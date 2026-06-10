@@ -1,0 +1,68 @@
+const certificates = [
+  {
+    id: 1,
+    title: "CCNA: Introduction to Networks",
+    issuer: "Cisco Networking Academy",
+    category: "Networking",
+    file: "/certificates/ccna-intro-networks.pdf",
+    type: "pdf",
+  },
+  {
+    id: 2,
+    title: "Networking Devices and Initial Configuration",
+    issuer: "Cisco Networking Academy",
+    category: "Networking",
+    file: "/certificates/networking-devices.pdf",
+    type: "pdf",
+  },
+  {
+    id: 3,
+    title: "Network Addressing and Basic Troubleshooting",
+    issuer: "Cisco Networking Academy",
+    category: "Networking",
+    file: "/certificates/network-addressing.pdf",
+    type: "pdf",
+  },
+  {
+    id: 4,
+    title: "Network Defense",
+    issuer: "Cisco Networking Academy",
+    category: "Networking",
+    file: "/certificates/network-defense.pdf",
+    type: "pdf",
+  },
+  {
+    id: 5,
+    title: "Cyber Threat Management",
+    issuer: "Cisco Networking Academy",
+    category: "Cybersecurity",
+    file: "/certificates/cyber-threat-management.pdf",
+    type: "pdf",
+  },
+  {
+    id: 6,
+    title: "IT Week 2025 — Certificate of Attendance",
+    issuer: "Ateneo de Davao University",
+    category: "Event",
+    file: "/certificates/it-week-2025.pdf",
+    type: "pdf",
+  },
+  {
+    id: 7,
+    title: "IT Week 2024 — Certificate of Appreciation",
+    issuer: "Ateneo de Davao University",
+    category: "Event",
+    file: "/certificates/it-week-2024.png",
+    type: "image",
+  },
+  {
+    id: 8,
+    title: "Arrupe Exhibit — Certificate of Attendance",
+    issuer: "Ateneo de Davao University",
+    category: "Event",
+    file: "/certificates/arrupe-exhibit.pdf",
+    type: "pdf",
+  },
+]
+
+export default certificates

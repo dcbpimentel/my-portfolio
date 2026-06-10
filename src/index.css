@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg:             #0A0A0A;
+    --color-surface:        #141414;
+    --color-text-primary:   #F5F5F5;
+    --color-text-secondary: #888888;
+    --color-accent:         #E8FF4D;
+    --color-border:         #2A2A2A;
+  }
+
+  html,
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Syne', system-ui, sans-serif;
+  }
+}
