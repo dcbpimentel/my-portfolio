@@ -27,12 +27,16 @@ const baseInput = (hasError) =>
     hasError ? 'border-red-500' : 'border-border'
   }`
 
+const FORMSPREE_URL = 'https://formspree.io/f/xvznqqlg'
+
 // ── Contact form ─────────────────────────────────────────────────
 const ContactForm = () => {
-  const [fields,   setFields]   = useState({ name: '', email: '', message: '' })
-  const [errors,   setErrors]   = useState({})
-  const [touched,  setTouched]  = useState({})
-  const [submitted, setSubmitted] = useState(false)
+  const [fields,     setFields]     = useState({ name: '', email: '', message: '' })
+  const [errors,     setErrors]     = useState({})
+  const [touched,    setTouched]    = useState({})
+  const [submitted,  setSubmitted]  = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [serverError, setServerError] = useState('')
 
   const isEmpty = !fields.name.trim() || !fields.email.trim() || !fields.message.trim()
 
@@ -40,7 +44,6 @@ const ContactForm = () => {
     const { name, value } = e.target
     const next = { ...fields, [name]: value }
     setFields(next)
-    // Re-validate touched field live
     if (touched[name]) {
       const errs = validate(next)
       setErrors(prev => ({ ...prev, [name]: errs[name] }))
@@ -54,7 +57,7 @@ const ContactForm = () => {
     setErrors(prev => ({ ...prev, [name]: errs[name] }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const errs = validate(fields)
     if (Object.keys(errs).length) {
@@ -62,7 +65,32 @@ const ContactForm = () => {
       setTouched({ name: true, email: true, message: true })
       return
     }
-    setSubmitted(true)
+
+    setSubmitting(true)
+    setServerError('')
+
+    try {
+      const res = await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          name:    fields.name,
+          email:   fields.email,
+          message: fields.message,
+        }),
+      })
+
+      if (res.ok) {
+        setSubmitted(true)
+      } else {
+        const data = await res.json()
+        setServerError(data?.errors?.[0]?.message ?? 'Something went wrong. Please try again.')
+      }
+    } catch {
+      setServerError('Network error. Please check your connection and try again.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   // ── Success state ──────────────────────────────────────────────
@@ -149,14 +177,19 @@ const ContactForm = () => {
         )}
       </div>
 
+      {/* Server error */}
+      {serverError && (
+        <p className="font-body text-xs text-red-500 text-center">{serverError}</p>
+      )}
+
       {/* Submit */}
       <button
         type="submit"
-        disabled={isEmpty}
+        disabled={isEmpty || submitting}
         className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-accent text-bg font-body font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
       >
         <FiSend size={15} />
-        Send it my way →
+        {submitting ? 'Sending...' : 'Send it my way →'}
       </button>
 
     </form>
