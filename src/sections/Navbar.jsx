@@ -51,9 +51,11 @@ const Navbar = () => {
           smooth={true}
           duration={500}
           offset={-70}
-          className="font-display font-bold text-xl text-accent tracking-tight cursor-pointer select-none"
+          className="flex items-center cursor-pointer select-none"
         >
-          Dwyane.
+          <span className="font-display text-2xl font-bold tracking-tight text-white">
+            dwyane<span className="text-[#E8FF4D]">.</span>
+          </span>
         </Link>
 
         {/* Desktop nav */}
