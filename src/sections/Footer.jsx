@@ -1,10 +1,8 @@
 import { FiGithub, FiLinkedin } from 'react-icons/fi'
-import { FaDribbble } from 'react-icons/fa'
 
 const SOCIALS = [
-  { icon: FiGithub,   href: 'https://github.com/dcbpimentel',                              label: 'GitHub'   },
+  { icon: FiGithub,   href: 'https://github.com/dcbpimentel',                               label: 'GitHub'   },
   { icon: FiLinkedin, href: 'https://www.linkedin.com/in/dwyane-clark-pimentel-a7a5b12b1/', label: 'LinkedIn' },
-  { icon: FaDribbble, href: 'https://dribbble.com/dcbpimentel',                             label: 'Dribbble' },
 ]
 
 const Footer = () => {
@@ -21,8 +19,8 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center">
 
           {/* Left — wordmark */}
-          <span className="font-display font-bold text-lg text-accent tracking-tight">
-            Dwyane.
+          <span className="font-display text-lg font-bold tracking-tight text-white">
+            dwyane<span className="text-[#E8FF4D]">.</span>
           </span>
 
           {/* Center — copyright */}
