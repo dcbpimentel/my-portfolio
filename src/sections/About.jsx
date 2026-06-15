@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { FiCheck, FiBookOpen, FiDownload, FiMessageSquare, FiAward } from 'react-icons/fi'
+import { FiBookOpen, FiDownload, FiMessageSquare, FiAward } from 'react-icons/fi'
 import { aboutContent } from '../data/skills'
 import CertificatesModal from '../components/CertificatesModal'
 
@@ -68,16 +68,19 @@ const About = () => {
               <p className="font-body text-sm text-text-secondary uppercase tracking-widest">
                 What I do
               </p>
-              <ul className="flex flex-col gap-2.5">
-                {whatIDo.map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <FiCheck size={16} className="text-accent mt-0.5 flex-shrink-0" />
-                    <span className="font-body text-sm text-text-secondary leading-relaxed">
-                      {item}
-                    </span>
-                  </li>
+              <div className="flex flex-col gap-2.5">
+                {[
+                  ['Design', 'Figma to production-ready components'],
+                  ['Build',  'React, Tailwind, real deployed apps'],
+                  ['Bridge', 'I do both, so nothing gets lost in handoff'],
+                ].map(([label, desc]) => (
+                  <p key={label} className="font-body text-sm text-text-secondary leading-relaxed">
+                    <span className="text-text-primary font-medium">{label}</span>
+                    <span className="text-text-secondary/50 mx-2">→</span>
+                    {desc}
+                  </p>
                 ))}
-              </ul>
+              </div>
             </div>
 
             {/* Fun line */}

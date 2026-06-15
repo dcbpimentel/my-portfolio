@@ -9,9 +9,9 @@ const fadeUp = (delay = 0) => ({
 })
 
 const SOCIALS = [
-  { icon: FiGithub,   href: 'https://github.com',   label: 'GitHub'   },
-  { icon: FiLinkedin, href: 'https://linkedin.com',  label: 'LinkedIn' },
-  { icon: FaDribbble, href: 'https://dribbble.com',  label: 'Dribbble' },
+  { icon: FiGithub,   href: 'https://github.com/dcbpimentel',                                    label: 'GitHub'   },
+  { icon: FiLinkedin, href: 'https://www.linkedin.com/in/dwyane-clark-pimentel-a7a5b12b1/',       label: 'LinkedIn' },
+  { icon: FaDribbble, href: 'https://dribbble.com/dcbpimentel',                                   label: 'Dribbble' },
 ]
 
 const Hero = () => {
@@ -27,11 +27,7 @@ const Hero = () => {
           {...fadeUp(0)}
           className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-surface text-sm text-text-secondary"
         >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-green-400" />
-          </span>
-          Open to opportunities
+          Taking on projects | June 2025
         </motion.div>
 
         {/* Headline */}
@@ -39,8 +35,8 @@ const Hero = () => {
           {...fadeUp(0.15)}
           className="font-display font-bold text-5xl md:text-7xl leading-tight tracking-tight text-text-primary"
         >
-          Designing systems.<br />
-          <span className="text-accent">Building them too.</span>
+          I close the gap between<br />
+          <span className="text-accent">how it&apos;s designed and how it ships.</span>
         </motion.h1>
 
         {/* Subtitle */}

@@ -2,9 +2,9 @@ import { FiGithub, FiLinkedin } from 'react-icons/fi'
 import { FaDribbble } from 'react-icons/fa'
 
 const SOCIALS = [
-  { icon: FiGithub,   href: 'https://github.com',   label: 'GitHub'   },
-  { icon: FiLinkedin, href: 'https://linkedin.com',  label: 'LinkedIn' },
-  { icon: FaDribbble, href: 'https://dribbble.com',  label: 'Dribbble' },
+  { icon: FiGithub,   href: 'https://github.com/dcbpimentel',                              label: 'GitHub'   },
+  { icon: FiLinkedin, href: 'https://www.linkedin.com/in/dwyane-clark-pimentel-a7a5b12b1/', label: 'LinkedIn' },
+  { icon: FaDribbble, href: 'https://dribbble.com/dcbpimentel',                             label: 'Dribbble' },
 ]
 
 const Footer = () => {
@@ -14,7 +14,7 @@ const Footer = () => {
 
         {/* Tagline */}
         <p className="text-center font-body text-sm text-text-secondary italic">
-          Designed with intent. Built with care.
+          Built by Dwyane. Still improving it.
         </p>
 
         {/* Main row */}

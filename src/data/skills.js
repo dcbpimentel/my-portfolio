@@ -5,7 +5,7 @@
 export const aboutContent = {
   name: "Dwyane Clark Pimentel",
 
-  paragraph: `I'm a 4th-year IT student at Ateneo de Davao University with a dual focus in UI/UX design and video production. On the design and development side, I build interfaces in Figma and ship them in React. On the creative side, I shoot and edit short-form content, social media videos, montages, business and promotional pieces using Final Cut Pro. Both disciplines come from the same place: I care about how things look, how they feel, and whether they actually connect with the people watching or using them. Right now I'm applying all of it in school and growing a portfolio of real work before I graduate.`,
+  paragraph: `I'm the kind of person who redesigns the UI in his head while using someone else's app. Fourth year IT student at AdDU, specializing in UI/UX, but I also write the code, so nothing gets lost between Figma and the browser.`,
 
   whatIDo: [
     "Design user interfaces in Figma, from wireframes to production-ready components",

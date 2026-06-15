@@ -211,7 +211,7 @@ const Contact = () => {
             </span>
 
             <h2 className="font-display font-bold text-3xl md:text-4xl text-text-primary leading-tight">
-              Let&apos;s build something worth showing.
+              Got something in mind?
             </h2>
 
             <p className="font-body text-text-secondary text-base leading-relaxed">
