@@ -33,9 +33,9 @@ const Hero = () => {
         {/* Headline */}
         <motion.h1
           {...fadeUp(0.15)}
-          className="font-display font-bold text-5xl md:text-7xl leading-tight tracking-tight text-text-primary"
+          className="font-display font-bold text-5xl md:text-7xl leading-tight tracking-tight text-text-primary text-balance"
         >
-          <span className="text-accent">Works the way you expect it to.</span>
+          Works the way you expect it to.
         </motion.h1>
 
         {/* Subtitle */}
