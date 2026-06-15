@@ -48,6 +48,18 @@ const projects = [
     featured: false,
   },
   {
+    id: 6,
+    title: "Presnt",
+    description:
+      "A QR-based attendance system for teachers and students built as a full-stack web app. Teachers start a live session that generates a scannable QR code, and students scan it from their phone to instantly mark themselves present or late. Supabase Row Level Security enforces data isolation between users entirely at the database level, with no custom backend server.",
+    tags: ["React", "Supabase", "Tailwind CSS", "PostgreSQL", "Recharts"],
+    category: "fullstack",
+    image: null,
+    githubUrl: "https://github.com/dcbpimentel/Presnt",
+    liveUrl: "#",
+    featured: true,
+  },
+  {
     id: 5,
     title: "Intro Web: Calculator Suite",
     description:
