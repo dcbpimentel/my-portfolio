@@ -36,7 +36,7 @@ const Hero = () => {
           className="font-display font-bold text-5xl md:text-7xl leading-tight tracking-tight text-text-primary"
         >
           I close the gap between<br />
-          <span className="text-accent">how it&apos;s designed and how it ships.</span>
+          <span className="text-accent">how it&apos;s designed and how it works.</span>
         </motion.h1>
 
         {/* Subtitle */}
