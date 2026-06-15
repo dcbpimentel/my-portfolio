@@ -55,7 +55,7 @@ const projects = [
     tags: ["React", "Node.js", "Express", "MySQL", "Tailwind CSS"],
     category: "fullstack",
     image: null,
-    githubUrl: "https://github.com/dcbpimentel/smart-menu-pricing",
+    githubUrl: "#",
     liveUrl: "https://smart-menu-pricing.vercel.app",
     featured: true,
   },
