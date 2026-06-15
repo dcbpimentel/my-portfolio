@@ -43,7 +43,7 @@ const Hero = () => {
           {...fadeUp(0.30)}
           className="font-body font-medium text-xl md:text-2xl text-accent"
         >
-          UI/UX Designer · WEB Developer · Videographer
+          UI/UX Designer · Vibe Coder · Videographer
         </motion.h2>
 
         {/* Bio */}
