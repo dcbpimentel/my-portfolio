@@ -68,7 +68,7 @@ const projects = [
     category: "fullstack",
     image: null,
     githubUrl: "https://github.com/dcbpimentel/Presnt",
-    liveUrl: "#",
+    liveUrl: "https://presnt-wine.vercel.app/",
     featured: true,
   },
   {
