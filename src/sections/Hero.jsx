@@ -51,8 +51,7 @@ const Hero = () => {
           {...fadeUp(0.45)}
           className="font-body text-text-secondary text-base md:text-lg max-w-xl leading-relaxed"
         >
-          I&apos;m a 4th-year IT student who designs interfaces in Figma and ships them in React.
-          I care about the gap between how things look and how they actually work, and closing it.
+          Designing something is easy. Making it actually work the way people expect? That&apos;s the part I love.
         </motion.p>
 
         {/* CTA Buttons */}
