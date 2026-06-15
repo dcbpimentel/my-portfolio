@@ -48,6 +48,18 @@ const projects = [
     featured: false,
   },
   {
+    id: 8,
+    title: "Smart Menu Pricing",
+    description:
+      "A full-stack web application that helps small restaurant owners in Kidapawan City, Philippines calculate the exact ingredient cost of every dish and get recommended selling prices based on target food-cost percentages. Owners can manage ingredients, build recipes with quantities, and import live market prices from DTI and DA government bulletins via an automated extraction pipeline that supports HTML scraping, PDF parsing, and OCR with fuzzy ingredient matching.",
+    tags: ["React", "Node.js", "Express", "MySQL", "Tailwind CSS"],
+    category: "fullstack",
+    image: null,
+    githubUrl: "https://github.com/dcbpimentel/smart-menu-pricing",
+    liveUrl: "https://smart-menu-pricing.vercel.app",
+    featured: true,
+  },
+  {
     id: 7,
     title: "Rally by Dwyane",
     description:
