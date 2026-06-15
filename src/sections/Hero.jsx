@@ -27,7 +27,7 @@ const Hero = () => {
           {...fadeUp(0)}
           className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-surface text-sm text-text-secondary"
         >
-          Taking on projects | June 2025
+          Let&apos;s work together
         </motion.div>
 
         {/* Headline */}
@@ -35,8 +35,7 @@ const Hero = () => {
           {...fadeUp(0.15)}
           className="font-display font-bold text-5xl md:text-7xl leading-tight tracking-tight text-text-primary"
         >
-          I close the gap between<br />
-          <span className="text-accent">how it&apos;s designed and how it works.</span>
+          <span className="text-accent">Works the way you expect it to.</span>
         </motion.h1>
 
         {/* Subtitle */}
