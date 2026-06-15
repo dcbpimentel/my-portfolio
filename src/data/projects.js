@@ -48,6 +48,18 @@ const projects = [
     featured: false,
   },
   {
+    id: 7,
+    title: "Rally by Dwyane",
+    description:
+      "A mobile-first web app for organizing pickleball open play sessions at the court. Lets a host add players to a roster, randomize balanced teams across multiple courts, track live scores, and maintain a season leaderboard. Built as an installable PWA with full offline support — all data lives in the browser with no backend or account required.",
+    tags: ["React", "TypeScript", "Tailwind CSS", "Zustand", "PWA"],
+    category: "frontend",
+    image: null,
+    githubUrl: "https://github.com/dcbpimentel/rally",
+    liveUrl: "https://rally-by-dcbp.vercel.app",
+    featured: true,
+  },
+  {
     id: 6,
     title: "Presnt",
     description:
