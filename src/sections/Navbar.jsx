@@ -37,14 +37,15 @@ const Navbar = () => {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+      className="fixed top-0 left-0 right-0 z-50"
       style={scrolled ? {
         background:           'rgba(10, 10, 10, 0.70)',
         backdropFilter:       'blur(16px) saturate(140%)',
         WebkitBackdropFilter: 'blur(16px) saturate(140%)',
         borderBottom:         '1px solid rgba(255, 255, 255, 0.08)',
         boxShadow:            '0 8px 32px rgba(0, 0, 0, 0.4)',
-      } : {}}
+        transition:           'background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease',
+      } : { transition: 'background 0.3s ease, box-shadow 0.3s ease' }}
     >
       <div className="max-w-content mx-auto px-6 h-16 flex items-center justify-between">
 
@@ -83,46 +84,45 @@ const Navbar = () => {
           ))}
         </nav>
 
-        {/* Hamburger — animated icon swap */}
+        {/* Hamburger — simple rotate animation, no AnimatePresence to avoid iOS tap issues */}
         <button
-          className="md:hidden p-2 rounded-lg transition-colors duration-200"
-          style={{ background: menuOpen ? 'rgba(255, 255, 255, 0.06)' : 'transparent' }}
+          className="md:hidden p-2 rounded-lg"
+          style={{
+            background:  menuOpen ? 'rgba(255, 255, 255, 0.06)' : 'transparent',
+            transition:  'background 0.2s ease',
+          }}
           onClick={() => setMenuOpen(prev => !prev)}
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
         >
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={menuOpen ? 'close' : 'open'}
-              initial={{ opacity: 0, rotate: menuOpen ? -45 : 45, scale: 0.8 }}
-              animate={{ opacity: 1, rotate: 0, scale: 1 }}
-              exit={{ opacity: 0, rotate: menuOpen ? 45 : -45, scale: 0.8 }}
-              transition={{ type: 'spring', stiffness: 350, damping: 22, duration: 0.2 }}
-            >
-              {menuOpen
-                ? <HiX size={22} className="text-text-primary" />
-                : <HiMenu size={22} className="text-text-primary" />
-              }
-            </motion.div>
-          </AnimatePresence>
+          <motion.span
+            animate={{ rotate: menuOpen ? 90 : 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+            style={{ display: 'block', lineHeight: 0 }}
+          >
+            {menuOpen
+              ? <HiX   size={22} className="text-text-primary" />
+              : <HiMenu size={22} className="text-text-primary" />
+            }
+          </motion.span>
         </button>
       </div>
 
-      {/* Mobile menu — liquid glass panel */}
+      {/* Mobile menu — liquid glass, opacity+y only (no scaleY to avoid iOS tap-through) */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, scaleY: 0.92, y: -8 }}
-            animate={{ opacity: 1, scaleY: 1, y: 0 }}
-            exit={{ opacity: 0, scaleY: 0.92, y: -8 }}
-            transition={{ type: 'spring', stiffness: 320, damping: 28, mass: 0.8 }}
+            key="mobile-menu"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: [0.25, 0.46, 0.45, 0.94] }}
             style={{
-              transformOrigin: 'top',
-              background:           'rgba(10, 10, 10, 0.88)',
-              backdropFilter:       'blur(24px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+              background:           'rgba(10, 10, 10, 0.92)',
+              backdropFilter:       'blur(20px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(180%)',
               borderBottom:         '1px solid rgba(255, 255, 255, 0.08)',
-              boxShadow:            '0 16px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06)',
+              boxShadow:            '0 8px 32px rgba(0, 0, 0, 0.4)',
             }}
             className="md:hidden"
           >
@@ -130,9 +130,9 @@ const Navbar = () => {
               {NAV_LINKS.map(({ label, id }, i) => (
                 <motion.div
                   key={id}
-                  initial={{ opacity: 0, y: -6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.05 + i * 0.05, type: 'spring', stiffness: 350, damping: 28 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.06 + i * 0.04, duration: 0.18, ease: 'easeOut' }}
                 >
                   <Link
                     to={id}
