@@ -83,41 +83,71 @@ const Navbar = () => {
           ))}
         </nav>
 
-        {/* Hamburger */}
+        {/* Hamburger — animated icon swap */}
         <button
-          className="md:hidden text-text-primary p-1"
+          className="md:hidden p-2 rounded-lg transition-colors duration-200"
+          style={{ background: menuOpen ? 'rgba(255, 255, 255, 0.06)' : 'transparent' }}
           onClick={() => setMenuOpen(prev => !prev)}
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
         >
-          {menuOpen ? <HiX size={24} /> : <HiMenu size={24} />}
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={menuOpen ? 'close' : 'open'}
+              initial={{ opacity: 0, rotate: menuOpen ? -45 : 45, scale: 0.8 }}
+              animate={{ opacity: 1, rotate: 0, scale: 1 }}
+              exit={{ opacity: 0, rotate: menuOpen ? 45 : -45, scale: 0.8 }}
+              transition={{ type: 'spring', stiffness: 350, damping: 22, duration: 0.2 }}
+            >
+              {menuOpen
+                ? <HiX size={22} className="text-text-primary" />
+                : <HiMenu size={22} className="text-text-primary" />
+              }
+            </motion.div>
+          </AnimatePresence>
         </button>
       </div>
 
-      {/* Mobile menu */}
-      <div
-        aria-hidden={!menuOpen}
-        className={`
-          md:hidden overflow-hidden transition-all duration-300 ease-in-out
-          ${menuOpen ? 'max-h-64 opacity-100 pointer-events-auto' : 'max-h-0 opacity-0 pointer-events-none'}
-          bg-surface border-b border-border
-        `}
-      >
-        <nav className="flex flex-col px-6 py-4 gap-4">
-          {NAV_LINKS.map(({ label, id }) => (
-            <Link
-              key={id}
-              to={id}
-              {...SCROLL_PROPS}
-              onClick={() => setMenuOpen(false)}
-              tabIndex={menuOpen ? 0 : -1}
-              className="text-left font-body text-sm text-text-secondary hover:text-text-primary transition-colors duration-200 cursor-pointer"
-            >
-              {label}
-            </Link>
-          ))}
-        </nav>
-      </div>
+      {/* Mobile menu — liquid glass panel */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, scaleY: 0.92, y: -8 }}
+            animate={{ opacity: 1, scaleY: 1, y: 0 }}
+            exit={{ opacity: 0, scaleY: 0.92, y: -8 }}
+            transition={{ type: 'spring', stiffness: 320, damping: 28, mass: 0.8 }}
+            style={{
+              transformOrigin: 'top',
+              background:           'rgba(10, 10, 10, 0.88)',
+              backdropFilter:       'blur(24px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+              borderBottom:         '1px solid rgba(255, 255, 255, 0.08)',
+              boxShadow:            '0 16px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06)',
+            }}
+            className="md:hidden"
+          >
+            <nav className="flex flex-col px-6 py-2">
+              {NAV_LINKS.map(({ label, id }, i) => (
+                <motion.div
+                  key={id}
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.05 + i * 0.05, type: 'spring', stiffness: 350, damping: 28 }}
+                >
+                  <Link
+                    to={id}
+                    {...SCROLL_PROPS}
+                    onClick={() => setMenuOpen(false)}
+                    className="block py-4 font-body text-sm text-text-secondary hover:text-text-primary transition-colors duration-200 cursor-pointer border-b border-white/[0.05] last:border-0"
+                  >
+                    {label}
+                  </Link>
+                </motion.div>
+              ))}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   )
 }

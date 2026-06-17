@@ -70,12 +70,15 @@ const Skills = () => {
       id="skills"
       className="py-section px-6 relative overflow-hidden"
       style={{
-        backgroundImage: `radial-gradient(circle, rgba(232,255,77,0.07) 1px, transparent 1px)`,
+        backgroundImage: `radial-gradient(circle, rgba(232,255,77,0.05) 1px, transparent 1px)`,
         backgroundSize: '28px 28px',
       }}
     >
-      {/* Fade edges so the dot grid doesn't bleed into adjacent sections */}
-      <div className="absolute inset-0 bg-gradient-to-b from-bg via-transparent to-bg pointer-events-none" />
+      {/* Crossfade so the dot grid transitions smoothly into adjacent sections */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'linear-gradient(to bottom, #0A0A0A 0%, transparent 28%, transparent 72%, #0A0A0A 100%)' }}
+      />
 
       <div className="relative max-w-content mx-auto flex flex-col gap-block">
 

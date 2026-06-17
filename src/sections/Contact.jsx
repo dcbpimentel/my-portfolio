@@ -203,8 +203,9 @@ const ContactForm = () => {
 // ── Section ───────────────────────────────────────────────────────
 const Contact = () => {
   return (
-    <section id="contact" className="py-section px-6">
-      <div className="max-w-content mx-auto">
+    <section id="contact" className="py-section px-6 relative">
+      <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-bg to-transparent pointer-events-none" />
+      <div className="max-w-content mx-auto relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
 
           {/* Left: info */}

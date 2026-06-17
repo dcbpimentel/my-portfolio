@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import { FiGithub, FiLinkedin } from 'react-icons/fi'
-import { FaDribbble } from 'react-icons/fa'
 
 const fadeUp = (delay = 0) => ({
   initial:    { opacity: 0, y: 20 },
@@ -9,9 +8,8 @@ const fadeUp = (delay = 0) => ({
 })
 
 const SOCIALS = [
-  { icon: FiGithub,   href: 'https://github.com/dcbpimentel',                                    label: 'GitHub'   },
-  { icon: FiLinkedin, href: 'https://www.linkedin.com/in/dwyane-clark-pimentel-a7a5b12b1/',       label: 'LinkedIn' },
-  { icon: FaDribbble, href: 'https://dribbble.com/dcbpimentel',                                   label: 'Dribbble' },
+  { icon: FiGithub,   href: 'https://github.com/dcbpimentel',                              label: 'GitHub'   },
+  { icon: FiLinkedin, href: 'https://www.linkedin.com/in/dwyane-clark-pimentel-a7a5b12b1/', label: 'LinkedIn' },
 ]
 
 const Hero = () => {

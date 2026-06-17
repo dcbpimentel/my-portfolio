@@ -7,9 +7,8 @@ import Contact from './sections/Contact'
 import Footer from './sections/Footer'
 
 const BLOBS = [
-  { top: '-15%', right: '-8%',  width: '700px', height: '700px', background: 'rgba(232, 255, 77, 0.05)', filter: 'blur(100px)' },
-  { bottom: '10%', left: '-12%', width: '600px', height: '600px', background: 'rgba(255, 255, 255, 0.02)', filter: 'blur(120px)' },
-  { top: '55%',   right: '18%', width: '500px', height: '300px', background: 'rgba(232, 255, 77, 0.03)', filter: 'blur(80px)'  },
+  { top: '-20%', right: '-15%', width: '900px', height: '900px', background: 'rgba(232, 255, 77, 0.028)', filter: 'blur(140px)' },
+  { bottom: '-10%', left: '-20%', width: '800px', height: '800px', background: 'rgba(255, 255, 255, 0.012)', filter: 'blur(160px)' },
 ]
 
 function App() {

@@ -16,8 +16,9 @@ const About = () => {
   const [certOpen, setCertOpen] = useState(false)
 
   return (
-    <section id="about" className="py-section px-6">
-      <div className="max-w-content mx-auto">
+    <section id="about" className="py-section px-6 relative">
+      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-bg to-transparent pointer-events-none" />
+      <div className="max-w-content mx-auto relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
 
           {/* ── Left: Photo placeholder ── */}
