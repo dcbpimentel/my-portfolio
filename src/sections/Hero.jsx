@@ -59,19 +59,31 @@ const Hero = () => {
           {...fadeUp(0.60)}
           className="flex items-center gap-4 flex-wrap justify-center"
         >
-          <button
+          <motion.button
             onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-            className="px-6 py-3 rounded-lg bg-accent text-bg font-body font-semibold text-sm hover:opacity-90 transition-opacity"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+            className="px-6 py-3 rounded-lg bg-accent text-bg font-body font-semibold text-sm"
+            style={{ boxShadow: '0 4px 20px rgba(232, 255, 77, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3)' }}
           >
             View Projects
-          </button>
-          <a
+          </motion.button>
+          <motion.a
             href="/cv.pdf"
             download
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
             className="px-6 py-3 rounded-lg border border-accent text-accent font-body font-semibold text-sm hover:bg-accent hover:text-bg transition-colors"
+            style={{
+              background:           'rgba(255, 255, 255, 0.04)',
+              backdropFilter:       'blur(16px) saturate(140%)',
+              WebkitBackdropFilter: 'blur(16px) saturate(140%)',
+            }}
           >
             Download CV
-          </a>
+          </motion.a>
         </motion.div>
 
         {/* Social Links */}

@@ -183,14 +183,18 @@ const ContactForm = () => {
       )}
 
       {/* Submit */}
-      <button
+      <motion.button
         type="submit"
         disabled={isEmpty || submitting}
+        whileHover={{ scale: isEmpty || submitting ? 1 : 1.02 }}
+        whileTap={{ scale: isEmpty || submitting ? 1 : 0.96 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+        style={{ boxShadow: isEmpty || submitting ? 'none' : '0 4px 20px rgba(232, 255, 77, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3)' }}
         className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-accent text-bg font-body font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
       >
         <FiSend size={15} />
         {submitting ? 'Sending...' : 'Send it my way →'}
-      </button>
+      </motion.button>
 
     </form>
   )

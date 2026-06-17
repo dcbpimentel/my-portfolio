@@ -73,15 +73,21 @@ const ProjectCard = ({ project, index }) => {
     <motion.div
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -4 }}
+      whileHover={{
+        y: -6,
+        boxShadow: '0 16px 48px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
+        transition: { type: 'spring', stiffness: 400, damping: 25 },
+      }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, ease: 'easeOut', delay: index * 0.1 }}
-      className={`
-        group flex flex-col rounded-xl border border-border bg-surface
-        hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]
-        transition-shadow duration-300 overflow-hidden
-        ${featured ? 'md:col-span-2' : ''}
-      `}
+      style={{
+        background:           'rgba(255, 255, 255, 0.04)',
+        backdropFilter:       'blur(16px) saturate(140%)',
+        WebkitBackdropFilter: 'blur(16px) saturate(140%)',
+        border:               '1px solid rgba(255, 255, 255, 0.08)',
+        boxShadow:            '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12)',
+      }}
+      className={`group flex flex-col rounded-2xl overflow-hidden ${featured ? 'md:col-span-2' : ''}`}
     >
       {/* Editorial cover — replaces raw screenshots */}
       <ProjectCover id={id} index={index} title={title} category={category} />

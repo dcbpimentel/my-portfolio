@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-scroll'
 import { HiMenu, HiX } from 'react-icons/hi'
 
@@ -9,27 +10,25 @@ const NAV_LINKS = [
   { label: 'Contact',  id: 'contact'  },
 ]
 
-// Shared props for every react-scroll Link
 const SCROLL_PROPS = {
-  smooth:   true,
-  duration: 500,
-  offset:   -70,   // clears the 64px fixed navbar + 6px breathing room
-  spy:      true,
+  smooth:      true,
+  duration:    500,
+  offset:      -70,
+  spy:         true,
   activeClass: '!text-accent',
 }
 
 const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
+  const [menuOpen,    setMenuOpen]    = useState(false)
+  const [scrolled,    setScrolled]    = useState(false)
+  const [hoveredLink, setHoveredLink] = useState(null)
 
-  // Navbar background blur on scroll
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Close mobile menu when resizing to desktop
   useEffect(() => {
     const onResize = () => { if (window.innerWidth >= 768) setMenuOpen(false) }
     window.addEventListener('resize', onResize)
@@ -38,37 +37,49 @@ const Navbar = () => {
 
   return (
     <header
-      className={`
-        fixed top-0 left-0 right-0 z-50 transition-all duration-300
-        ${scrolled ? 'backdrop-blur-md bg-bg/80 border-b border-border' : 'bg-transparent'}
-      `}
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+      style={scrolled ? {
+        background:           'rgba(10, 10, 10, 0.70)',
+        backdropFilter:       'blur(16px) saturate(140%)',
+        WebkitBackdropFilter: 'blur(16px) saturate(140%)',
+        borderBottom:         '1px solid rgba(255, 255, 255, 0.08)',
+        boxShadow:            '0 8px 32px rgba(0, 0, 0, 0.4)',
+      } : {}}
     >
       <div className="max-w-content mx-auto px-6 h-16 flex items-center justify-between">
 
-        {/* Logo — scrolls to hero, no spy needed */}
-        <Link
-          to="hero"
-          smooth={true}
-          duration={500}
-          offset={-70}
-          className="flex items-center cursor-pointer select-none"
-        >
+        {/* Logo */}
+        <Link to="hero" smooth={true} duration={500} offset={-70} className="flex items-center cursor-pointer select-none">
           <span className="font-display text-2xl font-bold tracking-tight text-white">
             dwyane<span className="text-[#E8FF4D]">.</span>
           </span>
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-1" onMouseLeave={() => setHoveredLink(null)}>
           {NAV_LINKS.map(({ label, id }) => (
-            <Link
-              key={id}
-              to={id}
-              {...SCROLL_PROPS}
-              className="font-body text-sm text-text-secondary hover:text-text-primary transition-colors duration-200 cursor-pointer"
-            >
-              {label}
-            </Link>
+            <div key={id} className="relative" onMouseEnter={() => setHoveredLink(id)}>
+              <AnimatePresence>
+                {hoveredLink === id && (
+                  <motion.span
+                    key={`pill-${id}`}
+                    layoutId="nav-pill"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                    style={{ position: 'absolute', inset: 0, background: 'rgba(255, 255, 255, 0.06)', borderRadius: '6px' }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  />
+                )}
+              </AnimatePresence>
+              <Link
+                to={id}
+                {...SCROLL_PROPS}
+                className="relative z-10 font-body text-sm text-text-secondary hover:text-text-primary transition-colors duration-200 cursor-pointer px-4 py-2 block"
+              >
+                {label}
+              </Link>
+            </div>
           ))}
         </nav>
 

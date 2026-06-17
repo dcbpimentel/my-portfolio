@@ -41,9 +41,17 @@ const SkillCard = ({ skill, globalIndex }) => {
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -4, transition: { type: 'spring', stiffness: 400, damping: 17 } }}
       viewport={{ once: true }}
       transition={{ duration: 0.4, ease: 'easeOut', delay: globalIndex * 0.04 }}
-      className="group flex flex-col items-center gap-3 p-4 rounded-xl border border-border bg-surface/60 hover:border-accent transition-colors duration-200 cursor-default"
+      style={{
+        background:           'rgba(255, 255, 255, 0.04)',
+        backdropFilter:       'blur(16px) saturate(140%)',
+        WebkitBackdropFilter: 'blur(16px) saturate(140%)',
+        border:               '1px solid rgba(255, 255, 255, 0.08)',
+        boxShadow:            '0 4px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12)',
+      }}
+      className="group flex flex-col items-center gap-3 p-4 rounded-xl cursor-default"
     >
       {Icon
         ? <Icon size={28} className="text-text-secondary group-hover:text-accent transition-colors duration-200" />
