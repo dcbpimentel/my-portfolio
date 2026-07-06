@@ -1,5 +1,17 @@
 const projects = [
   {
+    id: 9,
+    title: "BANGERS",
+    description:
+      "A real-time badminton and pickleball tournament manager built for hosts running live sessions. Hosts register players by skill level, auto-generate round-robin brackets, and track match scores across multiple courts simultaneously. Supabase Realtime pushes live score and bracket updates to all connected devices without any page refresh.",
+    tags: ["React", "TypeScript", "Supabase", "Vite", "Tailwind CSS"],
+    category: "fullstack",
+    image: null,
+    githubUrl: "https://github.com/dcbpimentel/GovGenBangers",
+    liveUrl: "#",
+    featured: true,
+  },
+  {
     id: 1,
     title: "Davao Housing Rental",
     description:

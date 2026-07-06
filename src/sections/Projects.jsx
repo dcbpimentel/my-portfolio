@@ -20,6 +20,7 @@ const COVERS = {
   6: { from: '#001518', to: '#0d0d0d', dot: '#06b6d4', label: 'Full Stack' },
   7: { from: '#0a1500', to: '#0d0d0d', dot: '#84cc16', label: 'Frontend'   },
   8: { from: '#001a0d', to: '#0d0d0d', dot: '#10b981', label: 'Full Stack' },
+  9: { from: '#1a0800', to: '#0d0d0d', dot: '#f97316', label: 'Full Stack' },
 }
 
 const ProjectCover = ({ id, index, title, category }) => {
