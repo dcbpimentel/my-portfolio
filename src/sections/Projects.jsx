@@ -82,11 +82,9 @@ const ProjectCard = ({ project, index }) => {
       viewport={{ once: true }}
       transition={{ duration: 0.5, ease: 'easeOut', delay: index * 0.1 }}
       style={{
-        background:           'rgba(255, 255, 255, 0.04)',
-        backdropFilter:       'blur(16px) saturate(140%)',
-        WebkitBackdropFilter: 'blur(16px) saturate(140%)',
-        border:               '1px solid rgba(255, 255, 255, 0.08)',
-        boxShadow:            '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12)',
+        background: 'rgba(255, 255, 255, 0.04)',
+        border:     '1px solid rgba(255, 255, 255, 0.08)',
+        boxShadow:  '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12)',
       }}
       className={`group flex flex-col rounded-2xl overflow-hidden ${featured ? 'md:col-span-2' : ''}`}
     >

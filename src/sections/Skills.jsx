@@ -45,11 +45,9 @@ const SkillCard = ({ skill, globalIndex }) => {
       viewport={{ once: true }}
       transition={{ duration: 0.4, ease: 'easeOut', delay: globalIndex * 0.04 }}
       style={{
-        background:           'rgba(255, 255, 255, 0.04)',
-        backdropFilter:       'blur(16px) saturate(140%)',
-        WebkitBackdropFilter: 'blur(16px) saturate(140%)',
-        border:               '1px solid rgba(255, 255, 255, 0.08)',
-        boxShadow:            '0 4px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12)',
+        background: 'rgba(255, 255, 255, 0.04)',
+        border:     '1px solid rgba(255, 255, 255, 0.08)',
+        boxShadow:  '0 4px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12)',
       }}
       className="group flex flex-col items-center gap-3 p-4 rounded-xl cursor-default"
     >
