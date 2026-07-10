@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Link } from 'react-scroll'
 import { HiMenu, HiX } from 'react-icons/hi'
 
 const NAV_LINKS = [
@@ -10,18 +9,47 @@ const NAV_LINKS = [
   { label: 'Contact',  id: 'contact'  },
 ]
 
-const SCROLL_PROPS = {
-  smooth:      true,
-  duration:    500,
-  offset:      -70,
-  spy:         true,
-  activeClass: '!text-accent',
+const scrollTo = (id, attempt = 0) => {
+  const el = document.getElementById(id)
+  if (!el) {
+    if (attempt < 10) setTimeout(() => scrollTo(id, attempt + 1), 150)
+    return
+  }
+  const y = el.getBoundingClientRect().top + window.scrollY - 70
+  window.scrollTo({ top: y, behavior: 'smooth' })
+}
+
+const useActiveSection = () => {
+  const [active, setActive] = useState('hero')
+
+  useEffect(() => {
+    const ratios = {}
+    const observers = NAV_LINKS.map(({ id }) => {
+      const el = document.getElementById(id)
+      if (!el) return null
+      ratios[id] = 0
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          ratios[id] = entry.intersectionRatio
+          const top = Object.entries(ratios).reduce((a, b) => b[1] > a[1] ? b : a)
+          setActive(top[0])
+        },
+        { threshold: Array.from({ length: 21 }, (_, i) => i / 20) }
+      )
+      observer.observe(el)
+      return observer
+    })
+    return () => observers.forEach(o => o?.disconnect())
+  }, [])
+
+  return active
 }
 
 const Navbar = () => {
   const [menuOpen,    setMenuOpen]    = useState(false)
   const [scrolled,    setScrolled]    = useState(false)
   const [hoveredLink, setHoveredLink] = useState(null)
+  const activeSection = useActiveSection()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -50,11 +78,11 @@ const Navbar = () => {
       <div className="max-w-content mx-auto px-6 h-16 flex items-center justify-between">
 
         {/* Logo */}
-        <Link to="hero" smooth={true} duration={500} offset={-70} className="flex items-center cursor-pointer select-none">
+        <button onClick={() => scrollTo('hero')} className="flex items-center cursor-pointer select-none">
           <span className="font-display text-2xl font-bold tracking-tight text-white">
             dwyane<span className="text-[#E8FF4D]">.</span>
           </span>
-        </Link>
+        </button>
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-1" onMouseLeave={() => setHoveredLink(null)}>
@@ -73,23 +101,24 @@ const Navbar = () => {
                   />
                 )}
               </AnimatePresence>
-              <Link
-                to={id}
-                {...SCROLL_PROPS}
-                className="relative z-10 font-body text-sm text-text-secondary hover:text-text-primary transition-colors duration-200 cursor-pointer px-4 py-2 block"
+              <button
+                onClick={() => scrollTo(id)}
+                className={`relative z-10 font-body text-sm transition-colors duration-200 cursor-pointer px-4 py-2 block ${
+                  activeSection === id ? 'text-accent' : 'text-text-secondary hover:text-text-primary'
+                }`}
               >
                 {label}
-              </Link>
+              </button>
             </div>
           ))}
         </nav>
 
-        {/* Hamburger — simple rotate animation, no AnimatePresence to avoid iOS tap issues */}
+        {/* Hamburger */}
         <button
           className="md:hidden p-2 rounded-lg"
           style={{
-            background:  menuOpen ? 'rgba(255, 255, 255, 0.06)' : 'transparent',
-            transition:  'background 0.2s ease',
+            background: menuOpen ? 'rgba(255, 255, 255, 0.06)' : 'transparent',
+            transition: 'background 0.2s ease',
           }}
           onClick={() => setMenuOpen(prev => !prev)}
           aria-label="Toggle menu"
@@ -101,14 +130,14 @@ const Navbar = () => {
             style={{ display: 'block', lineHeight: 0 }}
           >
             {menuOpen
-              ? <HiX   size={22} className="text-text-primary" />
+              ? <HiX    size={22} className="text-text-primary" />
               : <HiMenu size={22} className="text-text-primary" />
             }
           </motion.span>
         </button>
       </div>
 
-      {/* Mobile menu — liquid glass, opacity+y only (no scaleY to avoid iOS tap-through) */}
+      {/* Mobile menu */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -134,14 +163,14 @@ const Navbar = () => {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.06 + i * 0.04, duration: 0.18, ease: 'easeOut' }}
                 >
-                  <Link
-                    to={id}
-                    {...SCROLL_PROPS}
-                    onClick={() => setMenuOpen(false)}
-                    className="block py-4 font-body text-sm text-text-secondary hover:text-text-primary transition-colors duration-200 cursor-pointer border-b border-white/[0.05] last:border-0"
+                  <button
+                    onClick={() => { scrollTo(id); setMenuOpen(false) }}
+                    className={`w-full text-left block py-4 font-body text-sm transition-colors duration-200 cursor-pointer border-b border-white/[0.05] last:border-0 ${
+                      activeSection === id ? 'text-accent' : 'text-text-secondary hover:text-text-primary'
+                    }`}
                   >
                     {label}
-                  </Link>
+                  </button>
                 </motion.div>
               ))}
             </nav>

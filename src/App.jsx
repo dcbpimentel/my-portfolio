@@ -1,10 +1,12 @@
+import { lazy, Suspense } from 'react'
 import Navbar from './sections/Navbar'
 import Hero from './sections/Hero'
-import Projects from './sections/Projects'
-import About from './sections/About'
-import Skills from './sections/Skills'
-import Contact from './sections/Contact'
-import Footer from './sections/Footer'
+
+const Projects = lazy(() => import('./sections/Projects'))
+const About    = lazy(() => import('./sections/About'))
+const Skills   = lazy(() => import('./sections/Skills'))
+const Contact  = lazy(() => import('./sections/Contact'))
+const Footer   = lazy(() => import('./sections/Footer'))
 
 const BLOBS = [
   { top: '-20%', right: '-15%', width: '900px', height: '900px', background: 'rgba(232, 255, 77, 0.028)', filter: 'blur(140px)' },
@@ -22,11 +24,13 @@ function App() {
       <div style={{ position: 'relative', zIndex: 1 }}>
         <Navbar />
         <Hero />
-        <Projects />
-        <About />
-        <Skills />
-        <Contact />
-        <Footer />
+        <Suspense fallback={null}>
+          <Projects />
+          <About />
+          <Skills />
+          <Contact />
+          <Footer />
+        </Suspense>
       </div>
     </>
   )
