@@ -43,7 +43,7 @@ const SkillCard = ({ skill, globalIndex }) => {
       whileInView={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4, transition: { type: 'spring', stiffness: 400, damping: 17 } }}
       viewport={{ once: true }}
-      transition={{ duration: 0.4, ease: 'easeOut', delay: globalIndex * 0.04 }}
+      transition={{ duration: 0.35, ease: 'easeOut', delay: globalIndex * 0.02 }}
       style={{
         background: 'rgba(255, 255, 255, 0.04)',
         border:     '1px solid rgba(255, 255, 255, 0.08)',

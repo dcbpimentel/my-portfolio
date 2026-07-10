@@ -80,7 +80,7 @@ const ProjectCard = ({ project, index }) => {
         transition: { type: 'spring', stiffness: 400, damping: 25 },
       }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, ease: 'easeOut', delay: index * 0.1 }}
+      transition={{ duration: 0.4, ease: 'easeOut', delay: index * 0.05 }}
       style={{
         background: 'rgba(255, 255, 255, 0.04)',
         border:     '1px solid rgba(255, 255, 255, 0.08)',

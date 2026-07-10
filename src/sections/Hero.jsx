@@ -2,9 +2,9 @@ import { motion } from 'framer-motion'
 import { FiGithub, FiLinkedin } from 'react-icons/fi'
 
 const fadeUp = (delay = 0) => ({
-  initial:    { opacity: 0, y: 20 },
+  initial:    { opacity: 0, y: 16 },
   animate:    { opacity: 1, y: 0  },
-  transition: { duration: 0.5, ease: 'easeOut', delay },
+  transition: { duration: 0.4, ease: 'easeOut', delay },
 })
 
 const SOCIALS = [
@@ -30,7 +30,7 @@ const Hero = () => {
 
         {/* Headline */}
         <motion.h1
-          {...fadeUp(0.15)}
+          {...fadeUp(0.07)}
           className="font-display font-bold text-5xl md:text-7xl leading-tight tracking-tight text-text-primary text-balance"
         >
           Works the way you expect it to.
@@ -38,7 +38,7 @@ const Hero = () => {
 
         {/* Subtitle */}
         <motion.h2
-          {...fadeUp(0.30)}
+          {...fadeUp(0.14)}
           className="font-body font-medium text-xl md:text-2xl text-accent"
         >
           UI/UX Designer · Vibe Coder · Videographer
@@ -46,7 +46,7 @@ const Hero = () => {
 
         {/* Bio */}
         <motion.p
-          {...fadeUp(0.45)}
+          {...fadeUp(0.21)}
           className="font-body text-text-secondary text-base md:text-lg max-w-xl leading-relaxed"
         >
           Designing something is easy. Making it actually work the way people expect? That&apos;s the part I love.
@@ -54,7 +54,7 @@ const Hero = () => {
 
         {/* CTA Buttons */}
         <motion.div
-          {...fadeUp(0.60)}
+          {...fadeUp(0.28)}
           className="flex items-center gap-4 flex-wrap justify-center"
         >
           <motion.button
@@ -86,7 +86,7 @@ const Hero = () => {
 
         {/* Social Links */}
         <motion.div
-          {...fadeUp(0.75)}
+          {...fadeUp(0.35)}
           className="flex items-center gap-5 pt-2"
         >
           {SOCIALS.map(({ icon: Icon, href, label }) => (
