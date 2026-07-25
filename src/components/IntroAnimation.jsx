@@ -70,8 +70,8 @@ export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
         : { duration: 0 }
       }
     >
-      {/* Background orbs — barely perceptible drift */}
-      <motion.div
+      {/* Background orbs — static, no animation to avoid Safari blur-repaint cost */}
+      <div
         aria-hidden="true"
         style={{
           position:     'absolute',
@@ -80,15 +80,12 @@ export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
           width:        orbSz,
           height:       orbSz,
           borderRadius: '50%',
-          background:   'rgba(232, 255, 77, 0.04)',
-          filter:       'blur(120px)',
+          background:   'rgba(232, 255, 77, 0.05)',
+          filter:       'blur(80px)',
           pointerEvents:'none',
         }}
-        initial={{ scale: 1 }}
-        animate={{ scale: 1.1 }}
-        transition={{ duration: 3.2, ease: 'easeOut' }}
       />
-      <motion.div
+      <div
         aria-hidden="true"
         style={{
           position:     'absolute',
@@ -97,13 +94,10 @@ export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
           width:        orbSz,
           height:       orbSz,
           borderRadius: '50%',
-          background:   'rgba(232, 255, 77, 0.04)',
-          filter:       'blur(120px)',
+          background:   'rgba(232, 255, 77, 0.05)',
+          filter:       'blur(80px)',
           pointerEvents:'none',
         }}
-        initial={{ scale: 1 }}
-        animate={{ scale: 1.1 }}
-        transition={{ duration: 3.2, ease: 'easeOut' }}
       />
 
       {/* Wordmark */}

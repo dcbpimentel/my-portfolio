@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
-import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion'
 import { ThemeProvider } from './context/ThemeContext'
 import { useIsMobile } from './hooks/useIsMobile'
 import IntroAnimation, { alreadyPlayed } from './components/IntroAnimation'
@@ -62,38 +62,27 @@ const ScrollProgressBar = () => {
 
 const OrbLayer = () => {
   const isMobile = useIsMobile()
-  const { scrollY } = useScroll()
-  const orb1Y = useTransform(scrollY, [0, 1500], [0, -180])
-  const orb2Y = useTransform(scrollY, [0, 1500], [0,  120])
-  const orb3Y = useTransform(scrollY, [0, 1500], [0,  -80])
-
   const sz = (desktop, mobile) => isMobile ? mobile : desktop
 
-  const mobileOrbs = [
+  const orbs = [
     {
-      style: {
-        top: '-5%', right: '-10%',
-        width: sz('600px', '280px'), height: sz('600px', '280px'),
-        background: 'var(--orb-1)',
-        filter: `blur(${sz('120px', '70px')})`,
-      },
+      top: '-5%', right: '-10%',
+      width: sz('600px', '280px'), height: sz('600px', '280px'),
+      background: 'var(--orb-1)',
+      filter: `blur(${sz('120px', '70px')})`,
     },
     {
-      style: {
-        bottom: '-5%', left: '-10%',
-        width: sz('400px', '220px'), height: sz('400px', '220px'),
-        background: 'var(--orb-2)',
-        filter: `blur(${sz('100px', '60px')})`,
-      },
+      bottom: '-5%', left: '-10%',
+      width: sz('400px', '220px'), height: sz('400px', '220px'),
+      background: 'var(--orb-2)',
+      filter: `blur(${sz('100px', '60px')})`,
     },
     {
-      style: {
-        top: '45%', left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: sz('500px', '260px'), height: sz('500px', '260px'),
-        background: 'var(--orb-3)',
-        filter: `blur(${sz('150px', '80px')})`,
-      },
+      top: '45%', left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: sz('500px', '260px'), height: sz('500px', '260px'),
+      background: 'var(--orb-3)',
+      filter: `blur(${sz('150px', '80px')})`,
     },
   ]
 
@@ -102,15 +91,9 @@ const OrbLayer = () => {
       aria-hidden="true"
       style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}
     >
-      {mobileOrbs.map((orb, i) => {
-        const y = [orb1Y, orb2Y, orb3Y][i]
-        return (
-          <motion.div
-            key={i}
-            style={{ position: 'absolute', borderRadius: '50%', ...orb.style, y }}
-          />
-        )
-      })}
+      {orbs.map((style, i) => (
+        <div key={i} style={{ position: 'absolute', borderRadius: '50%', ...style }} />
+      ))}
     </div>
   )
 }
