@@ -7,26 +7,51 @@ const alreadyPlayed = typeof window !== 'undefined' && (
   sessionStorage.getItem('intro-played') === 'true'
 )
 
+// CSS keyframes injected once
+const STYLE = `
+@keyframes _intro-fade-in {
+  from { opacity: 0; transform: scale(0.93); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes _intro-dot-pop {
+  0%   { opacity: 0; transform: scale(0); }
+  70%  { transform: scale(1.18); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes _intro-sub-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+`
+
+let styleInjected = false
+function ensureStyle() {
+  if (styleInjected || typeof document === 'undefined') return
+  styleInjected = true
+  const el = document.createElement('style')
+  el.textContent = STYLE
+  document.head.appendChild(el)
+}
+
 export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
   const isMobile = useIsMobile()
-  const [phase, setPhase]       = useState('playing')
-  const [showSkip, setShowSkip] = useState(false)
+  const [isExiting, setIsExiting]   = useState(false)
   const [exitTarget, setExitTarget] = useState(null)
+  const [showSkip, setShowSkip]     = useState(false)
+
+  const wordmarkRef   = useRef(null)
+  const exitCalledRef = useRef(false)
+  const doExitRef     = useRef(null)
 
   const reducedMotion = typeof window !== 'undefined' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  const wordmarkRef    = useRef(null)
-  const exitCalledRef  = useRef(false)
-  const doExitRef      = useRef(null)
-
   doExitRef.current = () => {
     if (exitCalledRef.current) return
     exitCalledRef.current = true
-    setPhase('exiting')
+    setIsExiting(true)
     onRevealPortfolio?.()
 
-    // Calculate fly target after one frame so layout is stable
     if (!reducedMotion) {
       requestAnimationFrame(() => {
         const navLogo  = document.querySelector('[data-nav-logo]')
@@ -47,10 +72,11 @@ export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
       if (typeof window !== 'undefined') window.__introPlayed = true
       sessionStorage.setItem('intro-played', 'true')
       onComplete?.()
-    }, reducedMotion ? 350 : 600)
+    }, reducedMotion ? 300 : 600)
   }
 
   useEffect(() => {
+    ensureStyle()
     if (reducedMotion) {
       const t = setTimeout(() => doExitRef.current?.(), 600)
       return () => clearTimeout(t)
@@ -61,84 +87,64 @@ export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
   }, [])
 
   const orbSz = isMobile ? '200px' : '400px'
-  const isExiting = phase === 'exiting'
 
   return (
-    <div
-      aria-hidden="true"
-      style={{ position: 'fixed', inset: 0, zIndex: 9999, overflow: 'hidden' }}
-    >
-      {/* Background — fades out independently */}
+    <div aria-hidden="true" style={{ position: 'fixed', inset: 0, zIndex: 9999, overflow: 'hidden' }}>
+
+      {/* Background + orbs — single motion element, no blur-inside-animated-parent issue */}
       <motion.div
         style={{ position: 'absolute', inset: 0, background: '#0A0A0A' }}
         animate={{ opacity: isExiting ? 0 : 1 }}
         transition={{ duration: 0.4, ease: 'easeIn' }}
-      />
-
-      {/* Orbs — fade with background */}
-      <motion.div
-        style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
-        animate={{ opacity: isExiting ? 0 : 1 }}
-        transition={{ duration: 0.28, ease: 'easeIn' }}
       >
         <div style={{ position: 'absolute', top: '-15%', right: '-10%', width: orbSz, height: orbSz, borderRadius: '50%', background: 'rgba(232,255,77,0.05)', filter: 'blur(80px)' }} />
         <div style={{ position: 'absolute', bottom: '-15%', left: '-10%', width: orbSz, height: orbSz, borderRadius: '50%', background: 'rgba(232,255,77,0.05)', filter: 'blur(80px)' }} />
       </motion.div>
 
-      {/* Centered content */}
+      {/* Center content */}
       <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '18px' }}>
 
-        {/* Wordmark — flies to nav logo on exit */}
+        {/* Wordmark — single motion.div, inner spans use CSS animations (no nested FM) */}
         <motion.div
           ref={wordmarkRef}
-          style={{ display: 'flex', alignItems: 'baseline', lineHeight: 1 }}
+          style={{ display: 'flex', alignItems: 'baseline', lineHeight: 1, willChange: 'transform, opacity' }}
           animate={exitTarget
             ? { x: exitTarget.x, y: exitTarget.y, scale: exitTarget.scale, opacity: 0 }
             : { x: 0, y: 0, scale: 1, opacity: 1 }
           }
           transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
         >
-          <motion.span
-            style={{
-              fontFamily:    'Syne, sans-serif',
-              fontWeight:    700,
-              fontSize:      'clamp(2.25rem, 9vw, 4.5rem)',
-              color:         '#F5F5F5',
-              lineHeight:    1,
-              letterSpacing: '-0.02em',
-            }}
-            initial={reducedMotion ? false : { opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={reducedMotion
-              ? { duration: 0 }
-              : { duration: 0.7, ease: 'easeOut', delay: 0.6 }
-            }
-          >
+          <span style={{
+            fontFamily:    'Syne, sans-serif',
+            fontWeight:    700,
+            fontSize:      'clamp(2.25rem, 9vw, 4.5rem)',
+            color:         '#F5F5F5',
+            letterSpacing: '-0.02em',
+            lineHeight:    1,
+            animation:     reducedMotion ? 'none' : '_intro-fade-in 0.7s ease-out 0.6s both',
+          }}>
             dwyane
-          </motion.span>
-
-          <motion.span
-            style={{
-              fontFamily:  'Syne, sans-serif',
-              fontWeight:  700,
-              fontSize:    'clamp(2.25rem, 9vw, 4.5rem)',
-              color:       '#E8FF4D',
-              lineHeight:  1,
-              display:     'inline-block',
-            }}
-            initial={reducedMotion ? false : { opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={reducedMotion
-              ? { duration: 0 }
-              : { type: 'spring', stiffness: 500, damping: 18, delay: 1.4 }
-            }
-          >
+          </span>
+          <span style={{
+            fontFamily:  'Syne, sans-serif',
+            fontWeight:  700,
+            fontSize:    'clamp(2.25rem, 9vw, 4.5rem)',
+            color:       '#E8FF4D',
+            lineHeight:  1,
+            display:     'inline-block',
+            animation:   reducedMotion ? 'none' : '_intro-dot-pop 0.4s cubic-bezier(0.34,1.56,0.64,1) 1.4s both',
+          }}>
             .
-          </motion.span>
+          </span>
         </motion.div>
 
-        {/* Tagline — fades out on exit */}
+        {/* Tagline */}
         <motion.p
+          animate={{ opacity: isExiting ? 0 : 1 }}
+          transition={isExiting
+            ? { duration: 0.18, ease: 'easeIn' }
+            : { duration: 0 }
+          }
           style={{
             fontFamily:    'DM Sans, sans-serif',
             fontWeight:    300,
@@ -146,21 +152,14 @@ export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
             letterSpacing: '0.05em',
             color:         '#888888',
             margin:        0,
+            animation:     reducedMotion ? 'none' : '_intro-sub-in 0.5s ease-out 1.8s both',
           }}
-          initial={reducedMotion ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: isExiting ? 0 : 1, y: 0 }}
-          transition={reducedMotion
-            ? { duration: 0 }
-            : isExiting
-              ? { duration: 0.18, ease: 'easeIn' }
-              : { duration: 0.5, ease: 'easeOut', delay: 1.8 }
-          }
         >
           Works the way you expect it to.
         </motion.p>
       </div>
 
-      {/* Skip button */}
+      {/* Skip */}
       {showSkip && !isExiting && (
         <motion.button
           onClick={() => doExitRef.current?.()}
