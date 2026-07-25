@@ -1,7 +1,8 @@
-import { lazy, Suspense, useEffect } from 'react'
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
+import { lazy, Suspense, useEffect, useState } from 'react'
+import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion'
 import { ThemeProvider } from './context/ThemeContext'
 import { useIsMobile } from './hooks/useIsMobile'
+import IntroAnimation, { alreadyPlayed } from './components/IntroAnimation'
 import Navbar from './sections/Navbar'
 import Hero from './sections/Hero'
 
@@ -127,22 +128,43 @@ function PerformanceInit() {
 }
 
 function App() {
+  const [showIntro,       setShowIntro]       = useState(!alreadyPlayed)
+  const [portfolioReady,  setPortfolioReady]  = useState(alreadyPlayed)
+
   return (
     <ThemeProvider>
-      <PerformanceInit />
-      <ScrollProgressBar />
-      <OrbLayer />
-      <div style={{ position: 'relative', zIndex: 1 }}>
-        <Navbar />
-        <Hero />
-        <Suspense fallback={null}>
-          <Projects />
-          <About />
-          <Skills />
-          <Contact />
-          <Footer />
-        </Suspense>
-      </div>
+      {/* Intro overlay — unmounted after exit animation completes */}
+      <AnimatePresence>
+        {showIntro && (
+          <IntroAnimation
+            key="intro"
+            onRevealPortfolio={() => setPortfolioReady(true)}
+            onComplete={() => setShowIntro(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Portfolio — fades in as the intro exits */}
+      <motion.div
+        initial={alreadyPlayed ? false : { opacity: 0, y: 20 }}
+        animate={{ opacity: portfolioReady ? 1 : 0, y: portfolioReady ? 0 : 20 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+      >
+        <PerformanceInit />
+        <ScrollProgressBar />
+        <OrbLayer />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <Navbar />
+          <Hero />
+          <Suspense fallback={null}>
+            <Projects />
+            <About />
+            <Skills />
+            <Contact />
+            <Footer />
+          </Suspense>
+        </div>
+      </motion.div>
     </ThemeProvider>
   )
 }
