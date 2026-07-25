@@ -47,10 +47,18 @@ const FloatingField = ({ id, name, type = 'text', label, value, onChange, onBlur
         : 'top-1/2 -translate-y-1/2 text-sm text-text-secondary',
   ].join(' ')
 
+  const handleFocus = (e) => {
+    setFocused(true)
+    // Scroll input into view on mobile so the keyboard doesn't cover it
+    if (window.innerWidth < 768) {
+      setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 120)
+    }
+  }
+
   const commonProps = {
     id, name,
     value, onChange,
-    onFocus: () => setFocused(true),
+    onFocus: handleFocus,
     onBlur:  (e) => { setFocused(false); onBlur?.(e) },
     className: sharedClass,
   }

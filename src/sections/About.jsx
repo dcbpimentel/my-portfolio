@@ -22,11 +22,14 @@ const About = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
 
           {/* ── Left: Photo placeholder ── */}
-          <motion.div {...slideIn('left')} className="flex justify-center md:justify-start">
-            <div className="relative w-72 md:w-full max-w-sm">
+          <motion.div {...slideIn('left')} className="flex justify-center lg:justify-start">
+            <div className="relative w-40 md:w-64 lg:w-full max-w-sm">
 
               {/* Photo card */}
-              <div className="relative rounded-2xl overflow-hidden aspect-square border border-border">
+              <div
+                className="relative rounded-2xl overflow-hidden aspect-square border border-border"
+                style={{ boxShadow: '0 0 0 1px var(--color-border), 0 0 28px var(--accent-glow)' }}
+              >
                 <img
                   src="/images/profile.jpg"
                   alt="Dwyane Clark Pimentel"
@@ -69,14 +72,21 @@ const About = () => {
               <p className="font-body text-sm text-text-secondary uppercase tracking-widest">
                 What I do
               </p>
-              <ul className="flex flex-col gap-2.5">
+              <ul className="flex flex-col gap-3">
                 {whatIDo.map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
+                  <motion.li
+                    key={i}
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.35, ease: 'easeOut', delay: i * 0.07 }}
+                    className="flex items-start gap-3 whatido-card"
+                  >
                     <FiCheck size={16} className="text-accent mt-0.5 flex-shrink-0" />
                     <span className="font-body text-sm text-text-secondary leading-relaxed">
                       {item}
                     </span>
-                  </li>
+                  </motion.li>
                 ))}
               </ul>
             </div>

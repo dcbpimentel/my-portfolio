@@ -1,6 +1,7 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { ThemeProvider } from './context/ThemeContext'
+import { useIsMobile } from './hooks/useIsMobile'
 import Navbar from './sections/Navbar'
 import Hero from './sections/Hero'
 
@@ -59,17 +60,48 @@ const ScrollProgressBar = () => {
 }
 
 const OrbLayer = () => {
+  const isMobile = useIsMobile()
   const { scrollY } = useScroll()
   const orb1Y = useTransform(scrollY, [0, 1500], [0, -180])
   const orb2Y = useTransform(scrollY, [0, 1500], [0,  120])
   const orb3Y = useTransform(scrollY, [0, 1500], [0,  -80])
+
+  const sz = (desktop, mobile) => isMobile ? mobile : desktop
+
+  const mobileOrbs = [
+    {
+      style: {
+        top: '-5%', right: '-10%',
+        width: sz('600px', '280px'), height: sz('600px', '280px'),
+        background: 'var(--orb-1)',
+        filter: `blur(${sz('120px', '70px')})`,
+      },
+    },
+    {
+      style: {
+        bottom: '-5%', left: '-10%',
+        width: sz('400px', '220px'), height: sz('400px', '220px'),
+        background: 'var(--orb-2)',
+        filter: `blur(${sz('100px', '60px')})`,
+      },
+    },
+    {
+      style: {
+        top: '45%', left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: sz('500px', '260px'), height: sz('500px', '260px'),
+        background: 'var(--orb-3)',
+        filter: `blur(${sz('150px', '80px')})`,
+      },
+    },
+  ]
 
   return (
     <div
       aria-hidden="true"
       style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}
     >
-      {ORBS.map((orb, i) => {
+      {mobileOrbs.map((orb, i) => {
         const y = [orb1Y, orb2Y, orb3Y][i]
         return (
           <motion.div
@@ -82,9 +114,22 @@ const OrbLayer = () => {
   )
 }
 
+function PerformanceInit() {
+  useEffect(() => {
+    const mem  = navigator.deviceMemory
+    const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection
+    const slow = conn && ['2g', 'slow-2g'].includes(conn.effectiveType)
+    if ((mem !== undefined && mem < 4) || slow) {
+      document.documentElement.classList.add('reduce-glass')
+    }
+  }, [])
+  return null
+}
+
 function App() {
   return (
     <ThemeProvider>
+      <PerformanceInit />
       <ScrollProgressBar />
       <OrbLayer />
       <div style={{ position: 'relative', zIndex: 1 }}>

@@ -29,7 +29,7 @@ const Footer = () => {
           </p>
 
           {/* Right — socials */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             {SOCIALS.map(({ icon: Icon, href, label }) => (
               <a
                 key={label}
@@ -37,7 +37,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="text-text-secondary hover:text-accent transition-colors duration-200"
+                className="flex items-center justify-center w-11 h-11 text-text-secondary hover:text-accent transition-colors duration-200"
               >
                 <Icon size={18} />
               </a>

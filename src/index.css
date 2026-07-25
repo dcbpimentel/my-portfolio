@@ -5,6 +5,9 @@
 @layer base {
   /* ── Light mode tokens (default / :root) ─────────────────────── */
   :root {
+    --drawer-bg:     rgba(248, 248, 245, 0.96);
+    --drawer-border: rgba(0, 0, 0, 0.06);
+    --accent-glow:   rgba(138, 158, 0, 0.18);
     --color-bg:             #F5F5F0;
     --color-surface:        #FFFFFF;
     --color-surface2:       #EFEFEA;
@@ -26,6 +29,9 @@
 
   /* ── Dark mode tokens ──────────────────────────────────────────── */
   html.dark {
+    --drawer-bg:     rgba(12, 12, 12, 0.96);
+    --drawer-border: rgba(255, 255, 255, 0.08);
+    --accent-glow:   rgba(232, 255, 77, 0.12);
     --color-bg:             #0A0A0A;
     --color-surface:        #141414;
     --color-surface2:       #1C1C1C;
@@ -105,6 +111,52 @@
   .float-textarea {
     @apply float-input pt-7 pb-3 resize-none;
   }
+}
+
+/* ── Hero headline — fluid sizing ──────────────────────────────── */
+.hero-headline {
+  font-size: clamp(2.25rem, 10vw, 3.5rem);
+  line-height: 1.12;
+}
+@media (min-width: 768px) {
+  .hero-headline {
+    font-size: clamp(3rem, 7vw, 4.5rem);
+  }
+}
+
+/* ── Carousel ───────────────────────────────────────────────────── */
+.carousel-track {
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.carousel-track::-webkit-scrollbar { display: none; }
+
+/* ── "What I do" mobile cards ───────────────────────────────────── */
+@media (max-width: 1023px) {
+  .whatido-card {
+    padding: 0.875rem 1rem;
+    border-radius: 0.75rem;
+    background: var(--glass-bg);
+    border-top:    1px solid var(--glass-border);
+    border-right:  1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+    border-left:   2px solid var(--color-accent);
+  }
+}
+
+/* ── Mobile touch input sizing ──────────────────────────────────── */
+@media (max-width: 767px) {
+  .float-input  { min-height: 52px; }
+  .float-textarea { min-height: 120px; }
+}
+
+/* ── Performance fallback: disable glass on low-end devices ─────── */
+html.reduce-glass .glass-card,
+html.reduce-glass [style*="backdrop-filter"] {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 /* ── Reduced motion ─────────────────────────────────────────────── */
