@@ -75,44 +75,82 @@ const MenuIcon = ({ isOpen }) => (
   </div>
 )
 
-// ── Theme toggle ─────────────────────────────────────────────────
+// ── Theme toggle — pill switch ────────────────────────────────────
 const ThemeToggle = () => {
   const { theme, toggle } = useTheme()
+  const isDark = theme === 'dark'
+
   return (
     <motion.button
       onClick={toggle}
-      aria-label="Toggle dark/light mode"
-      className="relative flex items-center justify-center w-9 h-9 rounded-lg border border-border cursor-pointer"
-      style={{ background: 'var(--glass-bg)' }}
-      whileHover={{ scale: 1.08 }}
-      whileTap={{ scale: 0.92 }}
+      role="switch"
+      aria-checked={isDark}
+      aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+      whileTap={{ scale: 0.88 }}
       transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+      style={{
+        width:        '44px',
+        height:       '26px',
+        borderRadius: '100px',
+        padding:      '3px',
+        border:       isDark
+          ? '1px solid rgba(232, 255, 77, 0.28)'
+          : '1px solid rgba(0, 0, 0, 0.14)',
+        background:   isDark
+          ? 'rgba(232, 255, 77, 0.10)'
+          : 'rgba(0, 0, 0, 0.08)',
+        cursor:       'pointer',
+        display:      'flex',
+        alignItems:   'center',
+        flexShrink:   0,
+        transition:   'background 0.3s ease, border-color 0.3s ease',
+      }}
     >
-      <AnimatePresence mode="wait" initial={false}>
-        {theme === 'dark' ? (
-          <motion.span
-            key="moon"
-            initial={{ opacity: 0, rotate: -60, scale: 0.6 }}
-            animate={{ opacity: 1, rotate: 0,   scale: 1   }}
-            exit={{    opacity: 0, rotate:  60, scale: 0.6 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            style={{ display: 'flex' }}
-          >
-            <FiMoon size={16} className="text-text-secondary" />
-          </motion.span>
-        ) : (
-          <motion.span
-            key="sun"
-            initial={{ opacity: 0, rotate:  60, scale: 0.6 }}
-            animate={{ opacity: 1, rotate: 0,   scale: 1   }}
-            exit={{    opacity: 0, rotate: -60, scale: 0.6 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            style={{ display: 'flex' }}
-          >
-            <FiSun size={16} className="text-text-secondary" />
-          </motion.span>
-        )}
-      </AnimatePresence>
+      {/* Sliding thumb */}
+      <motion.div
+        animate={{ x: isDark ? 18 : 0 }}
+        transition={{ type: 'spring', stiffness: 500, damping: 30, mass: 0.8 }}
+        style={{
+          width:          '18px',
+          height:         '18px',
+          borderRadius:   '50%',
+          background:     isDark ? '#E8FF4D' : '#2a2a2a',
+          display:        'flex',
+          alignItems:     'center',
+          justifyContent: 'center',
+          flexShrink:     0,
+          boxShadow:      isDark
+            ? '0 0 8px rgba(232, 255, 77, 0.45)'
+            : '0 1px 3px rgba(0, 0, 0, 0.22)',
+          transition:     'background 0.3s ease, box-shadow 0.3s ease',
+        }}
+      >
+        <AnimatePresence mode="wait" initial={false}>
+          {isDark ? (
+            <motion.span
+              key="moon"
+              initial={{ opacity: 0, rotate: -30, scale: 0.5 }}
+              animate={{ opacity: 1, rotate: 0,   scale: 1   }}
+              exit={{    opacity: 0, rotate:  30, scale: 0.5 }}
+              transition={{ duration: 0.13 }}
+              style={{ display: 'flex', lineHeight: 0 }}
+            >
+              <FiMoon size={9} color="#0A0A0A" strokeWidth={2.5} />
+            </motion.span>
+          ) : (
+            <motion.span
+              key="sun"
+              initial={{ opacity: 0, rotate:  30, scale: 0.5 }}
+              animate={{ opacity: 1, rotate: 0,   scale: 1   }}
+              exit={{    opacity: 0, rotate: -30, scale: 0.5 }}
+              transition={{ duration: 0.13 }}
+              style={{ display: 'flex', lineHeight: 0 }}
+            >
+              <FiSun size={9} color="#F5F5F0" strokeWidth={2.5} />
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </motion.button>
   )
 }

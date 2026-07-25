@@ -2,8 +2,12 @@ import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useIsMobile } from '../hooks/useIsMobile'
 
-// Bail out immediately if already played this session
-const alreadyPlayed = typeof window !== 'undefined' && sessionStorage.getItem('intro-played') === 'true'
+// window.__introPlayed survives Vite HMR within the same page session;
+// sessionStorage covers hard refreshes within the same browser session.
+const alreadyPlayed = typeof window !== 'undefined' && (
+  window.__introPlayed === true ||
+  sessionStorage.getItem('intro-played') === 'true'
+)
 
 export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
   const isMobile = useIsMobile()
@@ -23,6 +27,7 @@ export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
     setPhase('exiting')
     onRevealPortfolio?.()
     setTimeout(() => {
+      if (typeof window !== 'undefined') window.__introPlayed = true
       sessionStorage.setItem('intro-played', 'true')
       onComplete?.()
     }, reducedMotion ? 350 : 480)
