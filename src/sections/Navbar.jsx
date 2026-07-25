@@ -168,19 +168,34 @@ const ThemeToggle = () => {
 const DrawerMenu = ({ isOpen, onClose, activeSection }) => {
   const { theme } = useTheme()
   const isDark = theme === 'dark'
-  const drawerRef = useRef(null)
-  const [linksReady, setLinksReady] = useState(false)
+  const [mounted,        setMounted]        = useState(false)
+  const [overlayVisible, setOverlayVisible] = useState(false)
+  const [linksReady,     setLinksReady]     = useState(false)
 
   useEffect(() => {
-    if (!isOpen) { setLinksReady(false); return }
-    const t = setTimeout(() => setLinksReady(true), 240)
-    return () => clearTimeout(t)
+    if (isOpen) {
+      setMounted(true)
+    } else {
+      // Animate out first, then unmount
+      setOverlayVisible(false)
+      setLinksReady(false)
+      const t = setTimeout(() => setMounted(false), 260)
+      return () => clearTimeout(t)
+    }
   }, [isOpen])
 
-  const overlayBg   = isDark ? '#0A0A0A' : '#F4F4F6'
+  // Once mounted: fade overlay in (16ms), then stagger links (120ms)
+  useEffect(() => {
+    if (!mounted) return
+    const t1 = setTimeout(() => setOverlayVisible(true), 16)
+    const t2 = setTimeout(() => setLinksReady(true), 120)
+    return () => { clearTimeout(t1); clearTimeout(t2) }
+  }, [mounted])
+
+  const overlayBg   = isDark ? '#0A0A0A' : '#FAF9F7'
   const linkColor   = isDark ? '#F5F5F5' : '#0A0A0A'
   const mutedColor  = isDark ? 'rgba(245,245,245,0.28)' : 'rgba(10,10,10,0.28)'
-  const accentColor = isDark ? '#E8FF4D' : '#3D3BF3'
+  const accentColor = isDark ? '#E8FF4D' : '#E85D04'
   const dividerColor = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)'
 
   useEffect(() => {
@@ -197,108 +212,117 @@ const DrawerMenu = ({ isOpen, onClose, activeSection }) => {
 
   const handleLinkClick = (id) => {
     onClose()
-    setTimeout(() => scrollTo(id), 260)
+    setTimeout(() => scrollTo(id), 240)
   }
 
-  return isOpen ? (
-        <div
-          ref={drawerRef}
-          role="dialog"
-          aria-label="Navigation menu"
-          aria-modal="true"
-          className="lg:hidden"
-          style={{
-            position:        'fixed',
-            inset:           0,
-            zIndex:          60,
-            background:      overlayBg,
-            display:         'flex',
-            flexDirection:   'column',
-            alignItems:      'center',
-            justifyContent:  'center',
-          }}
-        >
-          {/* Nav links — centered, large */}
-          <nav aria-label="Mobile navigation" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
-            {MOBILE_LINKS.map(({ label, id }, i) => {
-              const isActive = activeSection === id
-              return (
-                <motion.button
-                  key={id}
-                  onClick={() => handleLinkClick(id)}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={linksReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-                  transition={linksReady ? {
-                    delay:     i * 0.055,
-                    type:      'spring',
-                    stiffness: 320,
-                    damping:   28,
-                  } : { duration: 0 }}
-                  whileTap={{ scale: 0.96, transition: { type: 'spring', stiffness: 400, damping: 17 } }}
-                  style={{
-                    background:   'none',
-                    border:       'none',
-                    cursor:       'pointer',
-                    fontFamily:   'Syne, sans-serif',
-                    fontWeight:   700,
-                    fontSize:     '32px',
-                    lineHeight:   1.15,
-                    letterSpacing: '-0.02em',
-                    color:        isActive ? accentColor : linkColor,
-                    padding:      '10px 32px',
-                    outline:      'none',
-                    WebkitTapHighlightColor: 'transparent',
-                    opacity:      isActive ? 1 : 0.85,
-                    transition:   'color 0.2s ease, opacity 0.2s ease',
-                  }}
-                >
-                  {label}
-                </motion.button>
-              )
-            })}
-          </nav>
+  if (!mounted) return null
 
-          {/* Social icons — bottom */}
-          <div
+  return (
+    <motion.div
+      role="dialog"
+      aria-label="Navigation menu"
+      aria-modal="true"
+      onClick={onClose}
+      className="lg:hidden"
+      animate={overlayVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+      transition={{ duration: 0.22, ease: 'easeOut' }}
+      style={{
+        position:       'fixed',
+        inset:          0,
+        zIndex:         60,
+        background:     overlayBg,
+        display:        'flex',
+        flexDirection:  'column',
+        alignItems:     'center',
+        justifyContent: 'center',
+      }}
+    >
+      {/* Nav links — stop propagation so tapping a link doesn't fire the overlay onClose */}
+      <nav
+        aria-label="Mobile navigation"
+        onClick={e => e.stopPropagation()}
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}
+      >
+        {MOBILE_LINKS.map(({ label, id }, i) => {
+          const isActive = activeSection === id
+          return (
+            <motion.button
+              key={id}
+              onClick={() => handleLinkClick(id)}
+              initial={{ opacity: 0, y: 14 }}
+              animate={linksReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
+              transition={linksReady ? {
+                delay:     i * 0.035,
+                type:      'spring',
+                stiffness: 340,
+                damping:   26,
+              } : { duration: 0 }}
+              whileTap={{ scale: 0.95, transition: { type: 'spring', stiffness: 500, damping: 20 } }}
+              style={{
+                background:    'none',
+                border:        'none',
+                cursor:        'pointer',
+                fontFamily:    'Syne, sans-serif',
+                fontWeight:    700,
+                fontSize:      '32px',
+                lineHeight:    1.15,
+                letterSpacing: '-0.02em',
+                color:         isActive ? accentColor : linkColor,
+                padding:       '10px 32px',
+                outline:       'none',
+                opacity:       isActive ? 1 : 0.8,
+                transition:    'color 0.18s ease, opacity 0.18s ease',
+                WebkitTapHighlightColor: 'transparent',
+              }}
+            >
+              {label}
+            </motion.button>
+          )
+        })}
+      </nav>
+
+      {/* Social icons — bottom, stop propagation */}
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          position:   'absolute',
+          bottom:     'max(36px, env(safe-area-inset-bottom, 36px))',
+          display:    'flex',
+          alignItems: 'center',
+          gap:        '8px',
+          opacity:    linksReady ? 1 : 0,
+          transition: 'opacity 0.25s ease',
+        }}
+      >
+        {DRAWER_SOCIALS.map(({ icon: Icon, href, label }) => (
+          <motion.a
+            key={label}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={label}
+            whileTap={{ scale: 1.15, transition: { type: 'spring', stiffness: 400, damping: 17 } }}
             style={{
-              position:    'absolute',
-              bottom:      'max(36px, env(safe-area-inset-bottom, 36px))',
-              display:     'flex',
-              alignItems:  'center',
-              gap:         '8px',
-              opacity:     linksReady ? 1 : 0,
-              transition:  'opacity 0.3s ease',
+              width:          '44px',
+              height:         '44px',
+              borderRadius:   '50%',
+              border:         `1px solid ${dividerColor}`,
+              background:     isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+              display:        'flex',
+              alignItems:     'center',
+              justifyContent: 'center',
+              color:          mutedColor,
+              textDecoration: 'none',
+              cursor:         'pointer',
+              WebkitTapHighlightColor: 'transparent',
             }}
           >
-            {DRAWER_SOCIALS.map(({ icon: Icon, href, label }) => (
-              <motion.a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                whileTap={{ scale: 1.15, transition: { type: 'spring', stiffness: 400, damping: 17 } }}
-                style={{
-                  width:           '44px',
-                  height:          '44px',
-                  borderRadius:    '50%',
-                  border:          `1px solid ${dividerColor}`,
-                  background:      isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
-                  display:         'flex',
-                  alignItems:      'center',
-                  justifyContent:  'center',
-                  color:           mutedColor,
-                  textDecoration:  'none',
-                  cursor:          'pointer',
-                  WebkitTapHighlightColor: 'transparent',
-                }}
-              >
-                <Icon size={17} />
-              </motion.a>
-            ))}
-          </div>
-        </div>
-  ) : null
+            <Icon size={17} />
+          </motion.a>
+        ))}
+      </div>
+    </motion.div>
+  )
 }
 
 // ── Navbar ─────────────────────────────────────────────────────────
