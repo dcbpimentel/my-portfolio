@@ -192,7 +192,7 @@ const DrawerMenu = ({ isOpen, onClose, activeSection }) => {
     return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [mounted])
 
-  const overlayBg   = isDark ? '#0A0A0A' : '#FAF9F7'
+  const overlayBg   = isDark ? 'rgba(10, 10, 10, 0.75)' : 'rgba(250, 249, 247, 0.72)'
   const linkColor   = isDark ? '#F5F5F5' : '#0A0A0A'
   const mutedColor  = isDark ? 'rgba(245,245,245,0.28)' : 'rgba(10,10,10,0.28)'
   const accentColor = isDark ? '#E8FF4D' : '#E85D04'
@@ -227,10 +227,12 @@ const DrawerMenu = ({ isOpen, onClose, activeSection }) => {
       animate={overlayVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
       transition={{ duration: 0.22, ease: 'easeOut' }}
       style={{
-        position:       'fixed',
-        inset:          0,
-        zIndex:         60,
-        background:     overlayBg,
+        position:             'fixed',
+        inset:                0,
+        zIndex:               60,
+        background:           overlayBg,
+        backdropFilter:       'blur(40px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(40px) saturate(180%)',
         display:        'flex',
         flexDirection:  'column',
         alignItems:     'center',
