@@ -370,7 +370,7 @@ const Navbar = () => {
             onClick={() => scrollTo('hero')}
             className="flex items-center cursor-pointer select-none shrink-0"
           >
-            <span className="font-display text-2xl font-bold tracking-tight text-text-primary">
+            <span data-nav-logo className="font-display text-2xl font-bold tracking-tight text-text-primary">
               dwyane<span className="text-accent">.</span>
             </span>
           </button>

@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useIsMobile } from '../hooks/useIsMobile'
 
-// window.__introPlayed survives Vite HMR within the same page session;
-// sessionStorage covers hard refreshes within the same browser session.
 const alreadyPlayed = typeof window !== 'undefined' && (
   window.__introPlayed === true ||
   sessionStorage.getItem('intro-played') === 'true'
@@ -11,107 +9,102 @@ const alreadyPlayed = typeof window !== 'undefined' && (
 
 export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
   const isMobile = useIsMobile()
-  const [phase, setPhase]       = useState('playing')  // 'playing' | 'exiting'
+  const [phase, setPhase]       = useState('playing')
   const [showSkip, setShowSkip] = useState(false)
+  const [exitTarget, setExitTarget] = useState(null)
 
   const reducedMotion = typeof window !== 'undefined' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  // Ref pattern keeps exit logic stable across re-renders and avoids double-fire
-  const exitCalledRef = useRef(false)
-  const doExitRef     = useRef(null)
+  const wordmarkRef    = useRef(null)
+  const exitCalledRef  = useRef(false)
+  const doExitRef      = useRef(null)
 
   doExitRef.current = () => {
     if (exitCalledRef.current) return
     exitCalledRef.current = true
     setPhase('exiting')
     onRevealPortfolio?.()
+
+    // Calculate fly target after one frame so layout is stable
+    if (!reducedMotion) {
+      requestAnimationFrame(() => {
+        const navLogo  = document.querySelector('[data-nav-logo]')
+        const wordmark = wordmarkRef.current
+        if (navLogo && wordmark) {
+          const lr = navLogo.getBoundingClientRect()
+          const wr = wordmark.getBoundingClientRect()
+          setExitTarget({
+            x:     (lr.left + lr.width  / 2) - (wr.left + wr.width  / 2),
+            y:     (lr.top  + lr.height / 2) - (wr.top  + wr.height / 2),
+            scale: lr.height / wr.height,
+          })
+        }
+      })
+    }
+
     setTimeout(() => {
       if (typeof window !== 'undefined') window.__introPlayed = true
       sessionStorage.setItem('intro-played', 'true')
       onComplete?.()
-    }, reducedMotion ? 350 : 480)
+    }, reducedMotion ? 350 : 600)
   }
 
   useEffect(() => {
-    // Reduced-motion path: display wordmark briefly, no movement
     if (reducedMotion) {
       const t = setTimeout(() => doExitRef.current?.(), 600)
       return () => clearTimeout(t)
     }
-
-    // Full animation path
     const t1 = setTimeout(() => setShowSkip(true), 800)
     const t2 = setTimeout(() => doExitRef.current?.(), 2800)
     return () => { clearTimeout(t1); clearTimeout(t2) }
-  }, []) // runs once — correct, doExitRef holds the latest fn
+  }, [])
 
   const orbSz = isMobile ? '200px' : '400px'
-
-  const overlayStyle = {
-    position:        'fixed',
-    inset:           0,
-    zIndex:          9999,
-    display:         'flex',
-    alignItems:      'center',
-    justifyContent:  'center',
-    background:      '#0A0A0A',
-    overflow:        'hidden',
-  }
+  const isExiting = phase === 'exiting'
 
   return (
-    <motion.div
+    <div
       aria-hidden="true"
-      style={overlayStyle}
-      initial={false}
-      animate={phase === 'exiting' ? { opacity: 0, scale: 1.04 } : { opacity: 1, scale: 1 }}
-      transition={phase === 'exiting'
-        ? { duration: 0.4, ease: 'easeIn' }
-        : { duration: 0 }
-      }
+      style={{ position: 'fixed', inset: 0, zIndex: 9999, overflow: 'hidden' }}
     >
-      {/* Background orbs — static, no animation to avoid Safari blur-repaint cost */}
-      <div
-        aria-hidden="true"
-        style={{
-          position:     'absolute',
-          top:          '-15%',
-          right:        '-10%',
-          width:        orbSz,
-          height:       orbSz,
-          borderRadius: '50%',
-          background:   'rgba(232, 255, 77, 0.05)',
-          filter:       'blur(80px)',
-          pointerEvents:'none',
-        }}
-      />
-      <div
-        aria-hidden="true"
-        style={{
-          position:     'absolute',
-          bottom:       '-15%',
-          left:         '-10%',
-          width:        orbSz,
-          height:       orbSz,
-          borderRadius: '50%',
-          background:   'rgba(232, 255, 77, 0.05)',
-          filter:       'blur(80px)',
-          pointerEvents:'none',
-        }}
+      {/* Background — fades out independently */}
+      <motion.div
+        style={{ position: 'absolute', inset: 0, background: '#0A0A0A' }}
+        animate={{ opacity: isExiting ? 0 : 1 }}
+        transition={{ duration: 0.4, ease: 'easeIn' }}
       />
 
-      {/* Wordmark */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '18px' }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', lineHeight: 1 }}>
+      {/* Orbs — fade with background */}
+      <motion.div
+        style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+        animate={{ opacity: isExiting ? 0 : 1 }}
+        transition={{ duration: 0.28, ease: 'easeIn' }}
+      >
+        <div style={{ position: 'absolute', top: '-15%', right: '-10%', width: orbSz, height: orbSz, borderRadius: '50%', background: 'rgba(232,255,77,0.05)', filter: 'blur(80px)' }} />
+        <div style={{ position: 'absolute', bottom: '-15%', left: '-10%', width: orbSz, height: orbSz, borderRadius: '50%', background: 'rgba(232,255,77,0.05)', filter: 'blur(80px)' }} />
+      </motion.div>
 
-          {/* "dwyane" — fades + scales in */}
+      {/* Centered content */}
+      <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '18px' }}>
+
+        {/* Wordmark — flies to nav logo on exit */}
+        <motion.div
+          ref={wordmarkRef}
+          style={{ display: 'flex', alignItems: 'baseline', lineHeight: 1 }}
+          animate={exitTarget
+            ? { x: exitTarget.x, y: exitTarget.y, scale: exitTarget.scale, opacity: 0 }
+            : { x: 0, y: 0, scale: 1, opacity: 1 }
+          }
+          transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
+        >
           <motion.span
             style={{
-              fontFamily:  'Syne, sans-serif',
-              fontWeight:  700,
-              fontSize:    'clamp(2.25rem, 9vw, 4.5rem)',
-              color:       '#F5F5F5',
-              lineHeight:  1,
+              fontFamily:    'Syne, sans-serif',
+              fontWeight:    700,
+              fontSize:      'clamp(2.25rem, 9vw, 4.5rem)',
+              color:         '#F5F5F5',
+              lineHeight:    1,
               letterSpacing: '-0.02em',
             }}
             initial={reducedMotion ? false : { opacity: 0, scale: 0.92 }}
@@ -124,7 +117,6 @@ export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
             dwyane
           </motion.span>
 
-          {/* "." — springs in after the name settles — the signature beat */}
           <motion.span
             style={{
               fontFamily:  'Syne, sans-serif',
@@ -143,10 +135,9 @@ export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
           >
             .
           </motion.span>
+        </motion.div>
 
-        </div>
-
-        {/* Tagline */}
+        {/* Tagline — fades out on exit */}
         <motion.p
           style={{
             fontFamily:    'DM Sans, sans-serif',
@@ -157,18 +148,20 @@ export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
             margin:        0,
           }}
           initial={reducedMotion ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={{ opacity: isExiting ? 0 : 1, y: 0 }}
           transition={reducedMotion
             ? { duration: 0 }
-            : { duration: 0.5, ease: 'easeOut', delay: 1.8 }
+            : isExiting
+              ? { duration: 0.18, ease: 'easeIn' }
+              : { duration: 0.5, ease: 'easeOut', delay: 1.8 }
           }
         >
           Works the way you expect it to.
         </motion.p>
       </div>
 
-      {/* Skip button — appears at t=0.8s, subtle */}
-      {showSkip && (
+      {/* Skip button */}
+      {showSkip && !isExiting && (
         <motion.button
           onClick={() => doExitRef.current?.()}
           initial={{ opacity: 0 }}
@@ -185,15 +178,13 @@ export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
             fontSize:   '12px',
             color:      '#555555',
             padding:    '10px 14px',
-            tabIndex:   0,
           }}
         >
           Skip →
         </motion.button>
       )}
-    </motion.div>
+    </div>
   )
 }
 
-// Export whether this session already has an intro so App.jsx can skip mounting
 export { alreadyPlayed }
