@@ -59,33 +59,31 @@ const useActiveSection = () => {
   return active
 }
 
-// ── Two-line → X morphing icon ──────────────────────────────────
-const MenuIcon = ({ isOpen }) => {
-  const line = {
-    height:       '2px',
-    width:        '20px',
-    background:   'currentColor',
-    borderRadius: '2px',
-    display:      'block',
-  }
-  return (
-    <div
-      style={{ width: '20px', height: '14px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-      aria-hidden="true"
-    >
-      <motion.div
-        style={{ ...line, transformOrigin: '50% 50%' }}
-        animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-        transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-      />
-      <motion.div
-        style={{ ...line, transformOrigin: '50% 50%' }}
-        animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-        transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-      />
-    </div>
-  )
-}
+// ── Three-line → X morphing icon ────────────────────────────────
+const MenuIcon = ({ isOpen }) => (
+  <div
+    className="w-[22px] h-[14px] flex flex-col justify-between text-text-primary"
+    aria-hidden="true"
+  >
+    <motion.span
+      className="block h-[1.8px] w-full bg-current rounded-full"
+      style={{ originX: '50%', originY: '50%' }}
+      animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 26 }}
+    />
+    <motion.span
+      className="block h-[1.8px] w-full bg-current rounded-full"
+      animate={isOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
+      transition={{ duration: 0.14 }}
+    />
+    <motion.span
+      className="block h-[1.8px] w-full bg-current rounded-full"
+      style={{ originX: '50%', originY: '50%' }}
+      animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 26 }}
+    />
+  </div>
+)
 
 // ── Theme toggle — pill switch ────────────────────────────────────
 const ThemeToggle = () => {
@@ -166,66 +164,30 @@ const ThemeToggle = () => {
   )
 }
 
-// ── Drawer animation variants — translateX only (GPU-accelerated) ─
-const drawerVariants = {
-  hidden: {
-    x: '100%',
-    opacity: 0,
-  },
-  visible: {
-    x: '0%',
-    opacity: 1,
-    transition: {
-      type: 'spring',
-      stiffness: 300,
-      damping: 30,
-      mass: 0.8,
-    },
-  },
-  exit: {
-    x: '100%',
-    opacity: 0,
-    transition: {
-      type: 'tween',
-      duration: 0.2,
-      ease: 'easeIn',
-    },
-  },
-}
-
-const scrimVariants = {
-  hidden:  { opacity: 0 },
-  visible: { opacity: 0.6, transition: { duration: 0.25, ease: 'easeOut' } },
-  exit:    { opacity: 0,   transition: { duration: 0.2,  ease: 'easeIn'  } },
-}
-
-// ── Rebuilt mobile drawer ─────────────────────────────────────────
+// ── Apple-inspired full-screen menu overlay ───────────────────────
 const DrawerMenu = ({ isOpen, onClose, activeSection }) => {
   const { theme } = useTheme()
   const isDark = theme === 'dark'
   const drawerRef = useRef(null)
   const [linksReady, setLinksReady] = useState(false)
 
-  // Reset link stagger state when drawer closes
   useEffect(() => {
-    if (!isOpen) setLinksReady(false)
+    if (!isOpen) { setLinksReady(false); return }
+    const t = setTimeout(() => setLinksReady(true), 240)
+    return () => clearTimeout(t)
   }, [isOpen])
 
-  // Theme-aware colors — no CSS vars, no backdrop-filter on drawer
-  const drawerBg      = isDark ? 'rgba(14, 14, 14, 0.97)'    : 'rgba(248, 248, 251, 0.97)'
-  const drawerBorderL = isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.06)'
-  const linkColor     = isDark ? '#F5F5F5' : '#0A0A0A'
-  const dividerColor  = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'
-  const accentColor   = isDark ? '#E8FF4D' : '#3D3BF3'
-  const accentBg      = isDark ? 'rgba(232, 255, 77, 0.08)' : 'rgba(61, 59, 243, 0.08)'
+  const overlayBg   = isDark ? '#0A0A0A' : '#F4F4F6'
+  const linkColor   = isDark ? '#F5F5F5' : '#0A0A0A'
+  const mutedColor  = isDark ? 'rgba(245,245,245,0.28)' : 'rgba(10,10,10,0.28)'
+  const accentColor = isDark ? '#E8FF4D' : '#3D3BF3'
+  const dividerColor = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)'
 
-  // Simple scroll lock — no fixed-position body trick
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
 
-  // ESC key
   useEffect(() => {
     if (!isOpen) return
     const handler = (e) => { if (e.key === 'Escape') onClose() }
@@ -233,175 +195,110 @@ const DrawerMenu = ({ isOpen, onClose, activeSection }) => {
     return () => window.removeEventListener('keydown', handler)
   }, [isOpen, onClose])
 
-  // Focus trap — wait for drawer to finish sliding in
-  useEffect(() => {
-    if (!isOpen || !drawerRef.current) return
-    const focusable = drawerRef.current.querySelectorAll('button, a, [tabindex]:not([tabindex="-1"])')
-    const first = focusable[0]
-    const last  = focusable[focusable.length - 1]
-    setTimeout(() => first?.focus(), 350)
-
-    const trap = (e) => {
-      if (e.key !== 'Tab') return
-      if (e.shiftKey) {
-        if (document.activeElement === first) { e.preventDefault(); last?.focus() }
-      } else {
-        if (document.activeElement === last)  { e.preventDefault(); first?.focus() }
-      }
-    }
-    window.addEventListener('keydown', trap)
-    return () => window.removeEventListener('keydown', trap)
-  }, [isOpen])
-
   const handleLinkClick = (id) => {
     onClose()
-    setTimeout(() => scrollTo(id), 250)
+    setTimeout(() => scrollTo(id), 260)
   }
 
-  return (
-    <AnimatePresence mode="wait">
-      {isOpen && (
-        <>
-          {/* Scrim — separate from drawer so they can animate independently */}
-          <motion.div
-            key="scrim"
-            variants={scrimVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            onClick={onClose}
-            aria-hidden="true"
-            className="lg:hidden"
-            style={{
-              position:   'fixed',
-              inset:      0,
-              zIndex:     40,
-              background: '#000000',
-            }}
-          />
+  return isOpen ? (
+        <div
+          ref={drawerRef}
+          role="dialog"
+          aria-label="Navigation menu"
+          aria-modal="true"
+          className="lg:hidden"
+          style={{
+            position:        'fixed',
+            inset:           0,
+            zIndex:          60,
+            background:      overlayBg,
+            display:         'flex',
+            flexDirection:   'column',
+            alignItems:      'center',
+            justifyContent:  'center',
+          }}
+        >
+          {/* Nav links — centered, large */}
+          <nav aria-label="Mobile navigation" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+            {MOBILE_LINKS.map(({ label, id }, i) => {
+              const isActive = activeSection === id
+              return (
+                <motion.button
+                  key={id}
+                  onClick={() => handleLinkClick(id)}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={linksReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+                  transition={linksReady ? {
+                    delay:     i * 0.055,
+                    type:      'spring',
+                    stiffness: 320,
+                    damping:   28,
+                  } : { duration: 0 }}
+                  whileTap={{ scale: 0.96, transition: { type: 'spring', stiffness: 400, damping: 17 } }}
+                  style={{
+                    background:   'none',
+                    border:       'none',
+                    cursor:       'pointer',
+                    fontFamily:   'Syne, sans-serif',
+                    fontWeight:   700,
+                    fontSize:     '32px',
+                    lineHeight:   1.15,
+                    letterSpacing: '-0.02em',
+                    color:        isActive ? accentColor : linkColor,
+                    padding:      '10px 32px',
+                    outline:      'none',
+                    WebkitTapHighlightColor: 'transparent',
+                    opacity:      isActive ? 1 : 0.85,
+                    transition:   'color 0.2s ease, opacity 0.2s ease',
+                  }}
+                >
+                  {label}
+                </motion.button>
+              )
+            })}
+          </nav>
 
-          {/* Drawer panel — NO backdrop-filter; solid high-opacity bg */}
-          <motion.div
-            key="drawer"
-            ref={drawerRef}
-            role="dialog"
-            aria-label="Navigation menu"
-            aria-modal="true"
-            variants={drawerVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            onAnimationComplete={(def) => { if (def === 'visible') setLinksReady(true) }}
-            className="lg:hidden"
+          {/* Social icons — bottom */}
+          <div
             style={{
-              position:      'fixed',
-              top:           0,
-              right:         0,
-              bottom:        0,
-              zIndex:        50,
-              width:         'min(72vw, 300px)',
-              display:       'flex',
-              flexDirection: 'column',
-              background:    drawerBg,
-              borderLeft:    drawerBorderL,
-              borderRadius:  '20px 0 0 20px',
-              willChange:    'transform',
+              position:    'absolute',
+              bottom:      'max(36px, env(safe-area-inset-bottom, 36px))',
+              display:     'flex',
+              alignItems:  'center',
+              gap:         '8px',
+              opacity:     linksReady ? 1 : 0,
+              transition:  'opacity 0.3s ease',
             }}
           >
-            {/* Nav links — stagger starts 320ms after drawer opens */}
-            <nav
-              aria-label="Mobile navigation"
-              style={{
-                display:       'flex',
-                flexDirection: 'column',
-                flex:          1,
-                paddingTop:    '88px',
-                paddingLeft:   '12px',
-                paddingRight:  '12px',
-                gap:           '2px',
-              }}
-            >
-              {MOBILE_LINKS.map(({ label, id }, i) => {
-                const isActive = activeSection === id
-                return (
-                  <motion.button
-                    key={id}
-                    onClick={() => handleLinkClick(id)}
-                    initial={{ x: 20, opacity: 0 }}
-                    animate={linksReady ? { x: 0, opacity: 1 } : { x: 20, opacity: 0 }}
-                    transition={linksReady ? {
-                      delay:     i * 0.05,
-                      type:      'spring',
-                      stiffness: 300,
-                      damping:   24,
-                    } : { duration: 0 }}
-                    whileTap={{ scale: 0.98, transition: { type: 'spring', stiffness: 400, damping: 17 } }}
-                    style={{
-                      width:        '100%',
-                      textAlign:    'left',
-                      padding:      '16px 20px',
-                      borderRadius: '12px',
-                      cursor:       'pointer',
-                      background:   isActive ? accentBg : 'transparent',
-                      borderTop:    'none',
-                      borderRight:  'none',
-                      borderBottom: 'none',
-                      borderLeft:   isActive ? `3px solid ${accentColor}` : '3px solid transparent',
-                      fontFamily:   'DM Sans, sans-serif',
-                      fontWeight:   500,
-                      fontSize:     '17px',
-                      lineHeight:   1.2,
-                      color:        isActive ? accentColor : linkColor,
-                      outline:      'none',
-                      WebkitTapHighlightColor: 'transparent',
-                    }}
-                  >
-                    {label}
-                  </motion.button>
-                )
-              })}
-            </nav>
-
-            {/* Social icons — no label, thin divider */}
-            <div
-              style={{
-                padding:     '20px 24px',
-                paddingBottom: 'max(32px, env(safe-area-inset-bottom, 32px))',
-                borderTop:   `1px solid ${dividerColor}`,
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                {DRAWER_SOCIALS.map(({ icon: Icon, href, label }) => (
-                  <motion.a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={label}
-                    whileTap={{ scale: 1.2, color: accentColor }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                    style={{
-                      width:          '36px',
-                      height:         '36px',
-                      display:        'flex',
-                      alignItems:     'center',
-                      justifyContent: 'center',
-                      color:          '#888888',
-                      cursor:         'pointer',
-                      textDecoration: 'none',
-                      WebkitTapHighlightColor: 'transparent',
-                    }}
-                  >
-                    <Icon size={18} />
-                  </motion.a>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
-  )
+            {DRAWER_SOCIALS.map(({ icon: Icon, href, label }) => (
+              <motion.a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                whileTap={{ scale: 1.15, transition: { type: 'spring', stiffness: 400, damping: 17 } }}
+                style={{
+                  width:           '44px',
+                  height:          '44px',
+                  borderRadius:    '50%',
+                  border:          `1px solid ${dividerColor}`,
+                  background:      isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+                  display:         'flex',
+                  alignItems:      'center',
+                  justifyContent:  'center',
+                  color:           mutedColor,
+                  textDecoration:  'none',
+                  cursor:          'pointer',
+                  WebkitTapHighlightColor: 'transparent',
+                }}
+              >
+                <Icon size={17} />
+              </motion.a>
+            ))}
+          </div>
+        </div>
+  ) : null
 }
 
 // ── Navbar ─────────────────────────────────────────────────────────
@@ -431,7 +328,7 @@ const Navbar = () => {
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+        className="fixed top-0 left-0 right-0 z-[70] transition-all duration-300"
         style={scrolled ? {
           background:           'var(--glass-bg)',
           backdropFilter:       'blur(20px) saturate(150%)',
@@ -495,26 +392,14 @@ const Navbar = () => {
           <div className="flex items-center gap-3">
             <ThemeToggle />
 
-            {/* Hamburger — mobile + tablet only
-                Small element: backdrop-filter is fine here, no lag */}
+            {/* Hamburger — mobile + tablet only */}
             <button
-              className="lg:hidden flex items-center justify-center cursor-pointer"
+              className="lg:hidden flex items-center justify-center w-9 h-9 rounded-lg cursor-pointer transition-colors duration-200"
+              style={{ background: menuOpen ? 'var(--glass-bg)' : 'transparent' }}
               onClick={() => setMenuOpen(prev => !prev)}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={menuOpen}
               aria-controls="mobile-drawer"
-              style={{
-                width:               '40px',
-                height:              '40px',
-                borderRadius:        '10px',
-                background:          isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
-                border:              isDark ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(0,0,0,0.08)',
-                backdropFilter:      'blur(12px)',
-                WebkitBackdropFilter:'blur(12px)',
-                color:               isDark ? '#F5F5F5' : '#0A0A0A',
-                flexShrink:          0,
-                WebkitTapHighlightColor: 'transparent',
-              }}
             >
               <MenuIcon isOpen={menuOpen} />
             </button>

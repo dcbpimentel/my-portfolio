@@ -6,7 +6,7 @@ import { useIsMobile } from '../hooks/useIsMobile'
 
 const ProjectModal = ({ project, onClose }) => {
   const isMobile = useIsMobile()
-  const { id, title, description, tags, githubUrl, liveUrl, category, image } = project
+  const { id, title, description, tags, githubUrl, liveUrl, category, image, type } = project
 
   useEffect(() => {
     document.body.style.overflow = 'hidden'
@@ -98,7 +98,7 @@ const ProjectModal = ({ project, onClose }) => {
             {description}
           </p>
 
-          {(githubUrl !== '#' || liveUrl !== '#') && (
+          {type === 'tryme' && (githubUrl !== '#' || liveUrl !== '#') && (
             <div className="flex items-center gap-3 pt-1 flex-wrap">
               {githubUrl !== '#' && (
                 <a
