@@ -5,26 +5,26 @@
 @layer base {
   /* ── Light mode tokens (default / :root) ─────────────────────── */
   :root {
-    --drawer-bg:     rgba(248, 248, 245, 0.96);
-    --drawer-border: rgba(0, 0, 0, 0.06);
-    --accent-glow:   rgba(138, 158, 0, 0.18);
-    --color-bg:             #F5F5F0;
+    --drawer-bg:     rgba(248, 248, 251, 0.97);
+    --drawer-border: rgba(0, 0, 0, 0.05);
+    --accent-glow:   rgba(61, 59, 243, 0.12);
+    --color-bg:             #F4F4F6;
     --color-surface:        #FFFFFF;
-    --color-surface2:       #EFEFEA;
+    --color-surface2:       #EBEBED;
     --color-text-primary:   #0A0A0A;
     --color-text-secondary: #6B6B6B;
-    --color-accent:         #8A9E00;
-    --color-border:         #E2E2DC;
+    --color-accent:         #3D3BF3;
+    --color-border:         #E0E0E4;
 
-    --orb-1: rgba(138, 158, 0, 0.035);
+    --orb-1: rgba(61, 59, 243, 0.035);
     --orb-2: rgba(0,   0,   0, 0.025);
-    --orb-3: rgba(138, 158, 0, 0.02);
-    --dot-color: rgba(138, 158, 0, 0.08);
+    --orb-3: rgba(61, 59, 243, 0.02);
+    --dot-color: rgba(61, 59, 243, 0.08);
 
-    --glass-bg:         rgba(255, 255, 255, 0.65);
+    --glass-bg:         rgba(255, 255, 255, 0.7);
     --glass-border:     rgba(255, 255, 255, 0.9);
     --glass-highlight:  rgba(255, 255, 255, 1);
-    --glass-shadow:     0 4px 24px rgba(0, 0, 0, 0.08);
+    --glass-shadow:     0 4px 24px rgba(0, 0, 0, 0.06);
   }
 
   /* ── Dark mode tokens ──────────────────────────────────────────── */

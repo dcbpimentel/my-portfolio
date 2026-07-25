@@ -43,22 +43,14 @@ const CertificateCard = ({ cert, onView }) => (
     </div>
 
     {/* Actions */}
-    <div className="flex gap-2 pt-1">
+    <div className="pt-1">
       <button
         onClick={() => onView(cert)}
-        className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-accent text-bg font-body font-semibold text-xs hover:opacity-90 transition-opacity"
+        className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-accent text-bg font-body font-semibold text-xs hover:opacity-90 transition-opacity"
       >
         <FiExternalLink size={13} />
         View
       </button>
-      <a
-        href={cert.file}
-        download
-        className="flex items-center justify-center w-9 h-9 rounded-lg border border-border text-text-secondary hover:border-accent hover:text-accent transition-colors"
-        aria-label="Download"
-      >
-        <FiDownload size={14} />
-      </a>
     </div>
   </motion.div>
 )
