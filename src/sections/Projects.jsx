@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import projects from '../data/projects'
 import { useReducedMotion } from '../hooks/useReducedMotion'
@@ -113,7 +113,7 @@ const ProjectCarousel = ({ items, onCardClick }) => {
               project={project}
               index={index}
               inCarousel
-              onClick={() => onCardClick(project)}
+              onClick={() => onCardClick(project, index)}
             />
           </div>
         ))}
@@ -186,9 +186,9 @@ const TryMeCard = ({ project }) => (
 // ── Section ───────────────────────────────────────────────────────
 const Projects = () => {
   const [activeTab, setActiveTab] = useState('personal')
-  const [selectedProject, setSelectedProject] = useState(null)
+  const [selected, setSelected] = useState(null) // { project, index }
 
-  const tabProjects = projects.filter(p => p.type === activeTab)
+  const tabProjects = useMemo(() => projects.filter(p => p.type === activeTab), [activeTab])
 
   return (
     <section id="projects" className="py-section overflow-hidden">
@@ -285,7 +285,7 @@ const Projects = () => {
             <ProjectCarousel
               key={activeTab}
               items={tabProjects}
-              onCardClick={setSelectedProject}
+              onCardClick={(project, index) => setSelected({ project, index })}
             />
           </div>
 
@@ -305,7 +305,7 @@ const Projects = () => {
                     key={project.id}
                     project={project}
                     index={index}
-                    onClick={() => setSelectedProject(project)}
+                    onClick={() => setSelected({ project, index })}
                   />
                 ))}
               </motion.div>
@@ -316,11 +316,12 @@ const Projects = () => {
 
       {/* Project detail modal */}
       <AnimatePresence>
-        {selectedProject && (
+        {selected && (
           <ProjectModal
-            key={selectedProject.id}
-            project={selectedProject}
-            onClose={() => setSelectedProject(null)}
+            key={selected.project.id}
+            project={selected.project}
+            index={selected.index}
+            onClose={() => setSelected(null)}
           />
         )}
       </AnimatePresence>

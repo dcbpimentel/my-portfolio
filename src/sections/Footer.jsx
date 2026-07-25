@@ -7,7 +7,7 @@ const SOCIALS = [
 
 const Footer = () => {
   return (
-    <footer className="border-t border-border px-6 py-10">
+    <footer className="border-t border-border px-6 py-6">
       <div className="max-w-content mx-auto flex flex-col gap-6">
 
         {/* Tagline */}

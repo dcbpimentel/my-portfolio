@@ -14,7 +14,7 @@ export const aboutContent = {
     "Produce montage, business, and promotional videos for school and personal projects",
   ],
 
-  funLine: "When I'm not pushing pixels or cutting clips, I'm probably overthinking a font choice, or looking up beaches near Samal.",
+  funLine: 'I believe in the saying, "If it ain\'t broke, don\'t fix it."',
 }
 
 

@@ -224,8 +224,8 @@ const DrawerMenu = ({ isOpen, onClose, activeSection }) => {
       aria-modal="true"
       onClick={onClose}
       className="lg:hidden"
-      animate={overlayVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-      transition={{ duration: 0.22, ease: 'easeOut' }}
+      animate={overlayVisible ? { opacity: 1 } : { opacity: 0 }}
+      transition={{ duration: 0.28, ease: 'easeOut' }}
       style={{
         position:             'fixed',
         inset:                0,

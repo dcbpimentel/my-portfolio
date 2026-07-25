@@ -4,7 +4,7 @@ import { FiX, FiGithub, FiExternalLink } from 'react-icons/fi'
 import ProjectCover from './ProjectCover'
 import { useIsMobile } from '../hooks/useIsMobile'
 
-const ProjectModal = ({ project, onClose }) => {
+const ProjectModal = ({ project, index = 0, onClose }) => {
   const isMobile = useIsMobile()
   const { id, title, description, tags, githubUrl, liveUrl, category, image, type } = project
 
@@ -57,7 +57,7 @@ const ProjectModal = ({ project, onClose }) => {
         className="fixed z-50 overflow-hidden flex flex-col bg-surface border border-border shadow-2xl"
         style={isMobile
           ? { bottom: 0, left: 0, right: 0, height: '92vh', borderRadius: '16px 16px 0 0' }
-          : { inset: 0, margin: 'auto', maxWidth: '680px', maxHeight: '85vh', borderRadius: '16px' }
+          : { inset: 0, margin: 'auto', width: '100%', maxWidth: '680px', maxHeight: '85vh', borderRadius: '16px' }
         }
       >
         {/* Cover / Image */}
@@ -65,7 +65,7 @@ const ProjectModal = ({ project, onClose }) => {
           {image ? (
             <img src={image} alt={title} className="w-full h-full object-cover" />
           ) : (
-            <ProjectCover id={id} index={0} title={title} category={category} />
+            <ProjectCover id={id} index={index} title={title} category={category} />
           )}
           <button
             onClick={onClose}

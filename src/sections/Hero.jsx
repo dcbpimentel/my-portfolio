@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { FiGithub, FiLinkedin } from 'react-icons/fi'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { useIsMobile } from '../hooks/useIsMobile'
@@ -17,17 +17,6 @@ const Hero = () => {
   const sectionRef = useRef(null)
   const reduced  = useReducedMotion()
   const isMobile = useIsMobile()
-  const { scrollY } = useScroll()
-  const heroH = typeof window !== 'undefined' ? window.innerHeight : 800
-
-  // Parallax: 0.05x intensity on mobile, full intensity on desktop
-  const _badgeYMob  = useTransform(scrollY, [0, heroH], [0, heroH * 0.05])
-  const _badgeYDesk = useTransform(scrollY, [0, heroH], [0, heroH * 0.30])
-  const _subYMob    = useTransform(scrollY, [0, heroH], [0, heroH * 0.025])
-  const _subYDesk   = useTransform(scrollY, [0, heroH], [0, heroH * 0.15])
-
-  const badgeY    = reduced ? 0 : (isMobile ? _badgeYMob  : _badgeYDesk)
-  const subtitleY = reduced ? 0 : (isMobile ? _subYMob    : _subYDesk)
 
   // Word stagger: tighter on mobile
   const wordDelay = isMobile ? 0.04 : 0.06
@@ -40,16 +29,14 @@ const Hero = () => {
     >
       <div className="flex flex-col items-center text-center max-w-prose gap-5 md:gap-6 w-full">
 
-        {/* Badge — 0.7x scroll speed */}
-        <motion.div style={{ y: badgeY }}>
-          <motion.div
-            initial={reduced ? false : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: 'easeOut' }}
-            className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-border text-sm text-text-secondary cursor-default glass-card"
-          >
-            Let&apos;s work together
-          </motion.div>
+        {/* Badge */}
+        <motion.div
+          initial={reduced ? false : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-border text-sm text-text-secondary cursor-default glass-card"
+        >
+          Let&apos;s work together
         </motion.div>
 
         {/* Headline — word-by-word stagger */}
@@ -67,17 +54,15 @@ const Hero = () => {
           ))}
         </h1>
 
-        {/* Subtitle — 0.85x scroll speed */}
-        <motion.div style={{ y: subtitleY }}>
-          <motion.h2
-            initial={reduced ? false : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: 'easeOut', delay: 0.50 }}
-            className="font-body font-medium text-lg md:text-xl lg:text-2xl text-accent"
-          >
-            UI/UX Designer · Vibe Coder · Videographer
-          </motion.h2>
-        </motion.div>
+        {/* Subtitle */}
+        <motion.h2
+          initial={reduced ? false : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: 'easeOut', delay: 0.50 }}
+          className="font-body font-medium text-lg md:text-xl lg:text-2xl text-accent"
+        >
+          UI/UX Designer · Vibe Coder · Videographer
+        </motion.h2>
 
         {/* Bio */}
         <motion.p
