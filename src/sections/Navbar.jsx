@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HiMenu, HiX } from 'react-icons/hi'
+import { FiSun, FiMoon } from 'react-icons/fi'
+import { useTheme } from '../context/ThemeContext'
 
 const NAV_LINKS = [
   { label: 'Home',     id: 'hero'     },
@@ -31,7 +33,7 @@ const useActiveSection = () => {
       const observer = new IntersectionObserver(
         ([entry]) => {
           ratios[id] = entry.intersectionRatio
-          const top = Object.entries(ratios).reduce((a, b) => b[1] > a[1] ? b : a)
+          const top = Object.entries(ratios).reduce((a, b) => (b[1] > a[1] ? b : a))
           setActive(top[0])
         },
         { threshold: Array.from({ length: 21 }, (_, i) => i / 20) }
@@ -43,6 +45,47 @@ const useActiveSection = () => {
   }, [])
 
   return active
+}
+
+const ThemeToggle = () => {
+  const { theme, toggle } = useTheme()
+  return (
+    <motion.button
+      onClick={toggle}
+      aria-label="Toggle dark/light mode"
+      className="relative flex items-center justify-center w-9 h-9 rounded-lg border border-border cursor-pointer"
+      style={{ background: 'var(--glass-bg)' }}
+      whileHover={{ scale: 1.08 }}
+      whileTap={{ scale: 0.92 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+    >
+      <AnimatePresence mode="wait" initial={false}>
+        {theme === 'dark' ? (
+          <motion.span
+            key="moon"
+            initial={{ opacity: 0, rotate: -60, scale: 0.6 }}
+            animate={{ opacity: 1, rotate: 0,   scale: 1   }}
+            exit={{    opacity: 0, rotate:  60, scale: 0.6 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            style={{ display: 'flex' }}
+          >
+            <FiMoon size={16} className="text-text-secondary" />
+          </motion.span>
+        ) : (
+          <motion.span
+            key="sun"
+            initial={{ opacity: 0, rotate:  60, scale: 0.6 }}
+            animate={{ opacity: 1, rotate: 0,   scale: 1   }}
+            exit={{    opacity: 0, rotate: -60, scale: 0.6 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            style={{ display: 'flex' }}
+          >
+            <FiSun size={16} className="text-text-secondary" />
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </motion.button>
+  )
 }
 
 const Navbar = () => {
@@ -65,27 +108,32 @@ const Navbar = () => {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50"
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
       style={scrolled ? {
-        background:           'rgba(10, 10, 10, 0.70)',
-        backdropFilter:       'blur(16px) saturate(140%)',
-        WebkitBackdropFilter: 'blur(16px) saturate(140%)',
-        borderBottom:         '1px solid rgba(255, 255, 255, 0.08)',
-        boxShadow:            '0 8px 32px rgba(0, 0, 0, 0.4)',
-        transition:           'background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease',
-      } : { transition: 'background 0.3s ease, box-shadow 0.3s ease' }}
+        background:           'var(--glass-bg)',
+        backdropFilter:       'blur(20px) saturate(150%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(150%)',
+        borderBottom:         '1px solid var(--glass-border)',
+        boxShadow:            'var(--glass-shadow)',
+      } : {}}
     >
-      <div className="max-w-content mx-auto px-6 h-16 flex items-center justify-between">
+      <div className="max-w-content mx-auto px-6 h-16 flex items-center justify-between gap-4">
 
         {/* Logo */}
-        <button onClick={() => scrollTo('hero')} className="flex items-center cursor-pointer select-none">
-          <span className="font-display text-2xl font-bold tracking-tight text-white">
-            dwyane<span className="text-[#E8FF4D]">.</span>
+        <button
+          onClick={() => scrollTo('hero')}
+          className="flex items-center cursor-pointer select-none shrink-0"
+        >
+          <span className="font-display text-2xl font-bold tracking-tight text-text-primary">
+            dwyane<span className="text-accent">.</span>
           </span>
         </button>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-1" onMouseLeave={() => setHoveredLink(null)}>
+        <nav
+          className="hidden md:flex items-center gap-1"
+          onMouseLeave={() => setHoveredLink(null)}
+        >
           {NAV_LINKS.map(({ label, id }) => (
             <div key={id} className="relative" onMouseEnter={() => setHoveredLink(id)}>
               <AnimatePresence>
@@ -96,7 +144,12 @@ const Navbar = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0, transition: { duration: 0.15 } }}
-                    style={{ position: 'absolute', inset: 0, background: 'rgba(255, 255, 255, 0.06)', borderRadius: '6px' }}
+                    style={{
+                      position:     'absolute',
+                      inset:        0,
+                      background:   'var(--glass-bg)',
+                      borderRadius: '6px',
+                    }}
                     transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                   />
                 )}
@@ -104,7 +157,9 @@ const Navbar = () => {
               <button
                 onClick={() => scrollTo(id)}
                 className={`relative z-10 font-body text-sm transition-colors duration-200 cursor-pointer px-4 py-2 block ${
-                  activeSection === id ? 'text-accent' : 'text-text-secondary hover:text-text-primary'
+                  activeSection === id
+                    ? 'text-accent'
+                    : 'text-text-secondary hover:text-text-primary'
                 }`}
               >
                 {label}
@@ -113,28 +168,33 @@ const Navbar = () => {
           ))}
         </nav>
 
-        {/* Hamburger */}
-        <button
-          className="md:hidden p-2 rounded-lg"
-          style={{
-            background: menuOpen ? 'rgba(255, 255, 255, 0.06)' : 'transparent',
-            transition: 'background 0.2s ease',
-          }}
-          onClick={() => setMenuOpen(prev => !prev)}
-          aria-label="Toggle menu"
-          aria-expanded={menuOpen}
-        >
-          <motion.span
-            animate={{ rotate: menuOpen ? 90 : 0 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-            style={{ display: 'block', lineHeight: 0 }}
+        {/* Right controls */}
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+
+          {/* Hamburger (mobile only) */}
+          <button
+            className="md:hidden p-2 rounded-lg cursor-pointer"
+            style={{
+              background: menuOpen ? 'var(--glass-bg)' : 'transparent',
+              transition: 'background 0.2s ease',
+            }}
+            onClick={() => setMenuOpen(prev => !prev)}
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
           >
-            {menuOpen
-              ? <HiX    size={22} className="text-text-primary" />
-              : <HiMenu size={22} className="text-text-primary" />
-            }
-          </motion.span>
-        </button>
+            <motion.span
+              animate={{ rotate: menuOpen ? 90 : 0 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+              style={{ display: 'block', lineHeight: 0 }}
+            >
+              {menuOpen
+                ? <HiX    size={22} className="text-text-primary" />
+                : <HiMenu size={22} className="text-text-primary" />
+              }
+            </motion.span>
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
@@ -147,11 +207,11 @@ const Navbar = () => {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.22, ease: [0.25, 0.46, 0.45, 0.94] }}
             style={{
-              background:           'rgba(10, 10, 10, 0.92)',
-              backdropFilter:       'blur(20px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-              borderBottom:         '1px solid rgba(255, 255, 255, 0.08)',
-              boxShadow:            '0 8px 32px rgba(0, 0, 0, 0.4)',
+              background:           'var(--glass-bg)',
+              backdropFilter:       'blur(20px) saturate(150%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(150%)',
+              borderBottom:         '1px solid var(--glass-border)',
+              boxShadow:            'var(--glass-shadow)',
             }}
             className="md:hidden"
           >
@@ -165,8 +225,10 @@ const Navbar = () => {
                 >
                   <button
                     onClick={() => { scrollTo(id); setMenuOpen(false) }}
-                    className={`w-full text-left block py-4 font-body text-sm transition-colors duration-200 cursor-pointer border-b border-white/[0.05] last:border-0 ${
-                      activeSection === id ? 'text-accent' : 'text-text-secondary hover:text-text-primary'
+                    className={`w-full text-left block py-4 font-body text-sm transition-colors duration-200 cursor-pointer border-b last:border-0 ${
+                      activeSection === id
+                        ? 'text-accent border-accent/10'
+                        : 'text-text-secondary hover:text-text-primary border-border'
                     }`}
                   >
                     {label}

@@ -17,7 +17,7 @@ const About = () => {
 
   return (
     <section id="about" className="py-section px-6 relative">
-      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-bg to-transparent pointer-events-none" />
+      <div className="absolute inset-x-0 bottom-0 h-28 pointer-events-none section-fade-bottom" />
       <div className="max-w-content mx-auto relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
 
@@ -102,22 +102,20 @@ const About = () => {
               </motion.a>
               <motion.button
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.96 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-accent text-accent font-body font-semibold text-sm hover:bg-accent hover:text-bg transition-colors"
-                style={{ background: 'rgba(255, 255, 255, 0.04)', backdropFilter: 'blur(16px) saturate(140%)', WebkitBackdropFilter: 'blur(16px) saturate(140%)' }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-accent text-accent font-body font-semibold text-sm hover:bg-accent hover:text-bg transition-colors glass-card cursor-pointer"
               >
                 <FiMessageSquare size={15} />
                 Let&apos;s Talk
               </motion.button>
               <motion.button
                 onClick={() => setCertOpen(true)}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.96 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-border text-text-secondary font-body font-semibold text-sm hover:border-accent hover:text-accent transition-colors"
-                style={{ background: 'rgba(255, 255, 255, 0.04)', backdropFilter: 'blur(16px) saturate(140%)', WebkitBackdropFilter: 'blur(16px) saturate(140%)' }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-border text-text-secondary font-body font-semibold text-sm hover:border-accent hover:text-accent transition-colors glass-card cursor-pointer"
               >
                 <FiAward size={15} />
                 Certificates

@@ -19,8 +19,8 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center">
 
           {/* Left — wordmark */}
-          <span className="font-display text-lg font-bold tracking-tight text-white">
-            dwyane<span className="text-[#E8FF4D]">.</span>
+          <span className="font-display text-lg font-bold tracking-tight text-text-primary">
+            dwyane<span className="text-accent">.</span>
           </span>
 
           {/* Center — copyright */}

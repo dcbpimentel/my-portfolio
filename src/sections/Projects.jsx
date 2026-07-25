@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FiGithub, FiExternalLink } from 'react-icons/fi'
 import projects from '../data/projects'
+import { useReducedMotion } from '../hooks/useReducedMotion'
 
 const FILTERS = [
   { label: 'All',        value: 'all'      },
@@ -69,24 +70,22 @@ const ProjectCover = ({ id, index, title, category }) => {
 
 const ProjectCard = ({ project, index }) => {
   const { id, title, description, tags, githubUrl, liveUrl, featured, category } = project
+  const reduced = useReducedMotion()
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={reduced ? false : { opacity: 0, y: 24, rotateX: 8 }}
+      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
       whileHover={{
         y: -6,
-        boxShadow: '0 16px 48px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
+        scale: 1.02,
         transition: { type: 'spring', stiffness: 400, damping: 25 },
       }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.4, ease: 'easeOut', delay: index * 0.05 }}
-      style={{
-        background: 'rgba(255, 255, 255, 0.04)',
-        border:     '1px solid rgba(255, 255, 255, 0.08)',
-        boxShadow:  '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12)',
-      }}
-      className={`group flex flex-col rounded-2xl overflow-hidden ${featured ? 'md:col-span-2' : ''}`}
+      whileTap={{ scale: 0.98 }}
+      viewport={{ once: true, margin: '-100px' }}
+      transition={{ type: 'spring', stiffness: 60, damping: 20, delay: index * 0.05 }}
+      style={{ transformOrigin: 'center bottom' }}
+      className={`glass-card group flex flex-col rounded-2xl overflow-hidden cursor-default ${featured ? 'md:col-span-2' : ''}`}
     >
       {/* Editorial cover — replaces raw screenshots */}
       <ProjectCover id={id} index={index} title={title} category={category} />
@@ -191,23 +190,29 @@ const Projects = () => {
           className="flex items-center justify-center flex-wrap gap-2"
         >
           {FILTERS.map(({ label, value }) => (
-            <button
+            <motion.button
               key={value}
               onClick={() => setActiveFilter(value)}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
               className={`
-                px-4 py-1.5 rounded-full text-sm font-body border transition-colors duration-200
+                px-4 py-1.5 rounded-full text-sm font-body border transition-colors duration-200 cursor-pointer
                 ${activeFilter === value
                   ? 'bg-accent text-bg border-accent font-semibold'
                   : 'bg-transparent text-text-secondary border-border hover:border-accent hover:text-accent'}
               `}
             >
               {label}
-            </button>
+            </motion.button>
           ))}
         </motion.div>
 
         {/* Cards grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          style={{ perspective: '1200px' }}
+        >
           {filtered.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
           ))}

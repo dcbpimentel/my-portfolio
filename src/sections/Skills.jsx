@@ -44,12 +44,7 @@ const SkillCard = ({ skill, globalIndex }) => {
       whileHover={{ y: -4, transition: { type: 'spring', stiffness: 400, damping: 17 } }}
       viewport={{ once: true }}
       transition={{ duration: 0.35, ease: 'easeOut', delay: globalIndex * 0.02 }}
-      style={{
-        background: 'rgba(255, 255, 255, 0.04)',
-        border:     '1px solid rgba(255, 255, 255, 0.08)',
-        boxShadow:  '0 4px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12)',
-      }}
-      className="group flex flex-col items-center gap-3 p-4 rounded-xl cursor-default"
+      className="glass-card group flex flex-col items-center gap-3 p-4 rounded-xl cursor-default"
     >
       {Icon
         ? <Icon size={28} className="text-text-secondary group-hover:text-accent transition-colors duration-200" />
@@ -68,14 +63,14 @@ const Skills = () => {
       id="skills"
       className="py-section px-6 relative overflow-hidden"
       style={{
-        backgroundImage: `radial-gradient(circle, rgba(232,255,77,0.05) 1px, transparent 1px)`,
+        backgroundImage: `radial-gradient(circle, var(--dot-color) 1px, transparent 1px)`,
         backgroundSize: '28px 28px',
       }}
     >
       {/* Crossfade so the dot grid transitions smoothly into adjacent sections */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: 'linear-gradient(to bottom, #0A0A0A 0%, transparent 28%, transparent 72%, #0A0A0A 100%)' }}
+        style={{ background: 'linear-gradient(to bottom, var(--color-bg) 0%, transparent 28%, transparent 72%, var(--color-bg) 100%)' }}
       />
 
       <div className="relative max-w-content mx-auto flex flex-col gap-block">

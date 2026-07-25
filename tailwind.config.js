@@ -4,6 +4,7 @@ import defaultTheme from 'tailwindcss/defaultTheme.js'
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       // ── Fonts ──────────────────────────────────────────
@@ -12,15 +13,16 @@ export default {
         body:    ['DM Sans', ...defaultTheme.fontFamily.sans],
       },
 
-      // ── Colors ────────────────────────────────────────
+      // ── Colors (CSS-variable driven — theme-aware) ────
       colors: {
-        bg:      '#0A0A0A',
-        surface: '#141414',
-        accent:  '#E8FF4D',
-        border:  '#2A2A2A',
+        bg:       'var(--color-bg)',
+        surface:  'var(--color-surface)',
+        surface2: 'var(--color-surface2)',
+        accent:   'var(--color-accent)',
+        border:   'var(--color-border)',
         text: {
-          primary:   '#F5F5F5',
-          secondary: '#888888',
+          primary:   'var(--color-text-primary)',
+          secondary: 'var(--color-text-secondary)',
         },
       },
 
