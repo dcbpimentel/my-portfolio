@@ -152,7 +152,7 @@ export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
             letterSpacing: '0.05em',
             color:         '#888888',
             margin:        0,
-            animation:     reducedMotion ? 'none' : '_intro-sub-in 0.5s ease-out 1.8s both',
+            animation:     (reducedMotion || isExiting) ? 'none' : '_intro-sub-in 0.5s ease-out 1.8s both',
           }}
         >
           Works the way you expect it to.
