@@ -16,7 +16,7 @@ const projects = [
     id: 1,
     title: "Davao Housing Rental",
     description:
-      "A Flutter mobile app for finding verified dormitories near Ateneo de Davao University. Features Google Sign-In, a live dashboard of dorm listings with ratings and pricing, map coordinates, and a detailed dorm view with owner contact info. Built with real data sourced via Supabase.",
+      "A Flutter mobile app for finding verified dormitories near Ateneo de Davao University. Features Google Sign-In, a live dashboard of dorm listings with ratings and pricing, map coordinates, and a detailed dorm view with owner contact info. Built with real data sourced via Supabase. Co-created with Brian.",
     tags: ["Flutter", "Dart", "Supabase", "Firebase"],
     category: "mobile",
     type: "school",
@@ -29,7 +29,7 @@ const projects = [
     id: 2,
     title: "Boyd's Pizza House: Restaurant Operations",
     description:
-      "A full-featured web-based restaurant management system for Boyd's Pizza House. Includes a live operations dashboard tracking daily sales, inventory value, and gross profit, plus modules for staff management, menu engineering, purchasing, catering, and sales reports.",
+      "A full-featured web-based restaurant management system for Boyd's Pizza House. Includes a live operations dashboard tracking daily sales, inventory value, and gross profit, plus modules for staff management, menu engineering, purchasing, catering, and sales reports. Co-created with Jed and Brian.",
     tags: ["Web App", "Dashboard", "Operations", "Full Stack"],
     category: "fullstack",
     type: "school",
@@ -68,7 +68,7 @@ const projects = [
     id: 8,
     title: "Smart Menu Pricing",
     description:
-      "A full-stack web application that helps small restaurant owners in Kidapawan City, Philippines calculate the exact ingredient cost of every dish and get recommended selling prices based on target food-cost percentages. Owners can manage ingredients, build recipes with quantities, and import live market prices from DTI and DA government bulletins via an automated extraction pipeline that supports HTML scraping, PDF parsing, and OCR with fuzzy ingredient matching.",
+      "A full-stack web application that helps small restaurant owners in Kidapawan City, Philippines calculate the exact ingredient cost of every dish and get recommended selling prices based on target food-cost percentages. Owners can manage ingredients, build recipes with quantities, and import live market prices from DTI and DA government bulletins via an automated extraction pipeline that supports HTML scraping, PDF parsing, and OCR with fuzzy ingredient matching. Co-created with Jed and Brian.",
     tags: ["React", "Node.js", "Express", "MySQL", "Tailwind CSS"],
     category: "fullstack",
     type: "school",
