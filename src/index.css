@@ -16,9 +16,9 @@
     --color-accent:         #E85D04;
     --color-border:         #E5E0DA;
 
-    --orb-1: rgba(232, 93, 4, 0.04);
-    --orb-2: rgba(0,   0,  0, 0.02);
-    --orb-3: rgba(232, 93, 4, 0.025);
+    --orb-1: radial-gradient(circle, rgba(232,93,4,0.13) 0%, rgba(232,93,4,0.04) 50%, transparent 75%);
+    --orb-2: radial-gradient(circle, rgba(0,0,0,0.06) 0%, transparent 70%);
+    --orb-3: radial-gradient(circle, rgba(232,93,4,0.08) 0%, rgba(232,93,4,0.02) 50%, transparent 75%);
     --dot-color: rgba(232, 93, 4, 0.07);
 
     --glass-bg:         rgba(250, 249, 247, 0.72);
@@ -40,9 +40,9 @@
     --color-accent:         #E8FF4D;
     --color-border:         #2A2A2A;
 
-    --orb-1: rgba(232, 255, 77,  0.05);
-    --orb-2: rgba(255, 255, 255, 0.04);
-    --orb-3: rgba(255, 255, 255, 0.03);
+    --orb-1: radial-gradient(circle, rgba(232,255,77,0.18) 0%, rgba(232,255,77,0.06) 45%, transparent 72%);
+    --orb-2: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);
+    --orb-3: radial-gradient(circle, rgba(232,255,77,0.09) 0%, rgba(232,255,77,0.02) 50%, transparent 72%);
     --dot-color: rgba(232, 255, 77, 0.05);
 
     --glass-bg:        rgba(255, 255, 255, 0.04);

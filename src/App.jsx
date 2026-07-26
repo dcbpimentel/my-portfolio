@@ -66,23 +66,23 @@ const OrbLayer = () => {
 
   const orbs = [
     {
-      top: '-5%', right: '-10%',
-      width: sz('600px', '280px'), height: sz('600px', '280px'),
+      top: '-15%', right: '-15%',
+      width: sz('800px', '420px'), height: sz('800px', '420px'),
       background: 'var(--orb-1)',
-      filter: `blur(${sz('120px', '70px')})`,
+      filter: `blur(${sz('60px', '40px')})`,
     },
     {
-      bottom: '-5%', left: '-10%',
-      width: sz('400px', '220px'), height: sz('400px', '220px'),
+      bottom: '-15%', left: '-15%',
+      width: sz('600px', '340px'), height: sz('600px', '340px'),
       background: 'var(--orb-2)',
-      filter: `blur(${sz('100px', '60px')})`,
+      filter: `blur(${sz('50px', '35px')})`,
     },
     {
-      top: '45%', left: '50%',
+      top: '40%', left: '45%',
       transform: 'translate(-50%, -50%)',
-      width: sz('500px', '260px'), height: sz('500px', '260px'),
+      width: sz('700px', '380px'), height: sz('700px', '380px'),
       background: 'var(--orb-3)',
-      filter: `blur(${sz('150px', '80px')})`,
+      filter: `blur(${sz('70px', '45px')})`,
     },
   ]
 
@@ -92,7 +92,7 @@ const OrbLayer = () => {
       style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}
     >
       {orbs.map((style, i) => (
-        <div key={i} style={{ position: 'absolute', borderRadius: '50%', ...style }} />
+        <div key={i} style={{ position: 'absolute', ...style }} />
       ))}
     </div>
   )
