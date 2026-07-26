@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useMotionValue, useSpring } from 'framer-motion'
 import { FiGithub, FiLinkedin } from 'react-icons/fi'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { useIsMobile } from '../hooks/useIsMobile'
@@ -44,11 +44,41 @@ const SOCIALS = [
 
 const springBtn = { type: 'spring', stiffness: 400, damping: 17 }
 
+function useMagnet(strength = 0.35) {
+  const ref  = useRef(null)
+  const rawX = useMotionValue(0)
+  const rawY = useMotionValue(0)
+  const x    = useSpring(rawX, { stiffness: 280, damping: 22, mass: 0.5 })
+  const y    = useSpring(rawY, { stiffness: 280, damping: 22, mass: 0.5 })
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches) return
+    const el = ref.current
+    if (!el) return
+    const onMove = (e) => {
+      const r = el.getBoundingClientRect()
+      rawX.set((e.clientX - r.left - r.width  / 2) * strength)
+      rawY.set((e.clientY - r.top  - r.height / 2) * strength)
+    }
+    const onLeave = () => { rawX.set(0); rawY.set(0) }
+    el.addEventListener('mousemove', onMove)
+    el.addEventListener('mouseleave', onLeave)
+    return () => {
+      el.removeEventListener('mousemove', onMove)
+      el.removeEventListener('mouseleave', onLeave)
+    }
+  }, [strength, rawX, rawY])
+
+  return { ref, x, y }
+}
+
 const Hero = () => {
   const sectionRef = useRef(null)
   const reduced    = useReducedMotion()
   const isMobile   = useIsMobile()
   const typedRole  = useTypingEffect(ROLES)
+  const m1         = useMagnet(0.3)
+  const m2         = useMagnet(0.3)
 
   // Word stagger: tighter on mobile
   const wordDelay = isMobile ? 0.04 : 0.06
@@ -116,22 +146,25 @@ const Hero = () => {
           className="flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-4 w-full max-w-[340px] md:max-w-none md:justify-center"
         >
           <motion.button
+            ref={m1.ref}
             onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
             whileTap={{ scale: 0.96 }}
             whileHover={{ scale: 1.03, filter: 'brightness(1.08)' }}
             transition={springBtn}
             className="px-6 py-4 md:py-3 rounded-lg bg-accent text-bg font-body font-semibold text-sm cursor-pointer text-center"
-            style={{ boxShadow: '0 4px 20px rgba(232,255,77,0.2), inset 0 1px 0 rgba(255,255,255,0.25)' }}
+            style={{ x: m1.x, y: m1.y, boxShadow: '0 4px 20px rgba(232,255,77,0.2), inset 0 1px 0 rgba(255,255,255,0.25)' }}
           >
             View Projects
           </motion.button>
           <motion.a
+            ref={m2.ref}
             href="/cv.pdf"
             download
             whileTap={{ scale: 0.96 }}
             whileHover={{ scale: 1.03 }}
             transition={springBtn}
             className="px-6 py-4 md:py-3 rounded-lg border border-accent text-accent font-body font-semibold text-sm hover:bg-accent hover:text-bg transition-colors cursor-pointer glass-card text-center"
+            style={{ x: m2.x, y: m2.y }}
           >
             Download CV
           </motion.a>
