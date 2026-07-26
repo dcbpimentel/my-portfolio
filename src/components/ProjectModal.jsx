@@ -56,10 +56,25 @@ const ProjectModal = ({ project, index = 0, onClose }) => {
         exit="exit"
         className="fixed z-50 overflow-hidden flex flex-col bg-surface border border-border shadow-2xl"
         style={isMobile
-          ? { bottom: 0, left: 0, right: 0, height: '92vh', borderRadius: '16px 16px 0 0' }
+          ? { bottom: 0, left: 0, right: 0, top: 80, borderRadius: '16px 16px 0 0' }
           : { inset: 0, margin: 'auto', width: '100%', maxWidth: '680px', maxHeight: '85vh', borderRadius: '16px' }
         }
       >
+        {/* Mobile: sticky header with drag handle + close button */}
+        {isMobile && (
+          <div className="flex-shrink-0 flex items-center justify-between px-4 pt-3 pb-2">
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: 'var(--color-border)' }} />
+            <button
+              onClick={onClose}
+              className="flex items-center justify-center w-9 h-9 rounded-full"
+              style={{ background: 'var(--color-surface2)', color: 'var(--color-text-secondary)' }}
+              aria-label="Close"
+            >
+              <FiX size={18} />
+            </button>
+          </div>
+        )}
+
         {/* Cover / Image */}
         <div className="aspect-video w-full overflow-hidden flex-shrink-0 relative">
           {image ? (
@@ -67,14 +82,17 @@ const ProjectModal = ({ project, index = 0, onClose }) => {
           ) : (
             <ProjectCover id={id} index={index} title={title} category={category} />
           )}
-          <button
-            onClick={onClose}
-            className="absolute top-3 right-3 flex items-center justify-center w-9 h-9 rounded-full transition-colors"
-            style={{ background: 'rgba(0,0,0,0.55)', color: '#fff' }}
-            aria-label="Close"
-          >
-            <FiX size={18} />
-          </button>
+          {/* Desktop-only close button inside cover */}
+          {!isMobile && (
+            <button
+              onClick={onClose}
+              className="absolute top-3 right-3 flex items-center justify-center w-9 h-9 rounded-full transition-colors"
+              style={{ background: 'rgba(0,0,0,0.55)', color: '#fff' }}
+              aria-label="Close"
+            >
+              <FiX size={18} />
+            </button>
+          )}
         </div>
 
         {/* Content */}
