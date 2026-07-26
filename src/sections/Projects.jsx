@@ -12,7 +12,7 @@ const TABS = [
 ]
 
 const ProjectCard = ({ project, index, inCarousel, onClick }) => {
-  const { id, title, description, tags, category } = project
+  const { id, title, subtitle, description, tags, category } = project
   const reduced = useReducedMotion()
 
   return (
@@ -32,7 +32,7 @@ const ProjectCard = ({ project, index, inCarousel, onClick }) => {
     >
       <ProjectCover id={id} index={index} title={title} category={category} />
 
-      <div className="flex flex-col flex-1 p-5 gap-3">
+      <div className="flex flex-col flex-1 p-5 gap-2.5">
         <div className="flex flex-wrap gap-2">
           {tags.map(tag => (
             <span
@@ -47,6 +47,12 @@ const ProjectCard = ({ project, index, inCarousel, onClick }) => {
         <h3 className="font-display font-bold text-base text-text-primary leading-snug">
           {title}
         </h3>
+
+        {subtitle && (
+          <p className="font-body text-sm text-accent/80 leading-snug -mt-0.5">
+            {subtitle}
+          </p>
+        )}
 
         <p className="font-body text-sm text-text-secondary leading-relaxed line-clamp-2 flex-1">
           {description}

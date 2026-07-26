@@ -1,8 +1,26 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { FiCheck, FiBookOpen, FiDownload, FiMessageSquare, FiAward } from 'react-icons/fi'
+import { FiBookOpen, FiDownload, FiMessageSquare, FiAward, FiPenTool, FiCode, FiVideo } from 'react-icons/fi'
 import { aboutContent } from '../data/skills'
 import CertificatesModal from '../components/CertificatesModal'
+
+const SERVICES = [
+  {
+    icon: FiPenTool,
+    title: 'UI/UX Design',
+    desc: 'From wireframes and Figma prototypes to polished, pixel-perfect interfaces people actually enjoy.',
+  },
+  {
+    icon: FiCode,
+    title: 'Frontend Dev',
+    desc: 'Building fast, responsive web apps with React and Tailwind. What I design is what gets built.',
+  },
+  {
+    icon: FiVideo,
+    title: 'Video Production',
+    desc: 'Shooting and editing short-form content, montages, and promo videos with Final Cut Pro.',
+  },
+]
 
 const slideIn = (direction, delay = 0) => ({
   initial:    { opacity: 0, x: direction === 'left' ? -40 : 40 },
@@ -67,28 +85,31 @@ const About = () => {
               {paragraph}
             </p>
 
-            {/* What I do */}
+            {/* Service cards */}
             <div className="flex flex-col gap-3">
               <p className="font-body text-sm text-text-secondary uppercase tracking-widest">
                 What I do
               </p>
-              <ul className="flex flex-col gap-3">
-                {whatIDo.map((item, i) => (
-                  <motion.li
-                    key={i}
-                    initial={{ opacity: 0, y: 12 }}
+              <div className="grid grid-cols-1 gap-3">
+                {SERVICES.map(({ icon: Icon, title, desc }, i) => (
+                  <motion.div
+                    key={title}
+                    initial={{ opacity: 0, y: 14 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.35, ease: 'easeOut', delay: i * 0.07 }}
-                    className="flex items-start gap-3 whatido-card"
+                    className="glass-card flex items-start gap-4 p-4 rounded-xl"
                   >
-                    <FiCheck size={16} className="text-accent mt-0.5 flex-shrink-0" />
-                    <span className="font-body text-sm text-text-secondary leading-relaxed">
-                      {item}
+                    <span className="flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-lg bg-accent/10 border border-accent/20">
+                      <Icon size={16} className="text-accent" />
                     </span>
-                  </motion.li>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="font-body text-sm font-semibold text-text-primary">{title}</span>
+                      <span className="font-body text-xs text-text-secondary leading-relaxed">{desc}</span>
+                    </div>
+                  </motion.div>
                 ))}
-              </ul>
+              </div>
             </div>
 
             {/* Fun line */}

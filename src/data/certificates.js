@@ -41,7 +41,7 @@ const certificates = [
   },
   {
     id: 6,
-    title: "IT Week 2025 — Certificate of Attendance",
+    title: "IT Week 2025 : Certificate of Attendance",
     issuer: "Ateneo de Davao University",
     category: "Event",
     file: "/certificates/it-week-2025.pdf",
@@ -49,7 +49,7 @@ const certificates = [
   },
   {
     id: 7,
-    title: "IT Week 2024 — Certificate of Appreciation",
+    title: "IT Week 2024 : Certificate of Appreciation",
     issuer: "Ateneo de Davao University",
     category: "Event",
     file: "/certificates/it-week-2024.png",
@@ -57,7 +57,7 @@ const certificates = [
   },
   {
     id: 8,
-    title: "Arrupe Exhibit — Certificate of Attendance",
+    title: "Arrupe Exhibit : Certificate of Attendance",
     issuer: "Ateneo de Davao University",
     category: "Event",
     file: "/certificates/arrupe-exhibit.pdf",

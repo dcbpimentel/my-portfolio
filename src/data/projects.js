@@ -2,6 +2,7 @@ const projects = [
   {
     id: 9,
     title: "BANGERS",
+    subtitle: "Live tournament manager for badminton and pickleball hosts",
     description:
       "A real-time badminton and pickleball tournament manager built for hosts running live sessions. Hosts register players by skill level, auto-generate round-robin brackets, and track match scores across multiple courts simultaneously. Supabase Realtime pushes live score and bracket updates to all connected devices without any page refresh.",
     tags: ["React", "TypeScript", "Supabase", "Vite", "Tailwind CSS"],
@@ -15,6 +16,7 @@ const projects = [
   {
     id: 1,
     title: "Davao Housing Rental",
+    subtitle: "Find and compare verified student dorms near AdDU",
     description:
       "A Flutter mobile app for finding verified dormitories near Ateneo de Davao University. Features Google Sign-In, a live dashboard of dorm listings with ratings and pricing, map coordinates, and a detailed dorm view with owner contact info. Built with real data sourced via Supabase. Co-created with Brian.",
     tags: ["Flutter", "Dart", "Supabase", "Firebase"],
@@ -28,6 +30,7 @@ const projects = [
   {
     id: 2,
     title: "Boyd's Pizza House: Restaurant Operations",
+    subtitle: "Full operations dashboard built for a real local restaurant",
     description:
       "A full-featured web-based restaurant management system for Boyd's Pizza House. Includes a live operations dashboard tracking daily sales, inventory value, and gross profit, plus modules for staff management, menu engineering, purchasing, catering, and sales reports. Co-created with Jed and Brian.",
     tags: ["Web App", "Dashboard", "Operations", "Full Stack"],
@@ -41,6 +44,7 @@ const projects = [
   {
     id: 3,
     title: "Pomodoro+",
+    subtitle: "A redesigned focus timer with a premium glassy look",
     description:
       "A Java Swing desktop application redesigned with a gradient glass-morphism UI. Supports configurable study duration, break duration, and number of sessions with real-time countdown, session progress tracking, and a native macOS-style notification at session end.",
     tags: ["Java", "Swing", "Desktop", "GUI"],
@@ -54,6 +58,7 @@ const projects = [
   {
     id: 4,
     title: "Fullstack Portfolio",
+    subtitle: "My first fullstack website, where it all started",
     description:
       "My first fullstack portfolio website built with Node.js, Express, and EJS server-side templates. Features a glass-morphism dark UI, animated project cards, a terminal-style About section, and an integrated Google Drive viewer for database project files.",
     tags: ["Node.js", "Express.js", "EJS", "CSS"],
@@ -67,6 +72,7 @@ const projects = [
   {
     id: 8,
     title: "Smart Menu Pricing",
+    subtitle: "Helps restaurant owners calculate dish costs and set the right price",
     description:
       "A full-stack web application that helps small restaurant owners in Kidapawan City, Philippines calculate the exact ingredient cost of every dish and get recommended selling prices based on target food-cost percentages. Owners can manage ingredients, build recipes with quantities, and import live market prices from DTI and DA government bulletins via an automated extraction pipeline that supports HTML scraping, PDF parsing, and OCR with fuzzy ingredient matching. Co-created with Jed and Brian.",
     tags: ["React", "Node.js", "Express", "MySQL", "Tailwind CSS"],
@@ -80,12 +86,13 @@ const projects = [
   {
     id: 7,
     title: "Rally by Dwyane",
+    subtitle: "Run pickleball open play: teams, scores, and leaderboards from your phone",
     description:
-      "A mobile-first web app for organizing pickleball open play sessions at the court. Lets a host add players to a roster, randomize balanced teams across multiple courts, track live scores, and maintain a season leaderboard. Built as an installable PWA with full offline support — all data lives in the browser with no backend or account required.",
+      "A mobile-first web app for organizing pickleball open play sessions at the court. Lets a host add players to a roster, randomize balanced teams across multiple courts, track live scores, and maintain a season leaderboard. Built as an installable PWA with full offline support. All data lives in the browser with no backend or account required.",
     tags: ["React", "TypeScript", "Tailwind CSS", "Zustand", "PWA"],
     category: "frontend",
     type: "tryme",
-    trymeDescription: "Organize pickleball open play — add players, randomize balanced teams across courts, track live scores, and manage a season leaderboard, all from your phone with no account needed.",
+    trymeDescription: "Organize pickleball open play: add players, randomize balanced teams across courts, track live scores, and manage a season leaderboard, all from your phone with no account needed.",
     image: null,
     githubUrl: "https://github.com/dcbpimentel/rally",
     liveUrl: "https://rally-by-dcbp.vercel.app",
@@ -94,6 +101,7 @@ const projects = [
   {
     id: 6,
     title: "Presnt",
+    subtitle: "QR code attendance: students scan in, teachers see it instantly",
     description:
       "A QR-based attendance system for teachers and students built as a full-stack web app. Teachers start a live session that generates a scannable QR code, and students scan it from their phone to instantly mark themselves present or late. Supabase Row Level Security enforces data isolation between users entirely at the database level, with no custom backend server.",
     tags: ["React", "Supabase", "Tailwind CSS", "PostgreSQL", "Recharts"],
@@ -107,6 +115,7 @@ const projects = [
   {
     id: 5,
     title: "Intro Web: Calculator Suite",
+    subtitle: "My very first web project, calculators built from scratch in freshman year",
     description:
       "A set of utility web pages built from scratch in my freshman year: unit conversion, income tax calculator, factorial/sum/average solver, and a simple payroll processor. My first real HTML/CSS/JavaScript project, where it all started.",
     tags: ["HTML", "CSS", "JavaScript"],

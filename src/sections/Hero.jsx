@@ -138,12 +138,12 @@ const Hero = () => {
           Designing something is easy. Making it actually work the way people expect? That&apos;s the part I love.
         </motion.p>
 
-        {/* CTA Buttons — stacked + full-width on mobile, row on md+ */}
+        {/* CTA Buttons — full-width stacked on mobile, auto-width row on desktop */}
         <motion.div
           initial={reduced ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: 'easeOut', delay: 0.68 }}
-          className="flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-4 w-full max-w-[340px] md:max-w-none md:justify-center"
+          className="flex flex-col sm:flex-row items-stretch sm:items-center sm:justify-center gap-3 w-full max-w-[340px] sm:max-w-none"
         >
           <motion.button
             ref={m1.ref}
@@ -151,7 +151,7 @@ const Hero = () => {
             whileTap={{ scale: 0.96 }}
             whileHover={{ scale: 1.03, filter: 'brightness(1.08)' }}
             transition={springBtn}
-            className="px-6 py-4 md:py-3 rounded-lg bg-accent text-bg font-body font-semibold text-sm cursor-pointer text-center"
+            className="px-8 py-3.5 rounded-lg bg-accent text-bg font-body font-semibold text-sm cursor-pointer text-center whitespace-nowrap"
             style={{ x: m1.x, y: m1.y, boxShadow: '0 4px 20px rgba(232,255,77,0.2), inset 0 1px 0 rgba(255,255,255,0.25)' }}
           >
             View Projects
@@ -163,7 +163,7 @@ const Hero = () => {
             whileTap={{ scale: 0.96 }}
             whileHover={{ scale: 1.03 }}
             transition={springBtn}
-            className="px-6 py-4 md:py-3 rounded-lg border border-accent text-accent font-body font-semibold text-sm hover:bg-accent hover:text-bg transition-colors cursor-pointer glass-card text-center"
+            className="px-8 py-3.5 rounded-lg border border-accent text-accent font-body font-semibold text-sm hover:bg-accent hover:text-bg transition-colors cursor-pointer glass-card text-center whitespace-nowrap"
             style={{ x: m2.x, y: m2.y }}
           >
             Download CV

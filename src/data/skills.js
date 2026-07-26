@@ -35,14 +35,14 @@ export const skills = [
     iconName: "SiFigma",         // react-icons/si
   },
   {
-    name: "Adobe XD",
+    name: "Claude Design",
     category: "design",
-    iconName: "SiAdobexd",       // react-icons/si
+    iconName: "SiAnthropic",     // react-icons/si
   },
   {
-    name: "Framer",
+    name: "Canva",
     category: "design",
-    iconName: "SiFramer",        // react-icons/si
+    iconName: "SiCanva",         // react-icons/si
   },
 
   // ── Frontend ────────────────────────────────
@@ -97,6 +97,11 @@ export const skills = [
     name: "npm",
     category: "tools",
     iconName: "SiNpm",           // react-icons/si
+  },
+  {
+    name: "Xcode",
+    category: "tools",
+    iconName: "SiXcode",         // react-icons/si
   },
 
   // ── Creative ────────────────────────────────

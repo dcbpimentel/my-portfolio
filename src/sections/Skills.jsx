@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, useAnimation } from 'framer-motion'
 import {
-  SiFigma, SiFramer,
+  SiFigma, SiCanva,
   SiTailwindcss, SiJavascript, SiTypescript, SiHtml5,
-  SiAnthropic, SiVercel, SiNpm,
+  SiAnthropic, SiVercel, SiNpm, SiXcode,
 } from 'react-icons/si'
 import { FaReact, FaGitAlt } from 'react-icons/fa'
 import { VscVscode } from 'react-icons/vsc'
@@ -11,9 +11,9 @@ import { FiPenTool, FiVideo, FiFilm, FiInstagram, FiScissors } from 'react-icons
 import { skills, skillCategories } from '../data/skills'
 
 const ICON_MAP = {
-  SiFigma, SiAdobexd: FiPenTool, SiFramer,
+  SiFigma, SiCanva,
   FaReact, SiTailwindcss, SiJavascript, SiTypescript, SiHtml5,
-  FaGitAlt, VscVscode, SiAnthropic, SiVercel, SiNpm,
+  FaGitAlt, VscVscode, SiAnthropic, SiVercel, SiNpm, SiXcode,
   FiVideo, FiFilm, FiInstagram, FiScissors,
 }
 
@@ -56,28 +56,65 @@ const SkillCard = ({ skill, globalIndex }) => {
   )
 }
 
-// ── Mobile/tablet skill pill ──────────────────────────────────────
-const SkillPill = ({ skill, index }) => {
+// ── Mobile skill icon card ────────────────────────────────────────
+const MobileSkillCard = ({ skill, index, catIdx }) => {
   const Icon = ICON_MAP[skill.iconName]
+  const glowControls = useAnimation()
+  const iconControls = useAnimation()
+
+  const handleTap = () => {
+    glowControls.start({
+      opacity: [0, 1, 0],
+      transition: { duration: 0.55, ease: 'easeOut' },
+    })
+    iconControls.start({
+      scale: [1, 1.35, 1],
+      filter: ['brightness(0.7)', 'brightness(2)', 'brightness(1)'],
+      transition: { duration: 0.4, ease: [0.34, 1.56, 0.64, 1] },
+    })
+  }
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.04, duration: 0.2, ease: 'easeOut' }}
-      whileTap={{ scale: 1.1, transition: { type: 'spring', stiffness: 600, damping: 20 } }}
-      className="glass-card flex items-center gap-2 px-3 py-2.5 rounded-full cursor-pointer select-none"
+      onTap={handleTap}
+      initial={{ opacity: 0, scale: 0.75, y: 18 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+      viewport={{ once: true, margin: '-10px' }}
+      transition={{
+        type: 'spring',
+        stiffness: 260,
+        damping: 18,
+        delay: catIdx * 0.06 + index * 0.045,
+      }}
+      whileTap={{ scale: 0.88, transition: { type: 'spring', stiffness: 600, damping: 22 } }}
+      className="relative glass-card flex flex-col items-center justify-center gap-2 p-3 rounded-xl aspect-square select-none overflow-hidden"
     >
-      {Icon && <Icon size={15} className="text-accent flex-shrink-0" />}
-      <span className="font-body text-xs text-text-secondary whitespace-nowrap">{skill.name}</span>
+      {/* Tap glow flash */}
+      <motion.div
+        animate={glowControls}
+        initial={{ opacity: 0 }}
+        className="absolute inset-0 rounded-xl pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle at 50% 45%, rgba(232,255,77,0.24) 0%, transparent 72%)',
+          border: '1px solid rgba(232,255,77,0.4)',
+        }}
+      />
+
+      <motion.div
+        animate={iconControls}
+        className="relative z-10 text-accent/70 flex-shrink-0"
+      >
+        {Icon ? <Icon size={22} /> : <span className="w-5 h-5 rounded bg-border" />}
+      </motion.div>
+
+      <span className="relative z-10 font-body text-[10px] text-text-secondary text-center leading-tight">
+        {skill.name}
+      </span>
     </motion.div>
   )
 }
 
 const Skills = () => {
-  const [activeTab, setActiveTab] = useState(skillCategories[0]?.key ?? '')
-
-  const tabSkills = skills.filter(s => s.category === activeTab)
-
   return (
     <section
       id="skills"
@@ -122,48 +159,26 @@ const Skills = () => {
           </motion.p>
         </div>
 
-        {/* ── Mobile + Tablet: Tab UI (hidden on lg+) ── */}
-        <div className="flex flex-col gap-5 lg:hidden">
-          {/* Scrollable tab row */}
-          <div
-            className="flex gap-2 overflow-x-auto pb-1"
-            style={{ scrollbarWidth: 'none', WebkitScrollbar: 'none' }}
-          >
-            {skillCategories.map(cat => (
-              <motion.button
-                key={cat.key}
-                onClick={() => setActiveTab(cat.key)}
-                whileTap={{ scale: 0.96 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                className={`
-                  flex-none px-5 py-2 rounded-full font-body text-sm font-medium
-                  whitespace-nowrap transition-colors duration-200 cursor-pointer
-                  min-h-[44px]
-                  ${activeTab === cat.key
-                    ? 'bg-accent text-bg'
-                    : 'border border-border text-text-secondary hover:border-accent hover:text-accent'}
-                `}
+        {/* ── Mobile + Tablet: Grouped icon grid (hidden on lg+) ── */}
+        <div className="flex flex-col gap-8 lg:hidden">
+          {grouped.map(({ key, label, items }, catIdx) => (
+            <div key={key} className="flex flex-col gap-3">
+              <motion.p
+                initial={{ opacity: 0, x: -14 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: '-20px' }}
+                transition={{ duration: 0.38, ease: 'easeOut', delay: catIdx * 0.06 }}
+                className="font-body text-xs text-accent uppercase tracking-widest font-semibold"
               >
-                {cat.label}
-              </motion.button>
-            ))}
-          </div>
-
-          {/* Animated pill grid */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.18, ease: 'easeOut' }}
-              className="flex flex-wrap gap-2"
-            >
-              {tabSkills.map((skill, i) => (
-                <SkillPill key={skill.name} skill={skill} index={i} />
-              ))}
-            </motion.div>
-          </AnimatePresence>
+                {label}
+              </motion.p>
+              <div className="grid grid-cols-4 gap-2.5">
+                {items.map((skill, i) => (
+                  <MobileSkillCard key={skill.name} skill={skill} index={i} catIdx={catIdx} />
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* ── Desktop: Grouped grid (hidden below lg) ── */}
