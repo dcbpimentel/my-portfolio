@@ -27,7 +27,7 @@ const Hero = () => {
       id="hero"
       className="min-h-screen flex items-center justify-center px-6 pt-16 overflow-hidden"
     >
-      <div className="flex flex-col items-center text-center max-w-prose gap-5 md:gap-6 w-full">
+      <div className="flex flex-col items-center text-center max-w-prose gap-5 md:gap-6 w-full mb-[18vh] md:mb-0">
 
         {/* Badge */}
         <motion.div
