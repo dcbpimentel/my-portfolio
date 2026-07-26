@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, useMemo, useLayoutEffect } from 'react'
-import { motion, AnimatePresence, useMotionValue, animate } from 'framer-motion'
+import { useState, useRef, useEffect, useMemo } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import projects from '../data/projects'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import ProjectCover from '../components/ProjectCover'
@@ -60,56 +60,35 @@ const ProjectCard = ({ project, index, inCarousel, onClick }) => {
   )
 }
 
-// ── Mobile Carousel (drag) ────────────────────────────────────────
-const CARD_VW   = 85
-const CARD_GAP  = 16
-const PAD_VW    = 7.5
-
+// ── Mobile Carousel (CSS scroll-snap) ────────────────────────────
 const ProjectCarousel = ({ items, onCardClick }) => {
-  const containerRef = useRef(null)
-  const trackRef     = useRef(null)
-  const isDragging   = useRef(false)
-  const [current, setCurrent]           = useState(0)
-  const [leftConstraint, setLeftConstraint] = useState(0)
-  const x = useMotionValue(0)
+  const trackRef  = useRef(null)
+  const cardRefs  = useRef([])
+  const [current, setCurrent] = useState(0)
 
-  const cardWidth = () =>
-    containerRef.current
-      ? containerRef.current.offsetWidth * (CARD_VW / 100) + CARD_GAP
-      : 0
-
-  // Reset when tab changes
   useEffect(() => {
     setCurrent(0)
-    animate(x, 0, { duration: 0 })
+    if (trackRef.current) trackRef.current.scrollLeft = 0
   }, [items])
 
-  // Recalculate drag bounds
-  useLayoutEffect(() => {
-    const update = () => {
-      if (!trackRef.current || !containerRef.current) return
-      setLeftConstraint(
-        -(trackRef.current.scrollWidth - containerRef.current.offsetWidth)
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+    const observers = items.map((_, i) => {
+      const card = cardRefs.current[i]
+      if (!card) return null
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting && entry.intersectionRatio >= 0.55) setCurrent(i) },
+        { threshold: 0.55, root: track }
       )
-    }
-    update()
-    window.addEventListener('resize', update)
-    return () => window.removeEventListener('resize', update)
+      obs.observe(card)
+      return obs
+    })
+    return () => observers.forEach(o => o?.disconnect())
   }, [items])
 
-  const snapTo = (idx) => {
-    const clamped = Math.max(0, Math.min(idx, items.length - 1))
-    setCurrent(clamped)
-    animate(x, -clamped * cardWidth(), { type: 'spring', stiffness: 400, damping: 40 })
-  }
-
-  const onDragEnd = (_, info) => {
-    setTimeout(() => { isDragging.current = false }, 50)
-    if (Math.abs(info.velocity.x) > 300) {
-      snapTo(info.velocity.x > 0 ? current - 1 : current + 1)
-    } else {
-      snapTo(Math.round(-x.get() / cardWidth()))
-    }
+  const scrollToCard = (i) => {
+    cardRefs.current[i]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
   }
 
   return (
@@ -119,33 +98,26 @@ const ProjectCarousel = ({ items, onCardClick }) => {
       viewport={{ once: true, margin: '-80px' }}
       transition={{ type: 'spring', stiffness: 60, damping: 20 }}
     >
-      {/* -mx-6 escapes the parent px-6 padding for full-bleed drag */}
-      <div ref={containerRef} className="-mx-6 overflow-hidden">
-        <motion.div
-          ref={trackRef}
-          drag="x"
-          dragConstraints={{ left: leftConstraint, right: 0 }}
-          dragElastic={0.06}
-          style={{ x, display: 'flex', gap: `${CARD_GAP}px`, paddingInline: `${PAD_VW}vw`, cursor: 'grab' }}
-          whileDrag={{ cursor: 'grabbing' }}
-          onDragStart={() => { isDragging.current = true }}
-          onDragEnd={onDragEnd}
-        >
-          {items.map((project, index) => (
-            <div
-              key={project.id}
-              className="flex-shrink-0"
-              style={{ width: `${CARD_VW}vw` }}
-            >
-              <ProjectCard
-                project={project}
-                index={index}
-                inCarousel
-                onClick={() => { if (!isDragging.current) onCardClick(project, index) }}
-              />
-            </div>
-          ))}
-        </motion.div>
+      <div
+        ref={trackRef}
+        className="carousel-track flex gap-4"
+        style={{ paddingInline: '7.5vw' }}
+      >
+        {items.map((project, index) => (
+          <div
+            key={project.id}
+            ref={el => { cardRefs.current[index] = el }}
+            className="flex-shrink-0 snap-center"
+            style={{ width: '85vw' }}
+          >
+            <ProjectCard
+              project={project}
+              index={index}
+              inCarousel
+              onClick={() => onCardClick(project, index)}
+            />
+          </div>
+        ))}
       </div>
 
       {items.length > 1 && (
@@ -153,7 +125,7 @@ const ProjectCarousel = ({ items, onCardClick }) => {
           {items.map((_, i) => (
             <motion.div
               key={i}
-              onClick={() => snapTo(i)}
+              onClick={() => scrollToCard(i)}
               animate={{ width: i === current ? 20 : 8, opacity: i === current ? 1 : 0.35 }}
               transition={{ type: 'spring', stiffness: 300, damping: 28 }}
               className="h-2 rounded-full bg-accent cursor-pointer"
