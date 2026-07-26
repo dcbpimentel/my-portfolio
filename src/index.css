@@ -67,6 +67,22 @@
   }
 }
 
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 0.8em;
+  background: var(--color-accent);
+  margin-left: 3px;
+  vertical-align: middle;
+  border-radius: 1px;
+  animation: blink 1s step-end infinite;
+}
+
 @layer components {
   /* ── Glass card ──────────────────────────────────────────────────
      backdrop-filter only on pointer devices (avoids mobile GPU crash) */

@@ -240,7 +240,18 @@ const Contact = () => {
             </span>
 
             <h2 className="font-display font-bold text-3xl md:text-4xl text-text-primary leading-tight">
-              Got something in mind?
+              {['Got', 'something', 'in', 'mind?'].map((word, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.5, ease: 'easeOut', delay: i * 0.08 }}
+                  className="inline-block mr-[0.25em] last:mr-0"
+                >
+                  {word}
+                </motion.span>
+              ))}
             </h2>
 
             <p className="font-body text-text-secondary text-base leading-relaxed">

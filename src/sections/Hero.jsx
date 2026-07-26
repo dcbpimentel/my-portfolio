@@ -1,10 +1,41 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { FiGithub, FiLinkedin } from 'react-icons/fi'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { useIsMobile } from '../hooks/useIsMobile'
 
 const HEADLINE_WORDS = ['Works', 'the', 'way', 'you', 'expect', 'it', 'to.']
+const ROLES = ['UI/UX Designer', 'Vibe Coder', 'Videographer']
+
+function useTypingEffect(words, { typeSpeed = 65, deleteSpeed = 35, pauseAfterType = 1800, pauseAfterDelete = 400 } = {}) {
+  const [displayed, setDisplayed] = useState(words[0])
+  const [wordIdx,   setWordIdx]   = useState(0)
+  const [deleting,  setDeleting]  = useState(false)
+  const reduced = useReducedMotion()
+
+  useEffect(() => {
+    if (reduced) return
+    const word = words[wordIdx]
+    let t
+    if (!deleting) {
+      if (displayed.length < word.length) {
+        t = setTimeout(() => setDisplayed(word.slice(0, displayed.length + 1)), typeSpeed)
+      } else {
+        t = setTimeout(() => setDeleting(true), pauseAfterType)
+      }
+    } else {
+      if (displayed.length > 0) {
+        t = setTimeout(() => setDisplayed(displayed.slice(0, -1)), deleteSpeed)
+      } else {
+        setDeleting(false)
+        setWordIdx((wordIdx + 1) % words.length)
+      }
+    }
+    return () => clearTimeout(t)
+  }, [displayed, deleting, wordIdx, words, reduced])
+
+  return displayed
+}
 
 const SOCIALS = [
   { icon: FiGithub,   href: 'https://github.com/dcbpimentel',                               label: 'GitHub'   },
@@ -15,8 +46,9 @@ const springBtn = { type: 'spring', stiffness: 400, damping: 17 }
 
 const Hero = () => {
   const sectionRef = useRef(null)
-  const reduced  = useReducedMotion()
-  const isMobile = useIsMobile()
+  const reduced    = useReducedMotion()
+  const isMobile   = useIsMobile()
+  const typedRole  = useTypingEffect(ROLES)
 
   // Word stagger: tighter on mobile
   const wordDelay = isMobile ? 0.04 : 0.06
@@ -54,14 +86,16 @@ const Hero = () => {
           ))}
         </h1>
 
-        {/* Subtitle */}
+        {/* Subtitle — typing effect */}
         <motion.h2
           initial={reduced ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: 'easeOut', delay: 0.50 }}
           className="font-body font-medium text-lg md:text-xl lg:text-2xl text-accent"
+          style={{ minHeight: '1.5em' }}
         >
-          UI/UX Designer · Vibe Coder · Videographer
+          {typedRole}
+          <span className="typing-cursor" aria-hidden="true" />
         </motion.h2>
 
         {/* Bio */}

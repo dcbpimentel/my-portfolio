@@ -97,15 +97,20 @@ const Skills = () => {
 
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-3">
-          <motion.h2
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="font-display font-bold text-4xl md:text-5xl text-text-primary"
-          >
-            Tech Stack
-          </motion.h2>
+          <h2 className="font-display font-bold text-4xl md:text-5xl text-text-primary">
+            {['Tech', 'Stack'].map((word, i) => (
+              <motion.span
+                key={i}
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.55, ease: 'easeOut', delay: i * 0.1 }}
+                className="inline-block mr-[0.25em] last:mr-0"
+              >
+                {word}
+              </motion.span>
+            ))}
+          </h2>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
