@@ -60,10 +60,9 @@ const Showreel = () => {
           style={{ maxWidth: '860px' }}
         >
           <div
-            className="relative w-full glass-card border border-border overflow-hidden"
+            className="relative w-full glass-card border border-border overflow-hidden aspect-[3/2] sm:aspect-video"
             style={{
               borderRadius: '20px',
-              aspectRatio: '16/9',
               boxShadow: '0 0 0 1px var(--color-border), 0 24px 80px rgba(0,0,0,0.4), 0 0 60px var(--accent-glow)',
             }}
           >
