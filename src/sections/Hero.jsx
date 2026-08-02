@@ -166,7 +166,7 @@ const Hero = () => {
             target="_blank"
             rel="noopener noreferrer"
             whileTap={{ scale: 0.96 }}
-            whileHover={{ scale: 1.03 }}
+            whileHover={{ scale: 1.03, filter: 'brightness(1.08)' }}
             transition={springBtn}
             className="px-8 py-3.5 rounded-lg border border-accent text-accent font-body font-semibold text-sm cursor-pointer glass-card text-center whitespace-nowrap"
             style={{ x: m2.x, y: m2.y }}
