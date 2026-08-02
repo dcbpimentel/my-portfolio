@@ -38,18 +38,6 @@ const About = () => {
     <section id="about" className="py-section px-6 relative overflow-hidden">
       <div className="absolute inset-x-0 bottom-0 h-28 pointer-events-none section-fade-bottom" />
 
-      {/* Section number watermark */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-        aria-hidden="true"
-        className="absolute top-0 left-0 font-display font-bold pointer-events-none select-none leading-none"
-        style={{ fontSize: 'clamp(100px, 18vw, 200px)', color: 'var(--color-accent)', opacity: 0.035, lineHeight: 1 }}
-      >
-        02
-      </motion.div>
 
       <div className="max-w-content mx-auto relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">

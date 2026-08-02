@@ -31,18 +31,6 @@ const STEPS = [
 const Process = () => (
   <section id="process" className="py-section px-6 relative overflow-hidden">
 
-    {/* Section number watermark */}
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
-      aria-hidden="true"
-      className="absolute top-0 left-0 font-display font-bold pointer-events-none select-none leading-none"
-      style={{ fontSize: 'clamp(100px, 18vw, 200px)', color: 'var(--color-accent)', opacity: 0.035, lineHeight: 1 }}
-    >
-      03
-    </motion.div>
 
     <div className="max-w-content mx-auto relative z-10">
 
