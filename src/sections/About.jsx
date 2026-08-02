@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { FiBookOpen, FiDownload, FiMessageSquare, FiAward, FiPenTool, FiCode, FiVideo } from 'react-icons/fi'
+import { FiBookOpen, FiMessageSquare, FiAward, FiPenTool, FiCode, FiVideo } from 'react-icons/fi'
 import { aboutContent } from '../data/skills'
 import CertificatesModal from '../components/CertificatesModal'
 import current from '../data/current'
@@ -145,18 +145,6 @@ const About = () => {
 
             {/* CTAs */}
             <div className="flex items-center gap-4 flex-wrap pt-1">
-              <motion.a
-                href="/cv.pdf"
-                download
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.96 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-accent text-bg font-body font-semibold text-sm hover:opacity-90 transition-opacity"
-                style={{ boxShadow: '0 4px 16px rgba(232, 255, 77, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3)' }}
-              >
-                <FiDownload size={15} />
-                Download CV
-              </motion.a>
               <motion.button
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
                 whileHover={{ scale: 1.03 }}

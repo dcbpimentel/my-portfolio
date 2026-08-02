@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiX, FiDownload, FiExternalLink, FiAward, FiArrowLeft, FiFileText } from 'react-icons/fi'
+import { FiX, FiExternalLink, FiAward, FiArrowLeft, FiFileText } from 'react-icons/fi'
 import certificates from '../data/certificates'
 
 // Category badge colors
@@ -97,13 +97,7 @@ const Viewer = ({ cert, onClose }) => {
 
         <p className="font-body text-xs text-white/35 truncate max-w-[50%] text-center">{cert.title}</p>
 
-        <a
-          href={cert.file}
-          download
-          className="flex items-center gap-1.5 py-2 pl-3 text-white/60 hover:text-white transition-colors font-body text-sm min-h-[44px] min-w-[44px] justify-end"
-        >
-          <FiDownload size={18} />
-        </a>
+        <div className="min-w-[44px]" />
       </div>
 
       {/* Certificate content */}
@@ -137,13 +131,6 @@ const Viewer = ({ cert, onClose }) => {
             >
               <FiExternalLink size={15} />
               Open PDF
-            </a>
-            <a
-              href={cert.file}
-              download
-              className="font-body text-sm text-white/40 hover:text-white/70 transition-colors"
-            >
-              or download
             </a>
           </div>
         ) : (

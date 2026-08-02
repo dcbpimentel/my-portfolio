@@ -78,7 +78,6 @@ const Hero = () => {
   const isMobile   = useIsMobile()
   const typedRole  = useTypingEffect(ROLES)
   const m1         = useMagnet(0.3)
-  const m2         = useMagnet(0.3)
 
   // Word stagger: tighter on mobile
   const wordDelay = isMobile ? 0.04 : 0.06
@@ -160,18 +159,6 @@ const Hero = () => {
           >
             View Projects
           </motion.button>
-          <motion.a
-            ref={m2.ref}
-            href="/cv.pdf"
-            download
-            whileTap={{ scale: 0.96 }}
-            whileHover={{ scale: 1.03 }}
-            transition={springBtn}
-            className="px-8 py-3.5 rounded-lg border border-accent text-accent font-body font-semibold text-sm hover:bg-accent hover:text-bg transition-colors cursor-pointer glass-card text-center whitespace-nowrap"
-            style={{ x: m2.x, y: m2.y }}
-          >
-            Download CV
-          </motion.a>
         </motion.div>
 
         {/* Social Links */}
