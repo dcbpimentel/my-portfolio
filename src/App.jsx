@@ -9,6 +9,7 @@ import Hero from './sections/Hero'
 const Projects  = lazy(() => import('./sections/Projects'))
 const About     = lazy(() => import('./sections/About'))
 const Showreel  = lazy(() => import('./sections/Showreel'))
+const Process   = lazy(() => import('./sections/Process'))
 const Skills    = lazy(() => import('./sections/Skills'))
 const Contact   = lazy(() => import('./sections/Contact'))
 const Footer    = lazy(() => import('./sections/Footer'))
@@ -158,6 +159,7 @@ function App() {
             <Projects />
             <Showreel />
             <About />
+            <Process />
             <Skills />
             <Contact />
             <Footer />

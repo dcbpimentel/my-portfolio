@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiSun, FiMoon, FiGithub, FiLinkedin } from 'react-icons/fi'
 import { useTheme } from '../context/ThemeContext'
+import EasterEgg from '../components/EasterEgg'
 
 // Desktop nav — unchanged
 const NAV_LINKS = [
@@ -334,7 +335,10 @@ const Navbar = () => {
   const [menuOpen,    setMenuOpen]    = useState(false)
   const [scrolled,    setScrolled]    = useState(false)
   const [hoveredLink, setHoveredLink] = useState(null)
+  const [eggActive,   setEggActive]   = useState(false)
   const activeSection = useActiveSection()
+  const clickCountRef = useRef(0)
+  const clickTimerRef = useRef(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -350,6 +354,18 @@ const Navbar = () => {
   }, [])
 
   const closeMenu = useCallback(() => setMenuOpen(false), [])
+
+  const handleLogoClick = useCallback(() => {
+    scrollTo('hero')
+    clickCountRef.current += 1
+    clearTimeout(clickTimerRef.current)
+    if (clickCountRef.current >= 7) {
+      clickCountRef.current = 0
+      setEggActive(true)
+    } else {
+      clickTimerRef.current = setTimeout(() => { clickCountRef.current = 0 }, 2500)
+    }
+  }, [])
 
   return (
     <>
@@ -367,7 +383,7 @@ const Navbar = () => {
 
           {/* Logo */}
           <button
-            onClick={() => scrollTo('hero')}
+            onClick={handleLogoClick}
             className="flex items-center cursor-pointer select-none shrink-0"
           >
             <span data-nav-logo className="font-display text-2xl font-bold tracking-tight text-text-primary">
@@ -438,6 +454,10 @@ const Navbar = () => {
         onClose={closeMenu}
         activeSection={activeSection}
       />
+
+      <AnimatePresence>
+        {eggActive && <EasterEgg onClose={() => setEggActive(false)} />}
+      </AnimatePresence>
     </>
   )
 }

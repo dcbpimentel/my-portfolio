@@ -1,6 +1,28 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiMail, FiLinkedin, FiCheckCircle } from 'react-icons/fi'
+import { FiMail, FiLinkedin, FiCheckCircle, FiMapPin } from 'react-icons/fi'
+
+const LocalTime = () => {
+  const fmt = () => new Date().toLocaleTimeString('en-US', {
+    timeZone: 'Asia/Manila', hour: '2-digit', minute: '2-digit', hour12: true,
+  })
+  const [time, setTime] = useState(fmt)
+  useEffect(() => {
+    const id = setInterval(() => setTime(fmt()), 15000)
+    return () => clearInterval(id)
+  }, [])
+  return (
+    <div className="flex items-center gap-2.5 pt-1">
+      <FiMapPin size={14} className="text-text-secondary/50 flex-shrink-0" />
+      <span className="font-body text-sm text-text-secondary">
+        Davao City, Philippines
+        <span className="text-text-secondary/45 mx-1.5">·</span>
+        <span className="text-accent/80 font-medium">{time}</span>
+        <span className="text-text-secondary/45 ml-1">local</span>
+      </span>
+    </div>
+  )
+}
 
 // ── Validation ──────────────────────────────────────────────────
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -222,8 +244,21 @@ const ContactForm = () => {
 // ── Section ─────────────────────────────────────────────────────
 const Contact = () => {
   return (
-    <section id="contact" className="py-section px-6 relative">
+    <section id="contact" className="py-section px-6 relative overflow-hidden">
       <div className="absolute inset-x-0 top-0 h-28 pointer-events-none section-fade-top" />
+
+      {/* Section number watermark */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        aria-hidden="true"
+        className="absolute top-0 left-0 font-display font-bold pointer-events-none select-none leading-none"
+        style={{ fontSize: 'clamp(100px, 18vw, 200px)', color: 'var(--color-accent)', opacity: 0.035, lineHeight: 1 }}
+      >
+        05
+      </motion.div>
       <div className="max-w-content mx-auto relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
 
@@ -258,6 +293,8 @@ const Contact = () => {
               Whether you have a project in mind, a role you think I&apos;d fit, or just want
               to talk design, my inbox is open. I usually respond within a day.
             </p>
+
+            <LocalTime />
 
             <div className="flex flex-col gap-4 pt-2">
               <a

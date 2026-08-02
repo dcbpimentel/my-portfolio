@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { FiBookOpen, FiDownload, FiMessageSquare, FiAward, FiPenTool, FiCode, FiVideo } from 'react-icons/fi'
 import { aboutContent } from '../data/skills'
 import CertificatesModal from '../components/CertificatesModal'
+import current from '../data/current'
 
 const SERVICES = [
   {
@@ -34,8 +35,22 @@ const About = () => {
   const [certOpen, setCertOpen] = useState(false)
 
   return (
-    <section id="about" className="py-section px-6 relative">
+    <section id="about" className="py-section px-6 relative overflow-hidden">
       <div className="absolute inset-x-0 bottom-0 h-28 pointer-events-none section-fade-bottom" />
+
+      {/* Section number watermark */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        aria-hidden="true"
+        className="absolute top-0 left-0 font-display font-bold pointer-events-none select-none leading-none"
+        style={{ fontSize: 'clamp(100px, 18vw, 200px)', color: 'var(--color-accent)', opacity: 0.035, lineHeight: 1 }}
+      >
+        02
+      </motion.div>
+
       <div className="max-w-content mx-auto relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
 
@@ -116,6 +131,25 @@ const About = () => {
             <p className="font-body text-xs text-text-secondary italic border-l-2 border-accent pl-3 leading-relaxed">
               {funLine}
             </p>
+
+            {/* Currently building */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.15 }}
+              className="flex items-start gap-3 p-4 rounded-xl glass-card border border-border"
+            >
+              <span className="relative flex h-2 w-2 flex-shrink-0 mt-[5px]">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+              </span>
+              <div className="flex flex-col gap-0.5">
+                <p className="font-body text-[10px] text-accent font-semibold uppercase tracking-widest">Currently building</p>
+                <p className="font-body text-sm text-text-primary font-semibold">{current.project}</p>
+                <p className="font-body text-xs text-text-secondary">{current.description}</p>
+              </div>
+            </motion.div>
 
             {/* CTAs */}
             <div className="flex items-center gap-4 flex-wrap pt-1">
