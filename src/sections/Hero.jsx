@@ -160,11 +160,9 @@ const Hero = () => {
           >
             View Projects
           </motion.button>
-          <motion.a
+          <motion.button
             ref={m2.ref}
-            href="/cv.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={() => window.open('/cv.pdf', '_blank', 'noopener,noreferrer')}
             whileTap={{ scale: 0.96 }}
             whileHover={{ scale: 1.03, filter: 'brightness(1.08)' }}
             transition={springBtn}
@@ -172,7 +170,7 @@ const Hero = () => {
             style={{ x: m2.x, y: m2.y }}
           >
             View CV
-          </motion.a>
+          </motion.button>
         </motion.div>
 
         {/* Social Links */}
