@@ -72,7 +72,7 @@ export default function EasterEgg({ onClose }) {
             <div className="w-3 h-3 rounded-full" style={{ background: 'rgba(40,200,64,0.65)' }} />
           </div>
           <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '11px', color: 'rgba(255,255,255,0.28)', marginLeft: '8px', letterSpacing: '0.03em' }}>
-            dwyane.sh — bash
+            dwyane.sh · bash
           </span>
         </div>
 

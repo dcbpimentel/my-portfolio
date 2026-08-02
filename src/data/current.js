@@ -1,7 +1,13 @@
 // Update this manually whenever you start something new.
-const current = {
-  project: 'BANGERS v2',
-  description: 'Adding live spectator mode and bracket history to the tournament manager.',
-}
+const current = [
+  {
+    project: 'My Portfolio',
+    description: 'Continuously improving and adding new features to this website.',
+  },
+  {
+    project: 'Flea Market App',
+    description: 'Building the UI for a flea market web application.',
+  },
+]
 
 export default current

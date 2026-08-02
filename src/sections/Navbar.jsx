@@ -4,19 +4,19 @@ import { FiSun, FiMoon, FiGithub, FiLinkedin } from 'react-icons/fi'
 import { useTheme } from '../context/ThemeContext'
 import EasterEgg from '../components/EasterEgg'
 
-// Desktop nav — unchanged
 const NAV_LINKS = [
   { label: 'Home',     id: 'hero'     },
   { label: 'Projects', id: 'projects' },
   { label: 'About',    id: 'about'    },
+  { label: 'Process',  id: 'process'  },
   { label: 'Contact',  id: 'contact'  },
 ]
 
-// Mobile drawer — includes Skills
 const MOBILE_LINKS = [
   { label: 'Home',     id: 'hero'     },
   { label: 'Projects', id: 'projects' },
   { label: 'About',    id: 'about'    },
+  { label: 'Process',  id: 'process'  },
   { label: 'Skills',   id: 'skills'   },
   { label: 'Contact',  id: 'contact'  },
 ]

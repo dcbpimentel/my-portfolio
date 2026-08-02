@@ -126,17 +126,21 @@ const About = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: 0.15 }}
-              className="flex items-start gap-3 p-4 rounded-xl glass-card border border-border"
+              className="flex flex-col gap-2 p-4 rounded-xl glass-card border border-border"
             >
-              <span className="relative flex h-2 w-2 flex-shrink-0 mt-[5px]">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
-              </span>
-              <div className="flex flex-col gap-0.5">
-                <p className="font-body text-[10px] text-accent font-semibold uppercase tracking-widest">Currently building</p>
-                <p className="font-body text-sm text-text-primary font-semibold">{current.project}</p>
-                <p className="font-body text-xs text-text-secondary">{current.description}</p>
-              </div>
+              <p className="font-body text-[10px] text-accent font-semibold uppercase tracking-widest">Currently building</p>
+              {current.map((item, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <span className="relative flex h-2 w-2 flex-shrink-0 mt-[5px]">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+                  </span>
+                  <div className="flex flex-col gap-0.5">
+                    <p className="font-body text-sm text-text-primary font-semibold">{item.project}</p>
+                    <p className="font-body text-xs text-text-secondary">{item.description}</p>
+                  </div>
+                </div>
+              ))}
             </motion.div>
 
             {/* CTAs */}

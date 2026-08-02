@@ -14,8 +14,8 @@ const projects = [
     featured: true,
     caseStudy: {
       problem: "Tournament hosts running live badminton and pickleball sessions were managing brackets on paper or in spreadsheets. With multiple courts running at the same time, they constantly lost track of who had played whom and what the current standings were.",
-      process: "Built the bracket engine first — a round-robin algorithm that distributes players by skill level and minimizes repeat match-ups across courts. Then wired everything to Supabase Realtime so that every score update propagated to all connected devices instantly, no page refresh required. The hardest part was keeping the UI consistent when multiple hosts updated scores at the same time.",
-      outcome: "Hosts can now run a full multi-court round-robin from a single screen. Every player and spectator in the room sees live score and bracket updates the moment they happen — no one has to ask 'who's playing next?'",
+      process: "Built the bracket engine first: a round-robin algorithm that distributes players by skill level and minimizes repeat match-ups across courts. Then wired everything to Supabase Realtime so that every score update propagated to all connected devices instantly, no page refresh required. The hardest part was keeping the UI consistent when multiple hosts updated scores at the same time.",
+      outcome: "Hosts can now run a full multi-court round-robin from a single screen. Every player and spectator in the room sees live score and bracket updates the moment they happen. No one has to ask who's playing next.",
     },
   },
   {
@@ -34,7 +34,7 @@ const projects = [
     caseStudy: {
       problem: "Students new to Ateneo de Davao had no reliable way to find verified dorms near campus. Information was scattered across Facebook groups and word-of-mouth, with no standard for pricing, distance, or how to contact the owner.",
       process: "Researched and collected real dormitory data near AdDU, then structured it in Supabase. Built the Flutter app with Google Sign-In, a filterable listing dashboard, map coordinates, and a detail view that surfaces everything a student needs to make a decision. Worked with Brian to divide the backend and UI work.",
-      outcome: "Students can browse verified dorms near campus, compare prices and ratings, see the exact map location, and get owner contact info in one place — no more digging through Facebook groups.",
+      outcome: "Students can browse verified dorms near campus, compare prices and ratings, see the exact map location, and get owner contact info in one place. No more digging through Facebook groups.",
     },
   },
   {
@@ -51,9 +51,9 @@ const projects = [
     liveUrl: "#",
     featured: true,
     caseStudy: {
-      problem: "Boyd's Pizza House was running operations across disconnected paper logs and spreadsheets — inventory, staff scheduling, sales, purchasing, and catering were all separate. The owner had no single view of how the business was doing on any given day.",
+      problem: "Boyd's Pizza House was running operations across disconnected paper logs and spreadsheets. Inventory, staff scheduling, sales, purchasing, and catering were all separate. The owner had no single view of how the business was doing on any given day.",
       process: "Mapped every operational workflow with the restaurant owner before writing a line of code. Built dedicated modules for each function and tied them into a live dashboard that calculates daily sales, inventory value, and gross profit automatically. Worked with Jed and Brian across the full stack.",
-      outcome: "All restaurant operations now live in one system. The owner opens the dashboard and immediately sees the day's gross profit, current inventory value, and any upcoming catering orders — no manual calculations needed.",
+      outcome: "All restaurant operations now live in one system. The owner opens the dashboard and immediately sees the day's gross profit, current inventory value, and any upcoming catering orders. No manual calculations needed.",
     },
   },
   {
@@ -99,9 +99,9 @@ const projects = [
     liveUrl: "https://smart-menu-pricing.vercel.app",
     featured: true,
     caseStudy: {
-      problem: "Small restaurant owners in Kidapawan City were pricing dishes by gut feeling. Most didn't know their actual food-cost percentage and had no way to calculate it — meaning many were selling dishes at a loss without realizing it.",
+      problem: "Small restaurant owners in Kidapawan City were pricing dishes by gut feeling. Most didn't know their actual food-cost percentage and had no way to calculate it, meaning many were selling dishes at a loss without realizing it.",
       process: "The key insight was that ingredient prices change constantly, so manual entry would be abandoned quickly. Built an automated pipeline that pulls live market prices from DTI and DA government bulletins using HTML scraping, PDF parsing, and OCR with fuzzy ingredient matching. Owners enter their recipes once and the system handles the rest. Built with Jed and Brian.",
-      outcome: "Owners can see the exact cost of every dish on their menu and get a recommended selling price based on their target margin — all with market prices that update automatically from government sources.",
+      outcome: "Owners can see the exact cost of every dish on their menu and get a recommended selling price based on their target margin. Market prices update automatically from government sources.",
     },
   },
   {
@@ -119,8 +119,8 @@ const projects = [
     liveUrl: "https://rally-by-dcbp.vercel.app",
     featured: true,
     caseStudy: {
-      problem: "Organizing pickleball open play across multiple courts relied entirely on whoever could keep track in their head. With 10+ players rotating in and out, it was chaotic — nobody knew whose turn it was, and repeat pairings made it feel unfair.",
-      process: "Kept it deliberately simple: no accounts, no backend, no setup. All state lives in the browser via Zustand. The trickiest part was the team randomization algorithm — it needed to balance skill levels across courts while minimizing repeat pairings as the session went on. Built it as an installable PWA so it works offline and feels like a native app.",
+      problem: "Organizing pickleball open play across multiple courts relied entirely on whoever could keep track in their head. With 10+ players rotating in and out, it was chaotic. Nobody knew whose turn it was, and repeat pairings made it feel unfair.",
+      process: "Kept it deliberately simple: no accounts, no backend, no setup. All state lives in the browser via Zustand. The trickiest part was the team randomization algorithm: it needed to balance skill levels across courts while minimizing repeat pairings as the session went on. Built it as an installable PWA so it works offline and feels like a native app.",
       outcome: "Any host can run a fair, organized open play session from their phone in under a minute. Installs as an app, works with no Wi-Fi, and handles the chaos of 15 people rotating across 3 courts automatically.",
     },
   },
@@ -139,7 +139,7 @@ const projects = [
     featured: true,
     caseStudy: {
       problem: "Taking classroom attendance meant calling names aloud (slow and disruptive) or a paper sign-in sheet that students could easily sign for someone who wasn't there. Teachers had no reliable way to verify who was physically present.",
-      process: "Designed the flow around zero friction for students — scan a QR code, instantly marked present. The harder problem was security: a student could screenshot the QR and share it in the group chat. Solved this with one-time session codes and Supabase RLS policies that restrict attendance marking to active sessions only, enforced entirely at the database level with no custom server.",
+      process: "Designed the flow around zero friction for students: scan a QR code, instantly marked present. The harder problem was security: a student could screenshot the QR and share it in the group chat. Solved this with one-time session codes and Supabase RLS policies that restrict attendance marking to active sessions only, enforced entirely at the database level with no custom server.",
       outcome: "Attendance is now instant and tamper-resistant. Teachers see a live list update in real time as students walk in, and the system rejects any attempts to mark attendance outside an active session.",
     },
   },

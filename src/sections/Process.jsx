@@ -12,13 +12,13 @@ const STEPS = [
     num: '02',
     icon: FiPenTool,
     title: 'Design',
-    desc: 'Wireframes, Figma prototypes, and iteration until it feels right. The solution should be obvious before a line of code is written.',
+    desc: 'Wireframes, Figma and Claude Design prototypes, and iteration until it feels right. The solution should be obvious before a line of code is written.',
   },
   {
     num: '03',
     icon: FiCode,
     title: 'Build',
-    desc: 'Turning designs into real, working interfaces with React and Tailwind. What I design is exactly what gets built — no fidelity lost.',
+    desc: 'Turning the design into a real, working interface. The stack shifts with the project, but the goal stays the same: build it exactly as designed.',
   },
   {
     num: '04',
@@ -61,7 +61,7 @@ const Process = () => (
           transition={{ duration: 0.4, delay: 0.1 }}
           className="font-body text-text-secondary text-base max-w-md"
         >
-          Four steps I follow on every project — from the first question to the last deploy.
+          Four steps I follow on every project, from the first question to the last deploy.
         </motion.p>
       </div>
 
