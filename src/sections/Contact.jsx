@@ -286,13 +286,13 @@ const Contact = () => {
 
             <div className="flex flex-col gap-4 pt-2">
               <a
-                href="mailto:dwyanepimentel@email.com"
+                href="mailto:dwyanepimentel@gmail.com"
                 className="flex items-center gap-3 text-text-secondary hover:text-accent transition-colors group"
               >
                 <span className="flex items-center justify-center w-9 h-9 rounded-lg border border-border group-hover:border-accent transition-colors glass-card">
                   <FiMail size={16} />
                 </span>
-                <span className="font-body text-sm">dwyanepimentel@email.com</span>
+                <span className="font-body text-sm">dwyanepimentel@gmail.com</span>
               </a>
 
               <a
