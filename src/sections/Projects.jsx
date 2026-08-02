@@ -4,6 +4,7 @@ import projects from '../data/projects'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import ProjectCover from '../components/ProjectCover'
 import ProjectModal from '../components/ProjectModal'
+import MagnetButton from '../components/MagnetButton'
 
 const PLATFORM = {
   fullstack: 'Web App',
@@ -161,7 +162,8 @@ const TryMeCard = ({ project }) => (
         </p>
       </div>
 
-      <motion.a
+      <MagnetButton
+        tag="a"
         href={project.liveUrl}
         target="_blank"
         rel="noopener noreferrer"
@@ -172,7 +174,7 @@ const TryMeCard = ({ project }) => (
         style={{ boxShadow: '0 4px 20px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.25)' }}
       >
         Try it →
-      </motion.a>
+      </MagnetButton>
     </div>
   </motion.div>
 )
@@ -226,7 +228,7 @@ const Projects = () => {
         >
           <div className="flex items-center gap-2">
             {TABS.map(({ label, value }) => (
-              <motion.button
+              <MagnetButton
                 key={value}
                 onClick={() => setActiveTab(value)}
                 whileHover={{ scale: 1.04 }}
@@ -240,7 +242,7 @@ const Projects = () => {
                 `}
               >
                 {label}
-              </motion.button>
+              </MagnetButton>
             ))}
           </div>
 

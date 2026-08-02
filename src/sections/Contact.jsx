@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiMail, FiLinkedin, FiCheckCircle, FiMapPin } from 'react-icons/fi'
+import MagnetButton from '../components/MagnetButton'
 
 const LocalTime = () => {
   const fmt = () => new Date().toLocaleTimeString('en-US', {
@@ -203,9 +204,10 @@ const ContactForm = () => {
           <p className="font-body text-xs text-red-500 text-center">{serverError}</p>
         )}
 
-        <motion.button
+        <MagnetButton
           type="submit"
           disabled={isEmpty || submitting}
+          strength={isEmpty || submitting ? 0 : 0.3}
           whileHover={{ scale: isEmpty || submitting ? 1 : 1.03, filter: 'brightness(1.06)' }}
           whileTap={{ scale: isEmpty || submitting ? 1 : 0.96 }}
           transition={{ type: 'spring', stiffness: 400, damping: 17 }}
@@ -234,7 +236,7 @@ const ContactForm = () => {
               </motion.span>
             )}
           </AnimatePresence>
-        </motion.button>
+        </MagnetButton>
 
       </form>
     </div>

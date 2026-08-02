@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FiBookOpen, FiMessageSquare, FiAward, FiPenTool, FiCode, FiVideo } from 'react-icons/fi'
+import MagnetButton from '../components/MagnetButton'
 import { aboutContent } from '../data/skills'
 import CertificatesModal from '../components/CertificatesModal'
 import current from '../data/current'
@@ -145,7 +146,7 @@ const About = () => {
 
             {/* CTAs */}
             <div className="flex items-center gap-4 flex-wrap pt-1">
-              <motion.button
+              <MagnetButton
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.96 }}
@@ -154,8 +155,8 @@ const About = () => {
               >
                 <FiMessageSquare size={15} />
                 Let&apos;s Talk
-              </motion.button>
-              <motion.button
+              </MagnetButton>
+              <MagnetButton
                 onClick={() => setCertOpen(true)}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.96 }}
@@ -164,7 +165,7 @@ const About = () => {
               >
                 <FiAward size={15} />
                 Certificates
-              </motion.button>
+              </MagnetButton>
             </div>
 
             <CertificatesModal isOpen={certOpen} onClose={() => setCertOpen(false)} />
