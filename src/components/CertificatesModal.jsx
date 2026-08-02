@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiX, FiDownload, FiExternalLink, FiAward, FiArrowLeft } from 'react-icons/fi'
+import { FiX, FiDownload, FiExternalLink, FiAward, FiArrowLeft, FiFileText } from 'react-icons/fi'
 import certificates from '../data/certificates'
 
 // Category badge colors
@@ -55,20 +56,26 @@ const CertificateCard = ({ cert, onView }) => (
   </motion.div>
 )
 
+const isMobileDevice = () =>
+  typeof window !== 'undefined' &&
+  (window.innerWidth < 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent))
+
 const Viewer = ({ cert, onClose }) => {
+  const mobile = isMobileDevice()
+
   useEffect(() => {
     document.body.style.overflow = 'hidden'
     return () => { document.body.style.overflow = '' }
   }, [])
 
-  return (
+  const panel = (
     <motion.div
-      initial={{ x: '100%' }}
-      animate={{ x: 0 }}
-      exit={{ x: '100%' }}
+      initial={{ opacity: 0, x: '100%' }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: '100%' }}
       transition={{ duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] }}
       className="fixed inset-0 flex flex-col"
-      style={{ zIndex: 300, background: '#0A0A0A' }}
+      style={{ zIndex: 10000, background: '#0A0A0A' }}
     >
       {/* Back bar */}
       <div
@@ -81,25 +88,25 @@ const Viewer = ({ cert, onClose }) => {
       >
         <button
           onClick={onClose}
-          className="flex items-center gap-1.5 py-1 pr-3 text-white/60 hover:text-white transition-colors"
+          className="flex items-center gap-2 py-2 pr-3 text-white/70 hover:text-white active:text-white transition-colors min-h-[44px]"
           aria-label="Back"
         >
-          <FiArrowLeft size={18} />
-          <span className="font-body text-sm">Back</span>
+          <FiArrowLeft size={20} />
+          <span className="font-body text-sm font-medium">Back</span>
         </button>
 
-        <p className="font-body text-xs text-white/35 truncate max-w-[55%] text-center">{cert.title}</p>
+        <p className="font-body text-xs text-white/35 truncate max-w-[50%] text-center">{cert.title}</p>
 
         <a
           href={cert.file}
           download
-          className="flex items-center gap-1.5 py-1 pl-3 text-white/60 hover:text-white transition-colors font-body text-sm"
+          className="flex items-center gap-1.5 py-2 pl-3 text-white/60 hover:text-white transition-colors font-body text-sm min-h-[44px] min-w-[44px] justify-end"
         >
-          <FiDownload size={16} />
+          <FiDownload size={18} />
         </a>
       </div>
 
-      {/* Certificate content — fits full view */}
+      {/* Certificate content */}
       <div
         className="flex-1 overflow-hidden"
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
@@ -109,7 +116,36 @@ const Viewer = ({ cert, onClose }) => {
             src={cert.file}
             alt={cert.title}
             className="w-full h-full object-contain"
+            style={{ touchAction: 'pinch-zoom' }}
           />
+        ) : mobile ? (
+          /* PDFs inside iframes are broken on iOS — open in browser instead */
+          <div className="flex flex-col items-center justify-center h-full gap-6 px-8 text-center">
+            <FiFileText size={52} className="text-white/20" />
+            <div className="flex flex-col gap-2">
+              <p className="font-display font-bold text-white text-lg leading-snug">{cert.title}</p>
+              <p className="font-body text-white/45 text-sm">
+                PDF certificates open best in your browser&apos;s native viewer.
+              </p>
+            </div>
+            <a
+              href={cert.file}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-7 py-3.5 rounded-full font-body font-semibold text-sm"
+              style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+            >
+              <FiExternalLink size={15} />
+              Open PDF
+            </a>
+            <a
+              href={cert.file}
+              download
+              className="font-body text-sm text-white/40 hover:text-white/70 transition-colors"
+            >
+              or download
+            </a>
+          </div>
         ) : (
           <iframe
             src={`${cert.file}#toolbar=0&view=FitH`}
@@ -121,6 +157,8 @@ const Viewer = ({ cert, onClose }) => {
       </div>
     </motion.div>
   )
+
+  return createPortal(panel, document.body)
 }
 
 const CertificatesModal = ({ isOpen, onClose }) => {
