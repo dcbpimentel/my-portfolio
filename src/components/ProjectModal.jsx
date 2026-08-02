@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { FiX, FiGithub, FiExternalLink } from 'react-icons/fi'
+import { FiX } from 'react-icons/fi'
 import ProjectCover from './ProjectCover'
 import { useIsMobile } from '../hooks/useIsMobile'
 
@@ -138,34 +138,6 @@ const ProjectModal = ({ project, index = 0, onClose }) => {
             </div>
           )}
 
-          {/* Links — show for personal and tryme projects */}
-          {(type === 'personal' || type === 'tryme') && (githubUrl !== '#' || liveUrl !== '#') && (
-            <div className="flex items-center gap-3 pt-1 flex-wrap">
-              {githubUrl !== '#' && (
-                <a
-                  href={githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-border text-text-secondary hover:border-accent hover:text-accent transition-colors font-body text-sm glass-card"
-                >
-                  <FiGithub size={16} />
-                  Code
-                </a>
-              )}
-              {liveUrl !== '#' && (
-                <a
-                  href={liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-accent text-bg font-body font-semibold text-sm hover:opacity-90 transition-opacity"
-                  style={{ boxShadow: '0 4px 16px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.25)' }}
-                >
-                  <FiExternalLink size={16} />
-                  Live
-                </a>
-              )}
-            </div>
-          )}
         </div>
       </motion.div>
     </>
