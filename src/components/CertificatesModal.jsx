@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiX, FiDownload, FiExternalLink, FiAward } from 'react-icons/fi'
+import { FiX, FiDownload, FiExternalLink, FiAward, FiArrowLeft } from 'react-icons/fi'
 import certificates from '../data/certificates'
 
 // Category badge colors
@@ -55,56 +55,73 @@ const CertificateCard = ({ cert, onView }) => (
   </motion.div>
 )
 
-const Viewer = ({ cert, onClose }) => (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    className="fixed inset-0 z-[60] bg-bg/95 backdrop-blur-sm flex flex-col"
-  >
-    {/* Viewer header */}
-    <div className="flex items-center justify-between px-6 py-4 border-b border-border flex-shrink-0">
-      <div>
-        <p className="font-display font-bold text-text-primary text-sm">{cert.title}</p>
-        <p className="font-body text-xs text-text-secondary">{cert.issuer}</p>
-      </div>
-      <div className="flex items-center gap-3">
+const Viewer = ({ cert, onClose }) => {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
+  return (
+    <motion.div
+      initial={{ x: '100%' }}
+      animate={{ x: 0 }}
+      exit={{ x: '100%' }}
+      transition={{ duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className="fixed inset-0 flex flex-col"
+      style={{ zIndex: 300, background: '#0A0A0A' }}
+    >
+      {/* Back bar */}
+      <div
+        className="flex items-center justify-between px-4 border-b flex-shrink-0"
+        style={{
+          borderColor: 'rgba(255,255,255,0.08)',
+          paddingTop: 'max(14px, env(safe-area-inset-top))',
+          paddingBottom: '14px',
+        }}
+      >
+        <button
+          onClick={onClose}
+          className="flex items-center gap-1.5 py-1 pr-3 text-white/60 hover:text-white transition-colors"
+          aria-label="Back"
+        >
+          <FiArrowLeft size={18} />
+          <span className="font-body text-sm">Back</span>
+        </button>
+
+        <p className="font-body text-xs text-white/35 truncate max-w-[55%] text-center">{cert.title}</p>
+
         <a
           href={cert.file}
           download
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border text-text-secondary hover:border-accent hover:text-accent transition-colors text-sm font-body"
+          className="flex items-center gap-1.5 py-1 pl-3 text-white/60 hover:text-white transition-colors font-body text-sm"
         >
-          <FiDownload size={14} />
-          Download
+          <FiDownload size={16} />
         </a>
-        <button
-          onClick={onClose}
-          className="flex items-center justify-center w-9 h-9 rounded-lg border border-border text-text-secondary hover:border-accent hover:text-accent transition-colors"
-          aria-label="Close viewer"
-        >
-          <FiX size={18} />
-        </button>
       </div>
-    </div>
 
-    {/* Content */}
-    <div className="flex-1 overflow-hidden p-4">
-      {cert.type === 'image' ? (
-        <img
-          src={cert.file}
-          alt={cert.title}
-          className="w-full h-full object-contain rounded-xl"
-        />
-      ) : (
-        <iframe
-          src={cert.file}
-          title={cert.title}
-          className="w-full h-full rounded-xl border border-border"
-        />
-      )}
-    </div>
-  </motion.div>
-)
+      {/* Certificate content — fits full view */}
+      <div
+        className="flex-1 overflow-hidden"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+      >
+        {cert.type === 'image' ? (
+          <img
+            src={cert.file}
+            alt={cert.title}
+            className="w-full h-full object-contain"
+          />
+        ) : (
+          <iframe
+            src={`${cert.file}#toolbar=0&view=FitH`}
+            title={cert.title}
+            className="w-full h-full border-0"
+            style={{ background: 'white' }}
+          />
+        )}
+      </div>
+    </motion.div>
+  )
+}
 
 const CertificatesModal = ({ isOpen, onClose }) => {
   const [viewing, setViewing] = useState(null)

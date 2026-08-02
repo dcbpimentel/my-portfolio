@@ -91,14 +91,18 @@ const Hero = () => {
     >
       <div className="flex flex-col items-center text-center max-w-prose gap-5 md:gap-6 w-full mb-[18vh] md:mb-0">
 
-        {/* Badge */}
+        {/* Availability badge */}
         <motion.div
           initial={reduced ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-border text-sm text-text-secondary cursor-default glass-card"
+          className="flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-border text-sm text-text-secondary cursor-default glass-card"
         >
-          Let&apos;s work together
+          <span className="relative flex h-2 w-2 flex-shrink-0">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-60" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
+          </span>
+          Available for work
         </motion.div>
 
         {/* Headline — word-by-word stagger */}

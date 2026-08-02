@@ -5,6 +5,12 @@ import { useReducedMotion } from '../hooks/useReducedMotion'
 import ProjectCover from '../components/ProjectCover'
 import ProjectModal from '../components/ProjectModal'
 
+const PLATFORM = {
+  fullstack: 'Web App',
+  frontend:  'Web App',
+  mobile:    'Mobile App',
+}
+
 const TABS = [
   { label: 'Personal', value: 'personal' },
   { label: 'School',   value: 'school'   },
@@ -12,7 +18,7 @@ const TABS = [
 ]
 
 const ProjectCard = ({ project, index, inCarousel, onClick }) => {
-  const { id, title, subtitle, description, tags, category } = project
+  const { id, title, subtitle, description, category, platform } = project
   const reduced = useReducedMotion()
 
   return (
@@ -33,16 +39,9 @@ const ProjectCard = ({ project, index, inCarousel, onClick }) => {
       <ProjectCover id={id} index={index} title={title} category={category} />
 
       <div className="flex flex-col flex-1 p-5 gap-2.5">
-        <div className="flex flex-wrap gap-2">
-          {tags.map(tag => (
-            <span
-              key={tag}
-              className="px-2 py-0.5 rounded-md bg-bg text-text-secondary text-xs font-body border border-border"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
+        <span className="self-start px-2.5 py-0.5 rounded-full bg-surface text-text-secondary text-xs font-body border border-border">
+          {platform ?? PLATFORM[category] ?? 'App'}
+        </span>
 
         <h3 className="font-display font-bold text-base text-text-primary leading-snug">
           {title}
@@ -160,16 +159,6 @@ const TryMeCard = ({ project }) => (
         <p className="font-body text-text-secondary text-base leading-relaxed">
           {project.trymeDescription || project.description}
         </p>
-        <div className="flex flex-wrap gap-2">
-          {project.tags.map(tag => (
-            <span
-              key={tag}
-              className="px-2 py-0.5 rounded-md bg-bg text-text-secondary text-xs font-body border border-border"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
       </div>
 
       <motion.a

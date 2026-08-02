@@ -4,9 +4,15 @@ import { FiX, FiGithub, FiExternalLink } from 'react-icons/fi'
 import ProjectCover from './ProjectCover'
 import { useIsMobile } from '../hooks/useIsMobile'
 
+const CASE_STUDY_SECTIONS = [
+  { key: 'problem', num: '01', label: 'The Problem' },
+  { key: 'process', num: '02', label: 'What I Did'  },
+  { key: 'outcome', num: '03', label: 'The Outcome' },
+]
+
 const ProjectModal = ({ project, index = 0, onClose }) => {
   const isMobile = useIsMobile()
-  const { id, title, description, tags, githubUrl, liveUrl, category, image, type } = project
+  const { id, title, description, tags, githubUrl, liveUrl, category, image, type, caseStudy } = project
 
   useEffect(() => {
     document.body.style.overflow = 'hidden'
@@ -116,7 +122,24 @@ const ProjectModal = ({ project, index = 0, onClose }) => {
             {description}
           </p>
 
-          {type === 'tryme' && (githubUrl !== '#' || liveUrl !== '#') && (
+          {/* Case study sections */}
+          {caseStudy && (
+            <div className="flex flex-col gap-5 pt-1">
+              <div style={{ height: '1px', background: 'var(--color-border)' }} />
+              {CASE_STUDY_SECTIONS.map(({ key, num, label }) => (
+                <div key={key} className="flex flex-col gap-1.5">
+                  <div className="flex items-baseline gap-2">
+                    <span className="font-body text-[11px] text-accent font-semibold tracking-widest">{num}</span>
+                    <h4 className="font-display font-bold text-sm text-text-primary">{label}</h4>
+                  </div>
+                  <p className="font-body text-sm text-text-secondary leading-relaxed">{caseStudy[key]}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Links — show for personal and tryme projects */}
+          {(type === 'personal' || type === 'tryme') && (githubUrl !== '#' || liveUrl !== '#') && (
             <div className="flex items-center gap-3 pt-1 flex-wrap">
               {githubUrl !== '#' && (
                 <a

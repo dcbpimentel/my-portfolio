@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { useIsMobile } from '../hooks/useIsMobile'
 
 const alreadyPlayed = typeof window !== 'undefined' && (
   window.__introPlayed === true ||
@@ -34,7 +33,6 @@ function ensureStyle() {
 }
 
 export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
-  const isMobile = useIsMobile()
   const [isExiting, setIsExiting]   = useState(false)
   const [exitTarget, setExitTarget] = useState(null)
   const [showSkip, setShowSkip]     = useState(false)
@@ -81,12 +79,12 @@ export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
       const t = setTimeout(() => doExitRef.current?.(), 600)
       return () => clearTimeout(t)
     }
-    const t1 = setTimeout(() => setShowSkip(true), 800)
-    const t2 = setTimeout(() => doExitRef.current?.(), 2800)
+    const t1 = setTimeout(() => setShowSkip(true), 600)
+    const t2 = setTimeout(() => doExitRef.current?.(), 2400)
     return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [])
 
-  const orbSz = isMobile ? '200px' : '400px'
+  const orbSz = 'clamp(160px, 50vw, 400px)'
 
   return (
     <div aria-hidden="true" style={{ position: 'fixed', inset: 0, zIndex: 9999, overflow: 'hidden' }}>
@@ -121,7 +119,7 @@ export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
             color:         '#F5F5F5',
             letterSpacing: '-0.02em',
             lineHeight:    1,
-            animation:     reducedMotion ? 'none' : '_intro-fade-in 0.7s ease-out 0.6s both',
+            animation:     reducedMotion ? 'none' : '_intro-fade-in 0.6s ease-out 0.15s both',
           }}>
             dwyane
           </span>
@@ -132,7 +130,7 @@ export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
             color:       '#E8FF4D',
             lineHeight:  1,
             display:     'inline-block',
-            animation:   reducedMotion ? 'none' : '_intro-dot-pop 0.4s cubic-bezier(0.34,1.56,0.64,1) 1.4s both',
+            animation:   reducedMotion ? 'none' : '_intro-dot-pop 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.85s both',
           }}>
             .
           </span>
@@ -148,11 +146,11 @@ export default function IntroAnimation({ onRevealPortfolio, onComplete }) {
           style={{
             fontFamily:    'DM Sans, sans-serif',
             fontWeight:    300,
-            fontSize:      isMobile ? '13px' : '16px',
+            fontSize:      'clamp(12px, 3.5vw, 16px)',
             letterSpacing: '0.05em',
             color:         '#888888',
             margin:        0,
-            animation:     (reducedMotion || isExiting) ? 'none' : '_intro-sub-in 0.5s ease-out 1.8s both',
+            animation:     (reducedMotion || isExiting) ? 'none' : '_intro-sub-in 0.5s ease-out 1.2s both',
           }}
         >
           Works the way you expect it to.
