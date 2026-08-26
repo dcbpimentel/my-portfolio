@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiMail, FiLinkedin, FiCheckCircle, FiMapPin } from 'react-icons/fi'
+import { FiMail, FiLinkedin, FiCheckCircle, FiMapPin, FiLock } from 'react-icons/fi'
 import MagnetButton from '../components/MagnetButton'
+import { RESTRICTED } from '../config/restricted'
 
 const LocalTime = () => {
   const fmt = () => new Date().toLocaleTimeString('en-US', {
@@ -284,31 +285,40 @@ const Contact = () => {
               to talk design, my inbox is open. I usually respond within a day.
             </p>
 
-            <LocalTime />
+            {!RESTRICTED && <LocalTime />}
 
-            <div className="flex flex-col gap-4 pt-2">
-              <a
-                href="mailto:dwyanepimentel@gmail.com"
-                className="flex items-center gap-3 text-text-secondary hover:text-accent transition-colors group"
-              >
-                <span className="flex items-center justify-center w-9 h-9 rounded-lg border border-border group-hover:border-accent transition-colors glass-card">
-                  <FiMail size={16} />
+            {RESTRICTED ? (
+              <div className="flex items-center gap-2.5 px-4 py-3 rounded-xl glass-card border border-border">
+                <FiLock size={13} className="text-accent flex-shrink-0" />
+                <span className="font-body text-sm text-text-secondary">
+                  Contact details temporarily restricted. Use the form to reach out.
                 </span>
-                <span className="font-body text-sm">dwyanepimentel@gmail.com</span>
-              </a>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-4 pt-2">
+                <a
+                  href="mailto:dwyanepimentel@gmail.com"
+                  className="flex items-center gap-3 text-text-secondary hover:text-accent transition-colors group"
+                >
+                  <span className="flex items-center justify-center w-9 h-9 rounded-lg border border-border group-hover:border-accent transition-colors glass-card">
+                    <FiMail size={16} />
+                  </span>
+                  <span className="font-body text-sm">dwyanepimentel@gmail.com</span>
+                </a>
 
-              <a
-                href="https://www.linkedin.com/in/dwyane-clark-pimentel-a7a5b12b1/?skipRedirect=true"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 text-text-secondary hover:text-accent transition-colors group"
-              >
-                <span className="flex items-center justify-center w-9 h-9 rounded-lg border border-border group-hover:border-accent transition-colors glass-card">
-                  <FiLinkedin size={16} />
-                </span>
-                <span className="font-body text-sm">linkedin.com/in/dwyane-clark-pimentel</span>
-              </a>
-            </div>
+                <a
+                  href="https://www.linkedin.com/in/dwyane-clark-pimentel-a7a5b12b1/?skipRedirect=true"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-text-secondary hover:text-accent transition-colors group"
+                >
+                  <span className="flex items-center justify-center w-9 h-9 rounded-lg border border-border group-hover:border-accent transition-colors glass-card">
+                    <FiLinkedin size={16} />
+                  </span>
+                  <span className="font-body text-sm">linkedin.com/in/dwyane-clark-pimentel</span>
+                </a>
+              </div>
+            )}
           </motion.div>
 
           {/* Right: form */}

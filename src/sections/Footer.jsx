@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { FiGithub, FiLinkedin, FiArrowRight } from 'react-icons/fi'
+import { RESTRICTED, fireRestricted } from '../config/restricted'
 
 const SOCIALS = [
   { icon: FiGithub,   href: 'https://github.com/dcbpimentel',                               label: 'GitHub'   },
@@ -66,11 +67,12 @@ const Footer = () => {
               {SOCIALS.map(({ icon: Icon, href, label }) => (
                 <a
                   key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={RESTRICTED ? undefined : href}
+                  target={RESTRICTED ? undefined : '_blank'}
+                  rel={RESTRICTED ? undefined : 'noopener noreferrer'}
                   aria-label={label}
-                  className="flex items-center justify-center w-11 h-11 text-text-secondary hover:text-accent transition-colors duration-200"
+                  onClick={RESTRICTED ? (e) => { e.preventDefault(); fireRestricted() } : undefined}
+                  className="flex items-center justify-center w-11 h-11 text-text-secondary hover:text-accent transition-colors duration-200 cursor-pointer"
                 >
                   <Icon size={18} />
                 </a>

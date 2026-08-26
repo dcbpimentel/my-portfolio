@@ -3,6 +3,7 @@ import { motion, useMotionValue, useSpring } from 'framer-motion'
 import { FiGithub, FiLinkedin } from 'react-icons/fi'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { useIsMobile } from '../hooks/useIsMobile'
+import { RESTRICTED, fireRestricted } from '../config/restricted'
 
 const HEADLINE_WORDS = ['Works', 'the', 'way', 'you', 'expect', 'it', 'to.']
 const ROLES = ['UI/UX Designer', 'Vibe Coder', 'Videographer']
@@ -162,7 +163,7 @@ const Hero = () => {
           </motion.button>
           <motion.button
             ref={m2.ref}
-            onClick={() => window.open('/cv.pdf', '_blank', 'noopener,noreferrer')}
+            onClick={RESTRICTED ? fireRestricted : () => window.open('/cv.pdf', '_blank', 'noopener,noreferrer')}
             whileTap={{ scale: 0.96 }}
             whileHover={{ scale: 1.03, filter: 'brightness(1.08)' }}
             transition={springBtn}
@@ -183,10 +184,11 @@ const Hero = () => {
           {SOCIALS.map(({ icon: Icon, href, label }) => (
             <motion.a
               key={label}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={RESTRICTED ? undefined : href}
+              target={RESTRICTED ? undefined : '_blank'}
+              rel={RESTRICTED ? undefined : 'noopener noreferrer'}
               aria-label={label}
+              onClick={RESTRICTED ? (e) => { e.preventDefault(); fireRestricted() } : undefined}
               whileTap={{ scale: 0.9 }}
               whileHover={{ scale: 1.15, y: -2 }}
               transition={springBtn}

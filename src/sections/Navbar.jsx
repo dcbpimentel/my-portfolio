@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { FiSun, FiMoon, FiGithub, FiLinkedin } from 'react-icons/fi'
 import { useTheme } from '../context/ThemeContext'
 import EasterEgg from '../components/EasterEgg'
+import { RESTRICTED, fireRestricted } from '../config/restricted'
 
 const NAV_LINKS = [
   { label: 'Home',     id: 'hero'     },
@@ -300,10 +301,11 @@ const DrawerMenu = ({ isOpen, onClose, activeSection }) => {
         {DRAWER_SOCIALS.map(({ icon: Icon, href, label }) => (
           <motion.a
             key={label}
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={RESTRICTED ? undefined : href}
+            target={RESTRICTED ? undefined : '_blank'}
+            rel={RESTRICTED ? undefined : 'noopener noreferrer'}
             aria-label={label}
+            onClick={RESTRICTED ? (e) => { e.preventDefault(); fireRestricted() } : undefined}
             whileTap={{ scale: 1.15, transition: { type: 'spring', stiffness: 400, damping: 17 } }}
             style={{
               width:          '44px',

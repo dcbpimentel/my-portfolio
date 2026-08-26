@@ -21,7 +21,7 @@ const WIPBanner = () => {
         <motion.div
           initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -40 }}
+          exit={{ opacity: 0, y: -40, transition: { duration: 0.3, ease: 'easeIn' } }}
           transition={{ duration: 0.4, ease: 'easeOut', delay: 2.5 }}
           style={{
             position: 'fixed',

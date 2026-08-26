@@ -4,6 +4,7 @@ import { ThemeProvider } from './context/ThemeContext'
 import { useIsMobile } from './hooks/useIsMobile'
 import IntroAnimation, { alreadyPlayed } from './components/IntroAnimation'
 import WIPBanner from './components/WIPBanner'
+import RestrictedToast from './components/RestrictedToast'
 import Navbar from './sections/Navbar'
 import Hero from './sections/Hero'
 
@@ -154,6 +155,7 @@ function App() {
           }}
         />
         <WIPBanner />
+        <RestrictedToast />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <Navbar />
           <Hero />
