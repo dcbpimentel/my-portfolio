@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="squircle">
+      <rect width="512" height="512" rx="115" ry="115"/>
+    </clipPath>
+    <radialGradient id="glow" cx="50%" cy="42%" r="55%" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#E8192C" stop-opacity="0.07"/>
+      <stop offset="100%" stop-color="#E8192C" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <g clip-path="url(#squircle)">
+    <rect width="512" height="512" fill="#FAF9F7"/>
+    <rect width="512" height="512" fill="url(#glow)"/>
+    <text
+      x="256" y="386"
+      text-anchor="middle"
+      font-family="'Syne', system-ui, sans-serif"
+      font-weight="800"
+      font-size="270"
+      letter-spacing="-4"
+      fill="#1A1A18"
+    >d<tspan fill="#E8192C">.</tspan></text>
+  </g>
+</svg>

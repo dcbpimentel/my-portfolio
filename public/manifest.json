@@ -1,0 +1,17 @@
+{
+  "name": "dwyane.",
+  "short_name": "dwyane.",
+  "description": "Dwyane Clark Pimentel — UI/UX Designer, Vibe Coder, Videographer",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF9F7",
+  "theme_color": "#FAF9F7",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
