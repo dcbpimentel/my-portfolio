@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { FiBookOpen, FiMessageSquare, FiAward, FiPenTool, FiCode, FiVideo } from 'react-icons/fi'
+import { FiMessageSquare, FiAward, FiPenTool, FiCode, FiVideo } from 'react-icons/fi'
 import MagnetButton from '../components/MagnetButton'
+import ProfileOrbit from '../components/ProfileOrbit'
 import { aboutContent } from '../data/skills'
 import CertificatesModal from '../components/CertificatesModal'
 import current from '../data/current'
@@ -43,32 +44,9 @@ const About = () => {
       <div className="max-w-content mx-auto relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
 
-          {/* ── Left: Photo placeholder ── */}
+          {/* ── Left: Profile Orbit ── */}
           <motion.div {...slideIn('left')} className="flex justify-center lg:justify-start">
-            <div className="relative w-40 md:w-64 lg:w-full max-w-sm">
-
-              {/* Photo card */}
-              <div
-                className="relative rounded-2xl overflow-hidden aspect-square border border-border"
-                style={{ boxShadow: '0 0 0 1px var(--color-border), 0 0 28px var(--accent-glow)' }}
-              >
-                <img
-                  src="/images/profile.jpg"
-                  alt="Dwyane Clark Pimentel"
-                  className="w-full h-full object-cover object-top"
-                  loading="lazy"
-                />
-              </div>
-
-              {/* Floating badge */}
-              <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 rounded-full bg-surface border border-border shadow-lg whitespace-nowrap">
-                <FiBookOpen size={14} className="text-accent flex-shrink-0" />
-                <span className="font-body text-xs text-text-primary font-medium">
-                  4th Year IT Student
-                </span>
-              </div>
-
-            </div>
+            <ProfileOrbit />
           </motion.div>
 
           {/* ── Right: Content ── */}
