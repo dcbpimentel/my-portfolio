@@ -7,19 +7,19 @@
   :root {
     --drawer-bg:     rgba(250, 249, 247, 0.97);
     --drawer-border: rgba(0, 0, 0, 0.05);
-    --accent-glow:   rgba(232, 93, 4, 0.15);
+    --accent-glow:   rgba(212, 0, 0, 0.15);
     --color-bg:             #FAF9F7;
     --color-surface:        #FFFFFF;
     --color-surface2:       #EEE9E3;
     --color-text-primary:   #0A0A0A;
     --color-text-secondary: #66625E;
-    --color-accent:         #E85D04;
+    --color-accent:         #D40000;
     --color-border:         #E5E0DA;
 
-    --orb-1: radial-gradient(circle, rgba(232,93,4,0.13) 0%, rgba(232,93,4,0.04) 50%, transparent 75%);
+    --orb-1: radial-gradient(circle, rgba(212,0,0,0.13) 0%, rgba(212,0,0,0.04) 50%, transparent 75%);
     --orb-2: radial-gradient(circle, rgba(0,0,0,0.06) 0%, transparent 70%);
-    --orb-3: radial-gradient(circle, rgba(232,93,4,0.08) 0%, rgba(232,93,4,0.02) 50%, transparent 75%);
-    --dot-color: rgba(232, 93, 4, 0.07);
+    --orb-3: radial-gradient(circle, rgba(212,0,0,0.08) 0%, rgba(212,0,0,0.02) 50%, transparent 75%);
+    --dot-color: rgba(212, 0, 0, 0.07);
 
     --glass-bg:         rgba(250, 249, 247, 0.72);
     --glass-border:     rgba(255, 255, 255, 0.85);
