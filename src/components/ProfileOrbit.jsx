@@ -7,7 +7,7 @@ const ORBIT_DATA = [
     id: 'tib',
     label: 'Tokyo Innovation Base',
     category: 'International Delegation',
-    chips: ['2024', 'Tokyo, Japan', 'Department Representative'],
+    chips: ['2026', 'Tokyo, Japan', 'Department Representative'],
     hero: '/images/orbit/tib-hero.jpg',
     gallery: [
       '/images/orbit/tib-01.jpg',
@@ -26,7 +26,7 @@ const ORBIT_DATA = [
     id: 'sit',
     label: 'Shibaura Institute of Technology',
     category: 'Tokyo AI Class',
-    chips: ['2024', 'Tokyo, Japan', 'SIT'],
+    chips: ['2026', 'Tokyo, Japan', 'SIT'],
     hero: '/images/orbit/sit-hero.jpg',
     gallery: [
       '/images/orbit/sit-01.jpg',
@@ -42,7 +42,7 @@ const ORBIT_DATA = [
     id: 'chronogate',
     label: 'Chronogate',
     category: 'Logistics and Automation',
-    chips: ['2024', 'Haneda, Tokyo', 'Industry Visit'],
+    chips: ['2026', 'Haneda, Tokyo', 'Industry Visit'],
     hero: '/images/orbit/chronogate-hero.jpg',
     gallery: [
       '/images/orbit/chronogate-01.jpg',
