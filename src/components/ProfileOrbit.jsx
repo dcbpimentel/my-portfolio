@@ -156,8 +156,13 @@ function BubbleItem({ item, springX, springY, onSelect, selectedId }) {
   const bx = Math.cos(angleRad) * item.radius * 50
   const by = Math.sin(angleRad) * item.radius * 50
 
-  const px = useTransform(springX, v => v * item.depth * 0.05)
-  const py = useTransform(springY, v => v * item.depth * 0.05)
+  // Increased parallax for noticeable mouse response
+  const px = useTransform(springX, v => v * item.depth * 0.14)
+  const py = useTransform(springY, v => v * item.depth * 0.14)
+
+  // Per-bubble float timing so they all move independently
+  const floatDelay = (item.angle % 360) / 100
+  const floatDuration = 2.6 + item.depth * 0.7
 
   const handlePointerDown = (e) => {
     e.preventDefault()
@@ -189,62 +194,81 @@ function BubbleItem({ item, springX, springY, onSelect, selectedId }) {
   }
 
   return (
-    <motion.button
-      layoutId={`orbit-${item.id}`}
+    // Float wrapper — autonomous up/down bob, stops when selected
+    <motion.div
       style={{
         position: 'absolute',
         left: `calc(${50 + bx}% - ${item.size / 2}px)`,
         top: `calc(${50 + by}% - ${item.size / 2}px)`,
-        x: isSelected ? 0 : px,
-        y: isSelected ? 0 : py,
         width: item.size,
         height: item.size,
-        borderRadius: '50%',
-        overflow: 'hidden',
-        border: '2px solid var(--color-border)',
-        boxShadow: '0 4px 20px var(--accent-glow)',
-        cursor: 'pointer',
-        outline: 'none',
-        background: 'var(--color-surface)',
-        zIndex: isSelected ? 0 : 1,
-        pointerEvents: isSelected ? 'none' : 'auto',
+        zIndex: isSelected ? 0 : 2,
       }}
-      animate={{ opacity: isSelected ? 0 : 1 }}
+      animate={{ y: isSelected ? 0 : [0, -12, 0] }}
       transition={{
-        layout: { type: 'spring', bounce: 0.15, duration: 0.5 },
-        opacity: { duration: 0.08 },
+        y: {
+          duration: floatDuration,
+          repeat: isSelected ? 0 : Infinity,
+          ease: 'easeInOut',
+          delay: floatDelay,
+          repeatType: 'mirror',
+        },
       }}
-      onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerCancel}
-      onPointerLeave={handlePointerCancel}
     >
-      <img
-        src={item.hero}
-        alt={item.label}
-        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-        loading="lazy"
-        draggable={false}
-      />
+      <motion.button
+        layoutId={`orbit-${item.id}`}
+        style={{
+          position: 'relative',
+          x: isSelected ? 0 : px,
+          y: isSelected ? 0 : py,
+          width: '100%',
+          height: '100%',
+          borderRadius: '50%',
+          overflow: 'hidden',
+          border: '2px solid var(--color-border)',
+          boxShadow: '0 4px 20px var(--accent-glow)',
+          cursor: 'pointer',
+          outline: 'none',
+          background: 'var(--color-surface)',
+          pointerEvents: isSelected ? 'none' : 'auto',
+        }}
+        animate={{ opacity: isSelected ? 0 : 1 }}
+        transition={{
+          layout: { type: 'spring', bounce: 0.15, duration: 0.5 },
+          opacity: { duration: 0.08 },
+        }}
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerCancel}
+        onPointerLeave={handlePointerCancel}
+      >
+        <img
+          src={item.hero}
+          alt={item.label}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          loading="lazy"
+          draggable={false}
+        />
 
-      <AnimatePresence>
-        {pressing && (
-          <motion.div
-            initial={{ scale: 1, opacity: 0.7 }}
-            animate={{ scale: 2.0, opacity: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            style={{
-              position: 'absolute',
-              inset: -2,
-              borderRadius: '50%',
-              border: '2.5px solid var(--color-accent)',
-              pointerEvents: 'none',
-            }}
-          />
-        )}
-      </AnimatePresence>
-    </motion.button>
+        <AnimatePresence>
+          {pressing && (
+            <motion.div
+              initial={{ scale: 1, opacity: 0.7 }}
+              animate={{ scale: 2.0, opacity: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              style={{
+                position: 'absolute',
+                inset: -2,
+                borderRadius: '50%',
+                border: '2.5px solid var(--color-accent)',
+                pointerEvents: 'none',
+              }}
+            />
+          )}
+        </AnimatePresence>
+      </motion.button>
+    </motion.div>
   )
 }
 
@@ -441,7 +465,7 @@ export default function ProfileOrbit() {
       <div
         ref={containerRef}
         className="relative w-full aspect-square select-none"
-        style={{ maxWidth: 500 }}
+        style={{ maxWidth: 500, overflow: 'visible' }}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         onTouchMove={handleTouchMove}
