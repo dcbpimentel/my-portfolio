@@ -1,7 +1,6 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion'
-import { FiX } from 'react-icons/fi'
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence, LayoutGroup } from 'framer-motion'
 
 const ORBIT_DATA = [
   {
@@ -19,8 +18,8 @@ const ORBIT_DATA = [
     ],
     description: "Represented our department at Tokyo Innovation Base (TiB), Japan's flagship government-backed innovation hub, as part of an international delegation. We toured the facility, engaged with engineers and inventors at the forefront of hardware and AI development, and witnessed collaborative teams building the next generation of technology. The TiB FAB digital fabrication lab powered by DMM.make TOKYO showcased robotics, 3D-printed prototypes, and circuit design, alongside a state-of-the-art lecture amphitheater where global minds convene. A firsthand look at what it means to build at the intersection of technology, design, and human impact.",
     angle: 30,
-    radius: 0.68,
-    size: 70,
+    radius: 0.80,
+    size: 82,
     depth: 1.4,
   },
   {
@@ -35,8 +34,8 @@ const ORBIT_DATA = [
     ],
     description: "Attended an AI class at Shibaura Institute of Technology (SIT), one of Japan's leading engineering universities in Tokyo. The session, titled Introduction to AI and Applications, was led by a tenured professor and founder of SHIBA AI, heading a research team of graduates from institutions including MIT, Harvard, and other world-renowned universities. The class offered a deep dive into the practical and theoretical frontiers of artificial intelligence, delivered at the intersection of academia and cutting-edge industry research.",
     angle: 100,
-    radius: 0.66,
-    size: 62,
+    radius: 0.78,
+    size: 72,
     depth: 1.0,
   },
   {
@@ -51,8 +50,8 @@ const ORBIT_DATA = [
     ],
     description: "Toured Chronogate, Yamato Transport's flagship logistics hub located in Haneda, Tokyo. As one of the most advanced sorting and distribution facilities in Asia, Chronogate operates a fully automated package sorting system capable of processing hundreds of thousands of parcels daily. The facility visit provided firsthand insight into large-scale logistics automation, smart infrastructure design, and the operational technology driving one of Japan's most trusted delivery networks.",
     angle: 155,
-    radius: 0.70,
-    size: 66,
+    radius: 0.82,
+    size: 76,
     depth: 1.2,
   },
   {
@@ -67,8 +66,8 @@ const ORBIT_DATA = [
     ],
     description: "Participated in the inaugural Educational and Cultural Trip to Japan, organized through the first-ever partnership between FPT Japan Academy and Ateneo de Davao University. The program included an exclusive tour of FPT's Tokyo offices and facilities, offering direct exposure to one of Southeast Asia's largest technology corporations operating at the heart of Japan's tech industry. The trip was formally recognized with a Certificate of Participation issued by FPT Japan Academy Principal Yasutaka Owada, conducted from November 1 to 7, 2026.",
     angle: 220,
-    radius: 0.68,
-    size: 68,
+    radius: 0.80,
+    size: 78,
     depth: 0.9,
   },
   {
@@ -82,8 +81,8 @@ const ORBIT_DATA = [
     ],
     description: "Recognized on the President's List at Ateneo de Davao University at the annual Gawad Parangal Academic Awards Ceremony, with a cumulative Quality Point Index (QPI) of 3.93. This distinction is conferred upon students who demonstrate exceptional academic performance across all subjects, reflecting consistent excellence and an unwavering commitment to scholarly achievement.",
     angle: 270,
-    radius: 0.66,
-    size: 72,
+    radius: 0.78,
+    size: 84,
     depth: 1.3,
   },
   {
@@ -100,14 +99,58 @@ const ORBIT_DATA = [
     ],
     description: "Beyond academics, actively engaged in campus life and multimedia production at Ateneo de Davao University. Took on roles as videographer and cinematographer for student narrative film productions, operating professional gimbals and camera rigs on set. Participated in university-wide events including The Ateneo U-Fest, representing the department. These experiences reflect a hands-on commitment to storytelling through lens, light, and motion.",
     angle: 330,
-    radius: 0.70,
-    size: 60,
+    radius: 0.82,
+    size: 72,
     depth: 1.1,
   },
 ]
 
-function BubbleItem({ item, springX, springY, onSelect }) {
-  const [animating, setAnimating] = useState(false)
+function MosaicGrid({ images }) {
+  const count = images.length
+
+  const gridStyle = {
+    display: 'grid',
+    gap: 2,
+    ...(count >= 6 && { gridTemplateColumns: 'repeat(3, 1fr)' }),
+    ...(count === 5 && { gridTemplateColumns: '1.3fr 1fr 1fr', gridTemplateRows: '1fr 1fr' }),
+    ...(count === 3 && { gridTemplateColumns: '1.2fr 1fr', gridTemplateRows: '1fr 1fr' }),
+    ...(count === 2 && { gridTemplateColumns: '1fr 1fr' }),
+  }
+
+  return (
+    <div style={gridStyle}>
+      {images.map((src, i) => {
+        const cellStyle = {
+          overflow: 'hidden',
+          ...(count >= 6 && { aspectRatio: '4/3' }),
+          ...(count === 5 && i === 0 && { gridRow: '1 / 3', minHeight: 190 }),
+          ...(count === 5 && i > 0 && { aspectRatio: '1' }),
+          ...(count === 3 && i === 0 && { gridRow: '1 / 3', minHeight: 170 }),
+          ...(count === 3 && i > 0 && { aspectRatio: '1' }),
+          ...(count === 2 && { aspectRatio: '3/4' }),
+          ...(count === 1 && { aspectRatio: '4/3' }),
+        }
+        return (
+          <div key={i} style={cellStyle}>
+            <img
+              src={src}
+              alt=""
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              loading="eager"
+              draggable={false}
+            />
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+function BubbleItem({ item, springX, springY, onSelect, selectedId }) {
+  const [pressing, setPressing] = useState(false)
+  const pressTimer = useRef(null)
+  const pressed = useRef(false)
+  const isSelected = selectedId === item.id
 
   const angleRad = (item.angle - 90) * Math.PI / 180
   const bx = Math.cos(angleRad) * item.radius * 50
@@ -116,147 +159,237 @@ function BubbleItem({ item, springX, springY, onSelect }) {
   const px = useTransform(springX, v => v * item.depth * 0.05)
   const py = useTransform(springY, v => v * item.depth * 0.05)
 
-  const handleClick = () => {
-    if (animating) return
-    setAnimating(true)
-    try { navigator.vibrate([8, 10, 15]) } catch {}
-    setTimeout(() => {
-      setAnimating(false)
+  const handlePointerDown = (e) => {
+    e.preventDefault()
+    pressed.current = false
+    setPressing(true)
+    pressTimer.current = setTimeout(() => {
+      pressed.current = true
+      setPressing(false)
+      try { navigator.vibrate([10, 30, 15]) } catch {}
       onSelect(item)
-    }, 420)
+    }, 500)
+  }
+
+  const handlePointerUp = () => {
+    clearTimeout(pressTimer.current)
+    pressTimer.current = null
+    setPressing(false)
+    if (!pressed.current) {
+      onSelect(item)
+    }
+    pressed.current = false
+  }
+
+  const handlePointerCancel = () => {
+    clearTimeout(pressTimer.current)
+    pressTimer.current = null
+    setPressing(false)
+    pressed.current = false
   }
 
   return (
     <motion.button
+      layoutId={`orbit-${item.id}`}
       style={{
         position: 'absolute',
         left: `calc(${50 + bx}% - ${item.size / 2}px)`,
         top: `calc(${50 + by}% - ${item.size / 2}px)`,
-        x: px,
-        y: py,
+        x: isSelected ? 0 : px,
+        y: isSelected ? 0 : py,
         width: item.size,
         height: item.size,
+        borderRadius: '50%',
+        overflow: 'hidden',
+        border: '2px solid var(--color-border)',
         boxShadow: '0 4px 20px var(--accent-glow)',
+        cursor: 'pointer',
+        outline: 'none',
+        background: 'var(--color-surface)',
+        zIndex: isSelected ? 0 : 1,
+        pointerEvents: isSelected ? 'none' : 'auto',
       }}
-      animate={animating ? { scale: [1, 0.86, 1.14, 1] } : { scale: 1 }}
-      transition={{ duration: 0.42, times: [0, 0.2, 0.65, 1], ease: 'easeInOut' }}
-      onClick={handleClick}
-      className="rounded-full overflow-hidden border-2 border-border cursor-pointer focus:outline-none"
+      animate={{ opacity: isSelected ? 0 : 1 }}
+      transition={{
+        layout: { type: 'spring', bounce: 0.15, duration: 0.5 },
+        opacity: { duration: 0.08 },
+      }}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
+      onPointerLeave={handlePointerCancel}
     >
       <img
         src={item.hero}
         alt={item.label}
-        className="w-full h-full object-cover"
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
         loading="lazy"
         draggable={false}
       />
+
+      <AnimatePresence>
+        {pressing && (
+          <motion.div
+            initial={{ scale: 1, opacity: 0.7 }}
+            animate={{ scale: 2.0, opacity: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            style={{
+              position: 'absolute',
+              inset: -2,
+              borderRadius: '50%',
+              border: '2.5px solid var(--color-accent)',
+              pointerEvents: 'none',
+            }}
+          />
+        )}
+      </AnimatePresence>
     </motion.button>
   )
 }
 
 function OrbitModal({ item, onClose }) {
-  const [activeIdx, setActiveIdx] = useState(0)
   const allImages = [item.hero, ...item.gallery]
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4"
-      style={{
-        background: 'rgba(0,0,0,0.78)',
-        backdropFilter: 'blur(8px)',
-        WebkitBackdropFilter: 'blur(8px)',
-      }}
-      onClick={onClose}
-    >
+    <>
+      {/* Backdrop */}
       <motion.div
-        initial={{ scale: 0.92, opacity: 0, y: 20 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.92, opacity: 0, y: 20 }}
-        transition={{ type: 'spring', damping: 22, stiffness: 300 }}
-        onClick={e => e.stopPropagation()}
-        className="relative bg-surface border border-border rounded-2xl overflow-hidden max-w-md w-full overflow-y-auto"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.22 }}
         style={{
-          maxHeight: 'min(85vh, 680px)',
-          boxShadow: '0 24px 64px rgba(0,0,0,0.6)',
+          position: 'fixed',
+          inset: 0,
+          zIndex: 199,
+          background: 'rgba(0,0,0,0.72)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+        }}
+        onClick={onClose}
+      />
+
+      {/* Centered card wrapper */}
+      <div
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 200,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 16,
+          pointerEvents: 'none',
         }}
       >
-        {/* Main image */}
-        <div className="relative w-full overflow-hidden" style={{ aspectRatio: '4/3' }}>
-          <AnimatePresence mode="wait">
-            <motion.img
-              key={activeIdx}
-              src={allImages[activeIdx]}
-              alt={item.label}
+        <motion.div
+          layoutId={`orbit-${item.id}`}
+          onClick={e => e.stopPropagation()}
+          style={{
+            borderRadius: 20,
+            overflow: 'hidden',
+            maxWidth: 500,
+            width: '100%',
+            background: 'var(--color-surface)',
+            boxShadow: '0 32px 80px rgba(0,0,0,0.55), 0 8px 24px rgba(0,0,0,0.25)',
+            pointerEvents: 'auto',
+          }}
+          transition={{
+            layout: { type: 'spring', bounce: 0.12, duration: 0.55 },
+          }}
+        >
+          {/* Inner scroll container — isolates scroll from page */}
+          <div
+            style={{
+              overflowY: 'auto',
+              maxHeight: 'min(85vh, 680px)',
+              overscrollBehavior: 'contain',
+              WebkitOverflowScrolling: 'touch',
+            }}
+          >
+            {/* Photo mosaic — fades in after morph starts */}
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.18 }}
-              className="w-full h-full object-cover"
-              loading="eager"
-              draggable={false}
-            />
-          </AnimatePresence>
+              transition={{ delay: 0.2, duration: 0.2 }}
+            >
+              <MosaicGrid images={allImages} />
+            </motion.div>
 
-          <button
-            onClick={onClose}
-            className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer focus:outline-none"
-            style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }}
-          >
-            <FiX size={15} color="#fff" />
-          </button>
-        </div>
-
-        {/* Gallery thumbnails */}
-        {allImages.length > 1 && (
-          <div
-            className="flex gap-2 px-4 pt-3 overflow-x-auto"
-            style={{ scrollbarWidth: 'none' }}
-          >
-            {allImages.map((src, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveIdx(i)}
-                className="flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden cursor-pointer focus:outline-none transition-opacity"
+            {/* Text content */}
+            <motion.div
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ delay: 0.24, duration: 0.22 }}
+              style={{ padding: '18px 20px 26px' }}
+            >
+              <p
+                className="font-body"
                 style={{
-                  border: `2px solid ${i === activeIdx ? 'var(--color-accent)' : 'transparent'}`,
-                  opacity: i === activeIdx ? 1 : 0.55,
+                  fontSize: 10.5,
+                  fontWeight: 700,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  color: 'var(--color-accent)',
+                  marginBottom: 5,
                 }}
               >
-                <img src={src} alt="" className="w-full h-full object-cover" loading="lazy" draggable={false} />
-              </button>
-            ))}
-          </div>
-        )}
+                {item.category}
+              </p>
 
-        {/* Text content */}
-        <div className="p-4 flex flex-col gap-3">
-          <span className="font-body text-xs font-semibold text-accent uppercase tracking-widest">
-            {item.category}
-          </span>
-          <h3 className="font-display font-bold text-xl text-text-primary leading-tight">
-            {item.label}
-          </h3>
-          <p className="font-body text-sm text-text-secondary leading-relaxed">
-            {item.description}
-          </p>
-          <div className="flex flex-wrap gap-2 pt-1">
-            {item.chips.map(chip => (
-              <span
-                key={chip}
-                className="px-3 py-1 rounded-full text-xs font-medium font-body text-text-secondary border border-border"
-                style={{ background: 'var(--color-surface2)' }}
+              <h3
+                className="font-display"
+                style={{
+                  fontSize: 22,
+                  fontWeight: 700,
+                  letterSpacing: '-0.03em',
+                  lineHeight: 1.18,
+                  color: 'var(--color-text-primary)',
+                  marginBottom: 3,
+                }}
               >
-                {chip}
-              </span>
-            ))}
+                {item.label}
+              </h3>
+
+              <p
+                className="font-body"
+                style={{
+                  fontSize: 13,
+                  color: 'var(--color-text-secondary)',
+                  letterSpacing: '-0.01em',
+                  marginBottom: 14,
+                }}
+              >
+                {item.chips.join(' · ')}
+              </p>
+
+              <div
+                style={{
+                  height: '0.5px',
+                  background: 'var(--color-border)',
+                  margin: '0 -20px 14px',
+                }}
+              />
+
+              <p
+                className="font-body"
+                style={{
+                  fontSize: 14,
+                  color: 'var(--color-text-secondary)',
+                  lineHeight: 1.65,
+                  letterSpacing: '-0.01em',
+                }}
+              >
+                {item.description}
+              </p>
+            </motion.div>
           </div>
-        </div>
-      </motion.div>
-    </motion.div>
+        </motion.div>
+      </div>
+    </>
   )
 }
 
@@ -268,6 +401,14 @@ export default function ProfileOrbit() {
   const rawY = useMotionValue(0)
   const springX = useSpring(rawX, { stiffness: 80, damping: 25 })
   const springY = useSpring(rawY, { stiffness: 80, damping: 25 })
+
+  // Lock body scroll while modal is open
+  useEffect(() => {
+    if (!selectedItem) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = prev }
+  }, [selectedItem])
 
   const handleMouseMove = useCallback((e) => {
     const rect = containerRef.current?.getBoundingClientRect()
@@ -296,10 +437,11 @@ export default function ProfileOrbit() {
   }, [rawX, rawY])
 
   return (
-    <>
+    <LayoutGroup>
       <div
         ref={containerRef}
-        className="relative w-full max-w-sm aspect-square select-none"
+        className="relative w-full aspect-square select-none"
+        style={{ maxWidth: 420 }}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         onTouchMove={handleTouchMove}
@@ -308,7 +450,7 @@ export default function ProfileOrbit() {
         {/* Subtle orbit ring */}
         <div
           className="absolute rounded-full border border-border pointer-events-none"
-          style={{ inset: '15%', opacity: 0.25 }}
+          style={{ inset: '10%', opacity: 0.22 }}
         />
 
         {/* Center profile photo */}
@@ -316,8 +458,8 @@ export default function ProfileOrbit() {
           <div
             className="rounded-full overflow-hidden border-2 border-border pointer-events-auto"
             style={{
-              width: '40%',
-              height: '40%',
+              width: '38%',
+              height: '38%',
               boxShadow: '0 0 0 1px var(--color-border), 0 0 32px var(--accent-glow)',
             }}
           >
@@ -339,6 +481,7 @@ export default function ProfileOrbit() {
             springX={springX}
             springY={springY}
             onSelect={setSelectedItem}
+            selectedId={selectedItem?.id}
           />
         ))}
       </div>
@@ -355,6 +498,6 @@ export default function ProfileOrbit() {
         </AnimatePresence>,
         document.body
       )}
-    </>
+    </LayoutGroup>
   )
 }
