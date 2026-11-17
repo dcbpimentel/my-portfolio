@@ -19,7 +19,7 @@ const ORBIT_DATA = [
     description: "Represented our department at Tokyo Innovation Base (TiB), Japan's flagship government-backed innovation hub, as part of an international delegation. We toured the facility, engaged with engineers and inventors at the forefront of hardware and AI development, and witnessed collaborative teams building the next generation of technology. The TiB FAB digital fabrication lab powered by DMM.make TOKYO showcased robotics, 3D-printed prototypes, and circuit design, alongside a state-of-the-art lecture amphitheater where global minds convene. A firsthand look at what it means to build at the intersection of technology, design, and human impact.",
     angle: 30,
     radius: 0.80,
-    size: 82,
+    size: 96,
     depth: 1.4,
   },
   {
@@ -34,8 +34,8 @@ const ORBIT_DATA = [
     ],
     description: "Attended an AI class at Shibaura Institute of Technology (SIT), one of Japan's leading engineering universities in Tokyo. The session, titled Introduction to AI and Applications, was led by a tenured professor and founder of SHIBA AI, heading a research team of graduates from institutions including MIT, Harvard, and other world-renowned universities. The class offered a deep dive into the practical and theoretical frontiers of artificial intelligence, delivered at the intersection of academia and cutting-edge industry research.",
     angle: 100,
-    radius: 0.78,
-    size: 72,
+    radius: 0.76,
+    size: 84,
     depth: 1.0,
   },
   {
@@ -50,8 +50,8 @@ const ORBIT_DATA = [
     ],
     description: "Toured Chronogate, Yamato Transport's flagship logistics hub located in Haneda, Tokyo. As one of the most advanced sorting and distribution facilities in Asia, Chronogate operates a fully automated package sorting system capable of processing hundreds of thousands of parcels daily. The facility visit provided firsthand insight into large-scale logistics automation, smart infrastructure design, and the operational technology driving one of Japan's most trusted delivery networks.",
     angle: 155,
-    radius: 0.82,
-    size: 76,
+    radius: 0.80,
+    size: 88,
     depth: 1.2,
   },
   {
@@ -66,8 +66,8 @@ const ORBIT_DATA = [
     ],
     description: "Participated in the inaugural Educational and Cultural Trip to Japan, organized through the first-ever partnership between FPT Japan Academy and Ateneo de Davao University. The program included an exclusive tour of FPT's Tokyo offices and facilities, offering direct exposure to one of Southeast Asia's largest technology corporations operating at the heart of Japan's tech industry. The trip was formally recognized with a Certificate of Participation issued by FPT Japan Academy Principal Yasutaka Owada, conducted from November 1 to 7, 2026.",
     angle: 220,
-    radius: 0.80,
-    size: 78,
+    radius: 0.78,
+    size: 90,
     depth: 0.9,
   },
   {
@@ -81,8 +81,8 @@ const ORBIT_DATA = [
     ],
     description: "Recognized on the President's List at Ateneo de Davao University at the annual Gawad Parangal Academic Awards Ceremony, with a cumulative Quality Point Index (QPI) of 3.93. This distinction is conferred upon students who demonstrate exceptional academic performance across all subjects, reflecting consistent excellence and an unwavering commitment to scholarly achievement.",
     angle: 270,
-    radius: 0.78,
-    size: 84,
+    radius: 0.74,
+    size: 96,
     depth: 1.3,
   },
   {
@@ -99,8 +99,8 @@ const ORBIT_DATA = [
     ],
     description: "Beyond academics, actively engaged in campus life and multimedia production at Ateneo de Davao University. Took on roles as videographer and cinematographer for student narrative film productions, operating professional gimbals and camera rigs on set. Participated in university-wide events including The Ateneo U-Fest, representing the department. These experiences reflect a hands-on commitment to storytelling through lens, light, and motion.",
     angle: 330,
-    radius: 0.82,
-    size: 72,
+    radius: 0.80,
+    size: 84,
     depth: 1.1,
   },
 ]
@@ -441,7 +441,7 @@ export default function ProfileOrbit() {
       <div
         ref={containerRef}
         className="relative w-full aspect-square select-none"
-        style={{ maxWidth: 420 }}
+        style={{ maxWidth: 500 }}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         onTouchMove={handleTouchMove}
@@ -450,7 +450,7 @@ export default function ProfileOrbit() {
         {/* Subtle orbit ring */}
         <div
           className="absolute rounded-full border border-border pointer-events-none"
-          style={{ inset: '10%', opacity: 0.22 }}
+          style={{ inset: '9%', opacity: 0.22 }}
         />
 
         {/* Center profile photo */}
@@ -458,8 +458,8 @@ export default function ProfileOrbit() {
           <div
             className="rounded-full overflow-hidden border-2 border-border pointer-events-auto"
             style={{
-              width: '38%',
-              height: '38%',
+              width: '44%',
+              height: '44%',
               boxShadow: '0 0 0 1px var(--color-border), 0 0 32px var(--accent-glow)',
             }}
           >
